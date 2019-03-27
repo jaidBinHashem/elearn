@@ -23,3 +23,6 @@ export const SIGN_OUT = "SIGN_OUT";
 export const SIGN_OUT_COMPLETE = "SIGN_OUT_COMPLETE";
 export const GET_BLOGS = "GET_BLOGS";
 export const GET_BLOGS_RETURN = "GET_BLOGS_RETURN";
+
+export const SET_QUIZ = "SET_QUIZ";
+export const SET_QUIZ_DONE = "SET_QUIZ_DONE";
