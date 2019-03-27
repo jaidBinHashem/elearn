@@ -17,6 +17,8 @@ import Scolarships from '../component/Scolarships';
 import Upcoming from '../component/SuperLeague/Upcoming';
 import Completed from '../component/SuperLeague/Completed';
 
+import Quiz from '../component/Quiz';
+
 import DrawerComponent from './DrawerComponent';
 
 import colors from '../global/colors'
@@ -88,7 +90,8 @@ const AuthStack = createStackNavigator(
 const AppStack = createStackNavigator(
     {
         Dashboard: Dashboard,
-        ArticleWebView: ArticleWebView
+        ArticleWebView: ArticleWebView,
+        Quiz : Quiz
     },
     {
         initialRouteName: 'Dashboard',
