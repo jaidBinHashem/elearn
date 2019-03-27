@@ -1,0 +1,8 @@
+file name: esho_sikhi_key.keystore
+ALIAS: ESHO_SIKHI
+KeyStorePassword: bs23_esho_sikhi
+KeyPassword: bs23_esho_sikhi
+
+keytool -genkeypair -v -keystore esho_sikhi_key.keystore -alias ESHO_SIKHI -keyalg RSA -keysize 2048 -validity 10000
+
+For Create release Apk run this command:  cd android && gradlew assembleRelease

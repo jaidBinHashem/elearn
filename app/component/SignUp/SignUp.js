@@ -1,0 +1,150 @@
+import React, { Component } from 'react'
+import { View, StatusBar, TouchableOpacity, Text, ScrollView, Dimensions, Keyboard, Picker } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connect } from "react-redux";
+import { signUp, submitStudyDetails, submitCourses, registerUser } from '../../redux/actions/AuthActions';
+import RNAccountKit from 'react-native-facebook-account-kit'
+import Swiper from 'react-native-swiper';
+import Toast from 'react-native-simple-toast';
+
+import PersonalDetails from './PersonalDetails';
+import StudyDetails from './StudyDetails';
+import CourseDetails from './CourseDetails';
+import Success from './Success';
+
+import globalStyles from '../../global/styles';
+
+import styles from './styles';
+
+
+const deviceWidth = Dimensions.get("window").width;
+const deviceHeight = Dimensions.get("window").height;
+const EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const NUMBER = /^(01)[3456789][0-9]{8}/;
+
+class SignUp extends Component {
+    static navigationOptions = {
+        header: null
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            nameError: "",
+            emailError: "",
+            numberError: "",
+            studyLevels: [],
+            institutions: [],
+            selectedStudyLevel: null
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        nextProps.auth.error && Toast.show(nextProps.auth.errorMessage);
+        nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage));
+        nextProps.auth.numberVerified && this.scrollToNext(1);
+        nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
+    }
+
+
+    submitAccount = (name, email, number) => {
+        // this.scrollToNext(1)
+        // this.createSignUpRequest();
+        Keyboard.dismiss();
+        let nameError = "", emailError = "", numberError = "", err = false;
+        (name.length < 1 || name.length > 191) && (nameError = "Please insert a Full Name", err = true);
+        !EMAIL.test(String(email).toLowerCase()) && (emailError = "Please insert a valid Email", err = true);
+        !NUMBER.test(String(number)) && (numberError = "Please intert a valid mobile number", err = true);
+
+        err && this.setState({
+            nameError,
+            emailError,
+            numberError
+        });
+        !err && (this.createSignUpRequest(name, email, number), this.setState({ nameError, emailError, numberError }));
+    }
+
+    createSignUpRequest = (name, email, number) => {
+        RNAccountKit.configure({
+            responseType: 'code', // 'token' by default,
+            titleType: 'login',
+            initialPhoneCountryPrefix: '+880', // autodetected if none is provided
+            initialPhoneNumber: number[0] == 0 ? number.substring(1) : number,
+            // initialPhoneNumber: '1316100093',
+            readPhoneStateEnabled: true, // true by default,
+            receiveSMS: true, // true by default,
+            defaultCountry: 'BD',
+            getACallEnabled: true
+        })
+        RNAccountKit.loginWithPhone()
+            .then((response) => {
+                response.code && this.props.signUp(response.code, email, name)
+            })
+            .catch(err => console.log(err));
+    }
+
+    submitStudyDetails = (studyLevel, institution) => {
+        this.props.submitStudyDetails(studyLevel, institution);
+    }
+
+    scrollToNext = i => {
+        this.scroll.scrollBy(1);
+    };
+
+    registerUser = (courses) => {
+        this.props.registerUser(this.props.auth, courses);
+        this.props.submitCourses(courses);
+    }
+
+
+    render() {
+        return (
+            <View style={[styles.container]}>
+                <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />
+                <KeyboardAwareScrollView keyboardShouldPersistTaps='always'>
+                    <View style={[globalStyles.flexOne]}>
+                        <View style={[styles.registerTextContainer]}>
+                            <Text style={[styles.registerText]}>Register</Text>
+                        </View>
+                        <View style={{ height: deviceHeight - 130 }}>
+                            <Swiper style={styles.wrapper}
+                                ref={node => (this.scroll = node)}
+                                showsButtons={false}
+                                showsPagination={false}
+                                loop={false}
+                                scrollEnabled={false}
+                            >
+                                <PersonalDetails
+                                    nameError={this.state.nameError}
+                                    emailError={this.state.emailError}
+                                    numberError={this.state.numberError}
+                                    submitAccount={this.submitAccount.bind(this)}
+                                />
+                                <StudyDetails
+                                    submitStudyDetails={this.submitStudyDetails.bind(this)} />
+                                <CourseDetails
+                                    registerUser={this.registerUser.bind(this)}
+                                    studyLevel={this.props.auth.studyLevel} />
+                                <Success
+                                    navigation={this.props.navigation}
+                                />
+                            </Swiper>
+                        </View>
+                    </View>
+                </KeyboardAwareScrollView>
+            </View>
+        )
+    }
+}
+
+
+function mapStateToProps(state) {
+    return {
+        auth: state.AuthReducer
+    };
+}
+
+export default connect(
+    mapStateToProps,
+    { signUp, submitStudyDetails, submitCourses, registerUser }
+)(SignUp);

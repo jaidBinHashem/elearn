@@ -1,0 +1,45 @@
+{
+  "name": "EshoSikhi",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@react-native-community/async-storage": "^1.2.1",
+    "react": "16.8.3",
+    "react-native": "0.59.1",
+    "react-native-busy-indicator": "^1.1.0",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-elements": "^1.1.0",
+    "react-native-facebook-account-kit": "^1.1.0",
+    "react-native-gesture-handler": "^1.1.0",
+    "react-native-keyboard-aware-scroll-view": "^0.8.0",
+    "react-native-modal": "^9.0.0",
+    "react-native-progress": "^3.5.0",
+    "react-native-selectmultiple-button": "^0.1.105",
+    "react-native-simple-toast": "^0.0.8",
+    "react-native-spinkit": "^1.2.0",
+    "react-native-step-indicator": "^0.0.9",
+    "react-native-swiper": "^1.5.14",
+    "react-native-vector-icons": "^6.4.1",
+    "react-native-webview": "^5.4.2",
+    "react-navigation": "^3.4.1",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-saga": "^1.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/runtime": "^7.3.4",
+    "babel-jest": "^24.5.0",
+    "jest": "^24.5.0",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react-test-renderer": "16.8.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
