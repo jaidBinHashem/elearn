@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
@@ -21,7 +21,7 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            refreshing: false
         }
     }
 
@@ -36,6 +36,10 @@ class Dashboard extends Component {
         loaderHandler.showLoader("Loading");
     }
 
+    _onRefresh = () => {
+        this.props.navigation.navigate('Loader')
+    }
+
     render() {
         let subj = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
         let colors = ['#BC9CFF', '#F6D365', '#F093FB', '#0BA360', '#74DBC9', '#677DCB', '#501A57', '#F07B52'];
@@ -46,7 +50,7 @@ class Dashboard extends Component {
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('QuizDashboard')} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
                                 <Text>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
@@ -143,7 +147,13 @@ class Dashboard extends Component {
         return (
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh} />
+                    }
+                    showsVerticalScrollIndicator={false}>
                     <View>
                         <Text style={styles.name}>Rakib</Text>
                     </View>
@@ -179,30 +189,30 @@ class Dashboard extends Component {
                             {views}
                         </Swiper>
                     </View>
-                    <View>
-                        {scholarshipsView.length > 0 && (<View>
+                    {scholarshipsView.length > 0 && (<View>
+                        <View>
                             <Text style={styles.newsAndUpdatesTitle}>Scholarships</Text>
-                        </View>)}
+                        </View>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {scholarshipsView}
                         </ScrollView>
-                    </View>
-                    <View>
+                    </View>)}
+                    {newsAndUpdatesView.length > 0 && (<View>
                         <View>
                             <Text style={styles.newsAndUpdatesTitle}>News & Updates</Text>
                         </View>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {newsAndUpdatesView}
                         </ScrollView>
-                    </View>
-                    <View>
+                    </View>)}
+                    {tipsAndTricksView.length > 0 && (<View>
                         <View>
                             <Text style={styles.newsAndUpdatesTitle}>Tips & Tricks</Text>
                         </View>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {tipsAndTricksView}
                         </ScrollView>
-                    </View>
+                    </View>)}
                 </ScrollView>
                 <BusyIndicator />
             </View>

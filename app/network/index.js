@@ -34,7 +34,7 @@ export const getService = async (request) => {
             let accessToken = await AsyncStorage.getItem("USER_TOKEN");
             requestHeaders.authorization = 'Bearer ' + accessToken;
         }
-        let response = await fetch(!request.temp ? BASE_URL + request.endPoint : TEMP_URL + request.endPoint, {
+        let response = await fetch(!request.baseUrl ? BASE_URL + request.endPoint : request.baseUrl, {
             method: 'GET',
             headers: requestHeaders,
         });
@@ -42,6 +42,7 @@ export const getService = async (request) => {
         return { success: true, data: response };
     }
     catch (err) {
+        console.log(err, "Error in get service")
         response = await err.ERROR_BODY.json();
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }

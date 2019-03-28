@@ -1,7 +1,8 @@
 import { SET_QUIZ_DONE } from '../actions/types'
 const initialState = {
   questions: null,
-  time: 0
+  time: 0,
+  timeString: "15:00"
 };
 
 export default function (state = initialState, action) {
@@ -9,8 +10,8 @@ export default function (state = initialState, action) {
     case SET_QUIZ_DONE:
       return {
         ...state,
-        questions: action.questions,
-        time: action.time
+        questions: action.payload.data,
+        time: action.payload.time
       }
     default:
       return state;

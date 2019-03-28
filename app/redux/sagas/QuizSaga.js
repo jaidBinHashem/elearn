@@ -7,7 +7,7 @@ const retriveQuizDetails = async () => {
     try {
         let request = {
             endPoint: '',
-            baseUrl : 'https://pastebin.com/raw/QXSLsxEv',
+            baseUrl: 'https://pastebin.com/raw/QXSLsxEv',
             temp: true
         }
         return (await getService(request));
@@ -17,9 +17,8 @@ const retriveQuizDetails = async () => {
 };
 
 
-
 export const setQuiz = function* (action) {
     let quizDetails = yield call(retriveQuizDetails);
-    console.log(quizDetails, "here");
+    console.log(quizDetails)
     quizDetails.success && quizDetails.data && (yield put({ type: SET_QUIZ_DONE, payload: quizDetails.data }));
 };
