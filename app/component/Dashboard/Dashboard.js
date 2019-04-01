@@ -50,7 +50,7 @@ class Dashboard extends Component {
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('QuizDashboard')} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard')} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
                                 <Text>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}

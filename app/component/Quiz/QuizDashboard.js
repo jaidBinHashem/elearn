@@ -30,6 +30,9 @@ class QuizDashboard extends Component {
     }
 
     render() {
+        let minutes = parseInt(this.props.quiz.time / 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time / 60, 10) : parseInt(this.props.quiz.time / 60, 10);
+        let seconds = parseInt(this.props.quiz.time % 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time % 60, 10) : parseInt(this.props.quiz.time % 60, 10);
+        let time = String(minutes) + ":" + String(seconds);
         return (
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
@@ -44,7 +47,7 @@ class QuizDashboard extends Component {
                                 containerStyle={styles.numberIconContainer}
                             />
                             <View>
-                                <Text style={styles.qustionNumber}>10</Text>
+                                <Text style={styles.qustionNumber}>{this.props.quiz.questions && this.props.quiz.questions.length}</Text>
                                 <Text>Questions</Text>
                             </View>
                         </View>
@@ -57,7 +60,7 @@ class QuizDashboard extends Component {
                                 containerStyle={styles.numberIconContainer}
                             />
                             <View>
-                                <Text style={styles.time}>10</Text>
+                                <Text style={styles.time}>{time}</Text>
                                 <Text>Minutes</Text>
                             </View>
                         </View>
@@ -65,15 +68,10 @@ class QuizDashboard extends Component {
                     <View style={styles.instructionContainer}>
                         <Text style={styles.instructionTitle}>Instructions</Text>
                         <Text style={styles.instruction}>There will be a good amount of instruction. There will be a good amount of instruction. There will be a good amount of instruction. There will be a good amount of instruction.</Text>
-                        {/* <Text>Instructions</Text> */}
-                        {/* <Text>Instructions</Text> */}
-                    </View>
-                    <View>
-                        <Text>{this.props.quiz.timeString}</Text>
                     </View>
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
-                    <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.navigation.navigate('Quiz')}>
+                    <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation })}>
                         <Text style={styles.submitText}>Start Quiz</Text>
                         <Icon
                             name='arrowright'

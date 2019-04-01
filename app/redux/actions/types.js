@@ -30,3 +30,8 @@ export const GET_BLOGS_RETURN = "GET_BLOGS_RETURN";
 
 export const SET_QUIZ = "SET_QUIZ";
 export const SET_QUIZ_DONE = "SET_QUIZ_DONE";
+
+export const SUBMIT_QUIZ = "SUBMIT_QUIZ";
+export const SUBMIT_QUIZ_RETURN = "SUBMIT_QUIZ_RETURN";
+
+export const SHOW_EXPLANATION = "SHOW_EXPLANATION";

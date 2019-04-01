@@ -8,7 +8,8 @@ export default StyleSheet.create({
   horizontal: {
     // flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 10
+    padding: 10,
+    paddingHorizontal: 20
   },
   quesationNumberAndTimeContainer: {
     flexDirection: 'row',
@@ -99,15 +100,21 @@ export default StyleSheet.create({
   },
   option: {
     backgroundColor: '#fff',
-    height: 50,
-    justifyContent: 'center',
+    minHeight: 50,
     paddingHorizontal: 10,
     elevation: 5,
-    marginVertical: 10
-    // borderColor: Colors.appTheme,
-    // borderWidth:2
+    marginVertical: 10,
+  },
+  explanation: {
+    borderColor: Colors.appTheme,
+    borderWidth: 2
   },
   optionText: {
+    color: 'black',
+    marginVertical: 10
+  },
+  explanationText: {
+    marginVertical: 15,
     color: 'black'
   },
   questionNavigationContainer: {
@@ -131,7 +138,42 @@ export default StyleSheet.create({
     // backgroundColor: 'black',
     justifyContent: 'center'
   },
-  swiper : {
+  swiper: {
     flex: 1
+  },
+  score: {
+    fontWeight: '500',
+    fontSize: 20,
+    marginVertical: 30
+  },
+  scoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+
+  },
+  scoreRowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10
+  },
+  scoreIconContainer: {
+    marginRight: 20
+  },
+  scoreCircleContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginRight: 40,
+    borderColor: Colors.appTheme,
+    borderWidth: 2,
+    height: 67,
+    width: 67,
+    borderRadius: 67 / 2
+  },
+  scoreCircleText: {
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.appTheme,
+    width: 37,
+    textAlign: 'center'
   }
 });
