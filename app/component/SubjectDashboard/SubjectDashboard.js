@@ -76,6 +76,76 @@ class SubjectDashboard extends Component {
                                 <Text style={styles.topicText}>Quiz</Text>
                             </TouchableOpacity>
                         </View>
+                        <View>
+                            <Text>Chapter 2</Text>
+                        </View>
+                        <View style={styles.topicContainer}>
+                            <TouchableOpacity style={styles.topic}>
+                                <Icon
+                                    name='controller-play'
+                                    size={35}
+                                    type='entypo'
+                                    color='black'
+                                    containerStyle={styles.scoreIconContainer}
+                                />
+                                <Text style={styles.topicText}>Video</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.topic}>
+                                <Icon
+                                    name='text-document'
+                                    size={35}
+                                    type='entypo'
+                                    color='black'
+                                    containerStyle={styles.scoreIconContainer}
+                                />
+                                <Text style={styles.topicText}>Doc</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('QuizDashboard')} style={styles.topic}>
+                                <Icon
+                                    name='format-list-checks'
+                                    size={35}
+                                    type='material-community'
+                                    color='black'
+                                    containerStyle={styles.scoreIconContainer}
+                                />
+                                <Text style={styles.topicText}>Quiz</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View>
+                            <Text>Chapter 3</Text>
+                        </View>
+                        <View style={styles.topicContainer}>
+                            <TouchableOpacity style={styles.topic}>
+                                <Icon
+                                    name='controller-play'
+                                    size={35}
+                                    type='entypo'
+                                    color='black'
+                                    containerStyle={styles.scoreIconContainer}
+                                />
+                                <Text style={styles.topicText}>Video</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.topic}>
+                                <Icon
+                                    name='text-document'
+                                    size={35}
+                                    type='entypo'
+                                    color='black'
+                                    containerStyle={styles.scoreIconContainer}
+                                />
+                                <Text style={styles.topicText}>Doc</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('QuizDashboard')} style={styles.topic}>
+                                <Icon
+                                    name='format-list-checks'
+                                    size={35}
+                                    type='material-community'
+                                    color='black'
+                                    containerStyle={styles.scoreIconContainer}
+                                />
+                                <Text style={styles.topicText}>Quiz</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
