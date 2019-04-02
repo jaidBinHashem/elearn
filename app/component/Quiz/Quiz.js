@@ -50,7 +50,7 @@ class Quiz extends Component {
             seconds = parseInt(timer % 60, 10);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            // this.setState({ time: minutes + ":" + seconds });
+            this.setState({ time: minutes + ":" + seconds });
             if (--timer < 0) {
                 clearInterval(this.myTimer);
             }
