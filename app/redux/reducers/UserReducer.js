@@ -28,7 +28,7 @@ export default function (state = initialState, action) {
         countryPrefix: action.payload.data.user.countryPrefix,
         phone: action.payload.data.user.phone,
         email: action.payload.data.user.email,
-        name: action.payload.data.user.email,
+        name: action.payload.data.user.name,
         gender: action.payload.data.user.gender,
         location: action.payload.data.user.location,
         token: action.payload.data.token,
