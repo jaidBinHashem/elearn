@@ -21,6 +21,7 @@ import SubjectDashboard from '../component/SubjectDashboard'
 
 import QuizDashboard from '../component/Quiz';
 import QuizHighlights from '../component/Quiz/QuizHighlights';
+import PreviousAttemps from '../component/Quiz/PreviousAttemps';
 import Quiz from '../component/Quiz/Quiz';
 
 import DrawerComponent from './DrawerComponent';
@@ -99,7 +100,8 @@ const AppStack = createStackNavigator(
         QuizDashboard: QuizDashboard,
         Quiz: Quiz,
         QuizSolutions: Quiz,
-        QuizHighlights: QuizHighlights
+        QuizHighlights: QuizHighlights,
+        PreviousAttemps : PreviousAttemps
     },
     {
         initialRouteName: 'Dashboard',

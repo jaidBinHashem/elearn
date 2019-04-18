@@ -178,16 +178,21 @@ class Dashboard extends Component {
                         </View>
                     </View>
                     <View style={styles.swiperContainer}>
-                        <Swiper
-                            height={250}
-                            ref={node => (this.scroll = node)}
-                            showsButtons={false}
-                            showsPagination={false}
-                            loop={true}
-                            scrollEnabled={true}
-                        >
-                            {views}
-                        </Swiper>
+                        {
+                            views.length === length && (
+                                <Swiper
+                                    height={250}
+                                    index={0}
+                                    ref={node => (this.scroll = node)}
+                                    showsButtons={false}
+                                    showsPagination={false}
+                                    loop={true}
+                                    scrollEnabled={true}
+                                >
+                                    {views}
+                                </Swiper>
+                            )
+                        }
                     </View>
                     {scholarshipsView.length > 0 && (<View>
                         <View>

@@ -175,5 +175,17 @@ export default StyleSheet.create({
     borderBottomColor: Colors.appTheme,
     width: 37,
     textAlign: 'center'
+  },
+  attempsHeader: {
+    backgroundColor: 'white',
+    padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    elevation: 5,
+    marginTop:10
+  },
+  attempsHeaderText: {
+    color: 'black',
+    fontWeight: '600'
   }
 });

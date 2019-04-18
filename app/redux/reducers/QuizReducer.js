@@ -1,4 +1,4 @@
-import { SET_QUIZ_DONE, SUBMIT_QUIZ_RETURN, SHOW_EXPLANATION } from '../actions/types'
+import { SET_QUIZ_DONE, SUBMIT_QUIZ_RETURN, SHOW_EXPLANATION, GET_PREVIOUS_ATTEMPS_RETURN } from '../actions/types'
 const initialState = {
   questions: null,
   time: 0,
@@ -6,7 +6,8 @@ const initialState = {
   selectedAnswersIdArray: [],
   rightAnswers: [],
   wrongAnswers: [],
-  completedQuiz: false
+  completedQuiz: false,
+  previousAttemps: []
 };
 
 export default function (state = initialState, action) {
@@ -30,6 +31,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         completedQuiz: false,
+      }
+    case GET_PREVIOUS_ATTEMPS_RETURN:
+      return {
+        ...state,
+        previousAttemps: action.payload.data
       }
     default:
       return state;

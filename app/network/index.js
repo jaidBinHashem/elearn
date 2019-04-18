@@ -59,7 +59,7 @@ export const postService = async (request) => {
             let accessToken = await AsyncStorage.getItem("USER_TOKEN");
             requestHeaders.authorization = 'Bearer ' + accessToken;
         }
-        let response = await fetch(!request.temp ? BASE_URL + request.endPoint : TEMP_URL + request.endPoint, {
+        let response = await fetch(!request.temp ? BASE_URL + request.endPoint : request.baseUrl, {
             method: 'POST',
             headers: requestHeaders,
             body: JSON.stringify(request.params)

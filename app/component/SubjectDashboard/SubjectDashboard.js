@@ -65,7 +65,7 @@ class SubjectDashboard extends Component {
                                 />
                                 <Text style={styles.topicText}>Doc</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('QuizDashboard')} style={styles.topic}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('QuizDashboard', { lessonId: 51 })} style={styles.topic}>
                                 <Icon
                                     name='format-list-checks'
                                     size={35}

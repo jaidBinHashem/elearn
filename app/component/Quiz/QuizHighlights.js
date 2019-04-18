@@ -89,7 +89,7 @@ class QuizHighlights extends Component {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.submitButtom}
-                    // onPress={() => this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation })}
+                        onPress={() => this.props.navigation.navigate('PreviousAttemps', {})}
                     >
                         <Text style={styles.submitText}>PREVIOUS ATTEMPTS</Text>
                         <Icon

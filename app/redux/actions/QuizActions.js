@@ -1,4 +1,4 @@
-import { SET_QUIZ, SUBMIT_QUIZ, SHOW_EXPLANATION } from "./types";
+import { SET_QUIZ, SUBMIT_QUIZ, SHOW_EXPLANATION, GET_PREVIOUS_ATTEMPS } from "./types";
 
 export const setQuiz = () => {
     return {
@@ -21,5 +21,11 @@ export const submitQuiz = (answers, selectedAnswersIdArray, rightAnswers, wrongA
 export const showExplanation = () => {
     return {
         type: SHOW_EXPLANATION,
+    };
+};
+
+export const getPreviousAttemps = () => {
+    return {
+        type: GET_PREVIOUS_ATTEMPS,
     };
 };

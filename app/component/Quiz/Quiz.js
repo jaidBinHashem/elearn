@@ -66,21 +66,21 @@ class Quiz extends Component {
         let answers = [...this.state.answers],
             answerdQuestions = [...this.state.answerdQuestions],
             selectedAnswerIdArray = [...this.state.selectedAnswerIdArray],
-            selectedAnswersObject = [],
+            selectedAnswersObject = null,
             selectedAnswers = question.answers.filter(answer => selectedValues.includes(answer.id));
         selectedAnswers.map((selectedAnswer) => {
-            selectedAnswersObject.push({
+            selectedAnswersObject = {
                 "id": selectedAnswer.id,
                 "answer": selectedAnswer.answer,
                 "correct": selectedAnswer.correct
-            });
+            };
         });
         if (answerdQuestions.includes(question.id)) {
             answers[answerdQuestions.indexOf(question.id)] = {
                 'question': {
                     'id': question.id,
                     'question': question.question,
-                    "selectedAnswers": selectedAnswersObject
+                    "selectedAnswer": selectedAnswersObject
                 }
             }
         } else {
@@ -88,7 +88,7 @@ class Quiz extends Component {
                 'question': {
                     'id': question.id,
                     'question': question.question,
-                    "selectedAnswers": selectedAnswersObject
+                    "selectedAnswer": selectedAnswersObject
                 }
             });
             answerdQuestions.push(question.id);
@@ -97,6 +97,18 @@ class Quiz extends Component {
     }
 
     confirmExamSubmit = () => {
+        // this.state.answers.length === 0 && (return);
+        // if (this.state.answers.length === 0) {
+        //     Alert.alert(
+        //         'Please answer at least a question !',
+        //         '', // <- this part is optional, you can pass an empty string
+        //         [
+        //             { text: 'OK', onPress: () => console.log('OK Pressed') },
+        //         ],
+        //         { cancelable: false },
+        //     );
+        //     return
+        // }
         Alert.alert(
             'Submit Quiz',
             'Are you sure you want to submit the quiz ?',
@@ -121,53 +133,17 @@ class Quiz extends Component {
     }
 
     submitExam = () => {
-        let answers = [...this.state.answers],
-            answerdQuestions = [...this.state.answerdQuestions];
-        if (this.props.quiz.questions.length != this.state.answerdQuestions.length) {
-            this.props.quiz.questions.map((question) => {
-                if (!this.state.answerdQuestions.includes(question.id)) {
-                    answers.push({
-                        'question': {
-                            'id': question.id,
-                            'question': question.question,
-                            "selectedAnswers": []
-                        }
-                    });
-                    answerdQuestions.push(question.id);
-                }
-            });
-            this.setState({ answers, answerdQuestions }, () => {
-                let selectedAnswerIdArray = [], rightAnswers = [], wrongAnswers = [];
-                this.state.answers.map(answer => {
-                    let rightAnswer = true;
-                    if (answer.question.selectedAnswers.length > 0) {
-                        answer.question.selectedAnswers.map((selectedAnswer) => {
-                            selectedAnswer.correct === false && (rightAnswer = false);
-                            selectedAnswerIdArray.push(selectedAnswer.id);
-                        });
-                        rightAnswer === true
-                            ? rightAnswers.push(rightAnswer)
-                            : wrongAnswers.push(rightAnswer);
-                    }
-                });
-                this.props.submitQuiz(this.state.answers, selectedAnswerIdArray, rightAnswers, wrongAnswers);
-            });
-        } else if (this.props.quiz.questions.length === this.state.answerdQuestions.length) {
-            let selectedAnswerIdArray = [], rightAnswers = [], wrongAnswers = [];
-            this.state.answers.map(answer => {
-                if (answer.question.selectedAnswers.length > 0) {
-                    let rightAnswer = true;
-                    answer.question.selectedAnswers.map((selectedAnswer) => {
-                        selectedAnswer.correct === false && (rightAnswer = false)
-                        selectedAnswerIdArray.push(selectedAnswer.id);
-                    });
-                    rightAnswer === true
-                        ? rightAnswers.push(rightAnswer)
-                        : wrongAnswers.push(rightAnswer);
-                }
-            });
-            this.props.submitQuiz(this.state.answers, selectedAnswerIdArray, rightAnswers, wrongAnswers);
-        }
+        let answers = [...this.state.answers];
+        let selectedAnswerIdArray = [], rightAnswers = [], wrongAnswers = [];
+        answers.map(answer => {
+            let rightAnswer = true;
+            answer.question.selectedAnswer.correct === false && (rightAnswer = false);
+            selectedAnswerIdArray.push(answer.question.selectedAnswer.id);
+            rightAnswer === true
+                ? rightAnswers.push(rightAnswer)
+                : wrongAnswers.push(rightAnswer);
+        });
+        this.props.submitQuiz(this.state.answers, selectedAnswerIdArray, rightAnswers, wrongAnswers);
     }
 
     componentWillUnmount() {
@@ -214,7 +190,7 @@ class Quiz extends Component {
                                     textTintColor: '#fff',
                                     elevation: 5,
                                 }}
-                                multiple={true}
+                                multiple={false}
                                 onSelectedValuesChange={selectedValues => this._groupButtonOnSelectedValuesChange(selectedValues, question)}
                                 group={buttonData}
                             />
@@ -246,10 +222,10 @@ class Quiz extends Component {
                                         <TouchableOpacity key={answer.id} style={[styles.option, answer.correct && styles.explanation, wrongStyle]}>
                                             <Text style={styles.optionText}>{answer.answer}</Text>
                                             {
-                                                answer.explanation && (<Text style={styles.explanationText}>
+                                                answer.correct && answer.explanation != null && (<Text style={styles.explanationText}>
                                                     <Text style={{ color: colors.appTheme }}>
                                                         Explanation:
-                                                        </Text> {answer.explanation && answer.explanation}</Text>)
+                                                        </Text> {answer.explanation}</Text>)
                                             }
                                         </TouchableOpacity>
                                     )
