@@ -45,7 +45,7 @@ class SubjectDashboard extends Component {
                             <Text>Chapter 1</Text>
                         </View>
                         <View style={styles.topicContainer}>
-                            <TouchableOpacity style={styles.topic}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Player')} style={styles.topic}>
                                 <Icon
                                     name='controller-play'
                                     size={35}

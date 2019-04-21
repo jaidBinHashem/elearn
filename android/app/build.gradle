@@ -150,6 +150,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-android-fullscreen-webview-video')
     implementation project(':react-native-webview')
     implementation project(':react-native-spinkit')
     implementation project(':react-native-gesture-handler')

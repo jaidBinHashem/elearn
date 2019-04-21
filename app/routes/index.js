@@ -24,6 +24,8 @@ import QuizHighlights from '../component/Quiz/QuizHighlights';
 import PreviousAttemps from '../component/Quiz/PreviousAttemps';
 import Quiz from '../component/Quiz/Quiz';
 
+import Player from '../component/Player'
+
 import DrawerComponent from './DrawerComponent';
 
 import colors from '../global/colors'
@@ -101,7 +103,8 @@ const AppStack = createStackNavigator(
         Quiz: Quiz,
         QuizSolutions: Quiz,
         QuizHighlights: QuizHighlights,
-        PreviousAttemps : PreviousAttemps
+        PreviousAttemps: PreviousAttemps,
+        Player: Player
     },
     {
         initialRouteName: 'Dashboard',
