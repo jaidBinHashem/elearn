@@ -51,8 +51,12 @@ class Quiz extends Component {
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
             this.setState({ time: minutes + ":" + seconds });
-            if (--timer < 0) {
+            if (--timer < 1) {
                 clearInterval(this.myTimer);
+                // loaderHandler.showLoader("Loading");
+                setTimeout(() => {
+                    // this.submitExam();
+                }, 1000);
             }
         }, 1000);
     }
@@ -98,17 +102,17 @@ class Quiz extends Component {
 
     confirmExamSubmit = () => {
         // this.state.answers.length === 0 && (return);
-        // if (this.state.answers.length === 0) {
-        //     Alert.alert(
-        //         'Please answer at least a question !',
-        //         '', // <- this part is optional, you can pass an empty string
-        //         [
-        //             { text: 'OK', onPress: () => console.log('OK Pressed') },
-        //         ],
-        //         { cancelable: false },
-        //     );
-        //     return
-        // }
+        if (this.state.answers.length === 0) {
+            Alert.alert(
+                'Please answer at least a question !',
+                '', // <- this part is optional, you can pass an empty string
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ],
+                { cancelable: false },
+            );
+            return
+        }
         Alert.alert(
             'Submit Quiz',
             'Are you sure you want to submit the quiz ?',

@@ -22,7 +22,7 @@ class QuizHighlights extends Component {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null;
-        !nextProps.quiz.completedQuiz && this.props.navigation.navigate('QuizSolutions', { showExplanation: true });
+        // !nextProps.quiz.completedQuiz && this.props.navigation.navigate('QuizSolutions', { showExplanation: true });
     }
 
     render() {
@@ -77,7 +77,7 @@ class QuizHighlights extends Component {
                 </View>
                 <View style={{ flex: .4, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={[styles.submitButtom, { marginBottom: 30 }]}
-                        onPress={() => this.props.showExplanation()}
+                        onPress={() => this.props.navigation.navigate('QuizSolutions', { showExplanation: true })}
                     >
                         <Text style={styles.submitText}>VIEW SOLUTIONS</Text>
                         <Icon
