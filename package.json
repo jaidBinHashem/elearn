@@ -16,6 +16,7 @@
     "react-native-elements": "^1.1.0",
     "react-native-facebook-account-kit": "^1.1.0",
     "react-native-gesture-handler": "^1.1.0",
+    "react-native-katex": "^0.3.0",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-modal": "^9.0.0",
     "react-native-progress": "^3.5.0",

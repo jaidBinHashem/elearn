@@ -96,7 +96,7 @@ export default StyleSheet.create({
     fontSize: 20
   },
   optionsContainer: {
-    marginVertical: 20
+    marginVertical: 20,
   },
   option: {
     backgroundColor: '#fff',
@@ -187,5 +187,9 @@ export default StyleSheet.create({
   attempsHeaderText: {
     color: 'black',
     fontWeight: '600'
+  },
+  katex: {
+    height:90
+    // flex: 1,
   }
 });

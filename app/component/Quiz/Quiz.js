@@ -6,6 +6,8 @@ import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
+import Katex from 'react-native-katex';
+
 import { setQuiz, submitQuiz } from '../../redux/actions/QuizActions';
 import { connect } from "react-redux";
 
@@ -14,6 +16,28 @@ import styles from './styles';
 
 const deviceHeight = Dimensions.get("window").height;
 const deviceWidth = Dimensions.get("window").width;
+
+
+const inlineStyle = `
+html, body {
+  
+  background-color: white;
+  position:fixed;
+  width: 100%;
+height: 100%;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+.katex {
+  font-size: 2em;
+  margin: 0;
+  
+}
+`;
+
+
 class Quiz extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Quiz',
@@ -50,7 +74,7 @@ class Quiz extends Component {
             seconds = parseInt(timer % 60, 10);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            this.setState({ time: minutes + ":" + seconds });
+            // this.setState({ time: minutes + ":" + seconds });
             if (--timer < 1) {
                 clearInterval(this.myTimer);
                 // loaderHandler.showLoader("Loading");
@@ -150,13 +174,22 @@ class Quiz extends Component {
         this.props.submitQuiz(this.state.answers, selectedAnswerIdArray, rightAnswers, wrongAnswers);
     }
 
+    strippedContent = (text) => {
+        return text.split(/<latex>(.*?)<latex>/gi);
+    }
+
+
     componentWillUnmount() {
         clearInterval(this.myTimer);
     }
 
     render() {
         let questions = [...this.props.quiz.questions], answers = [...this.props.quiz.answers], selectedAnswersIdArray = [...this.props.quiz.selectedAnswersIdArray], questionViews = [], explanationView = [];
+        const INJECTEDJAVASCRIPT = `const meta = document.createElement('meta'); meta.setAttribute('content', 'width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `
         questions.map((question, index) => {
+
+            let questionContent = question.question.split(/<latex>(.*?)<latex>/gi);
+
             let buttonData = question.answers.map((answer) => {
                 return ({
                     value: answer.id,
@@ -164,13 +197,37 @@ class Quiz extends Component {
                 })
             });
             questionViews.push(
-                <View key={index} style={styles.questionContainer}>
+                <ScrollView showsVerticalScrollIndicator={false} key={index} style={styles.questionContainer}>
                     <View style={styles.questionCounter}>
                         <Text>{index + 1}</Text>
                     </View>
                     <View style={styles.question}>
-                        <View >
-                            <Text style={styles.questionTitle}>{question.question.replace(/<[^>]*>/g, '')}</Text>
+                        <View style={{ marginTop: 10 }}>
+                            {questionContent.map((value, index) => {
+                                if (index % 2 === 0) {
+                                    if (value.length > 0) {
+                                        return (<View key={index} ><Text style={{ fontSize: 26 }}>{value}</Text></View>)
+                                    }
+                                } else {
+                                    return (
+                                        <ScrollView key={index} style={{ padding: 5 }}>
+                                            <Katex
+                                                style={{ height: 110 }}
+                                                scalesPageToFit={false}
+                                                expression={value}
+                                                scrollEnabled={false}
+                                                displayMode={false}
+                                                throwOnError={false}
+                                                errorColor="#f00"
+                                                macros={{}}
+                                                colorIsTextColor={false}
+                                                onLoad={() => console.log('Loaded')}
+                                                onError={() => console.error('Error')}
+                                            />
+                                        </ScrollView>
+                                    )
+                                }
+                            })}
                         </View>
                         <View style={styles.optionsContainer}>
                             <SelectMultipleGroupButton
@@ -200,7 +257,7 @@ class Quiz extends Component {
                             />
                         </View>
                     </View>
-                </View>
+                </ScrollView>
             );
 
             explanationView.push(
@@ -234,7 +291,6 @@ class Quiz extends Component {
                                         </TouchableOpacity>
                                     )
                                 })
-                                // })
                             }
                         </View>
                     </View>
@@ -267,7 +323,7 @@ class Quiz extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>)}
-                        <View style={{ height: deviceHeight - 180 }}>
+                        <View style={{ height: deviceHeight - 200 }}>
                             <Swiper style={styles.wrapper}
                                 ref={node => (this.scroll = node)}
                                 showsButtons={false}
@@ -275,6 +331,7 @@ class Quiz extends Component {
                                 loop={false}
                                 scrollEnabled={false}
                                 index={0}
+                                automaticallyAdjustContentInsets={true}
                                 onIndexChanged={(index) => this.setState({ swiperIndex: index })}
                             >
                                 {this.props.navigation.state.params.showExplanation ? explanationView : questionViews}
@@ -299,7 +356,6 @@ class Quiz extends Component {
                             </View>
                         )}
                     </TouchableOpacity>
-
                     {this.props.quiz.questions.length != (this.state.swiperIndex + 1) && (<TouchableOpacity
                         onPress={() => this.scrollTo(1)}
                         style={styles.nextButton}>

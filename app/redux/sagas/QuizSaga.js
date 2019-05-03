@@ -6,7 +6,7 @@ import { getService, postService } from '../../network'
 const retriveQuizDetails = async () => {
     try {
         let request = {
-            endPoint: 'quiz/51/questions',
+            endPoint: 'quiz/55/questions',
             // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
             authenticate: true,
             temp: false
