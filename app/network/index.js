@@ -5,7 +5,6 @@ import { ERROR_CODE, ERROR_BODY, ERROR_CODE_VALUE, BAD_REQUEST_ERROR, OTHER_ERRO
 
 
 const checkStatus = (response) => {
-    console.log(response, "response here");
     if (response.status >= 200 && response.status < 300) {
         return response;
     }
@@ -51,7 +50,6 @@ export const getService = async (request) => {
 
 
 export const postService = async (request) => {
-    console.log(request, "request");
     try {
         let requestHeaders = {
             'Content-Type': 'application/json',
@@ -70,6 +68,7 @@ export const postService = async (request) => {
         return { success: true, data: response };
     }
     catch (err) {
+        console.log(err, "Error in post service")
         response = await err.ERROR_BODY.json();
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }

@@ -56,19 +56,19 @@ class Dashboard extends Component {
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
-                            <TouchableOpacity style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
-                            <TouchableOpacity style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
