@@ -31,7 +31,6 @@ class ArticleWebView extends Component {
             authenticate: true
         }
         let scolarship = await getService(request);
-        console.log(scolarship, "here");
         this.setState({ scolarship: scolarship.data.data })
     }
 

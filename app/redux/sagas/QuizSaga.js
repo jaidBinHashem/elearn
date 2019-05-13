@@ -1,14 +1,47 @@
 import { put, call } from "redux-saga/effects";
-import { GET_BLOGS_RETURN, SIGN_OUT } from '../actions/types';
+import { SET_QUIZ_DONE, SIGN_OUT, SUBMIT_QUIZ_RETURN, GET_PREVIOUS_ATTEMPS_RETURN } from '../actions/types';
 
-import { getService } from '../../network'
+import { getService, postService } from '../../network'
 
 const retriveQuizDetails = async () => {
     try {
         let request = {
-            endPoint: '',
-            baseUrl : 'https://pastebin.com/raw/QXSLsxEv',
-            temp: true
+            endPoint: 'quiz/55/questions',
+            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
+            authenticate: true,
+            temp: false
+        }
+        return (await getService(request));
+    } catch (error) {
+        return false;
+    }
+};
+
+const submitQuizResults = async (payload) => {
+    let answers = [...payload.answers]
+    try {
+        let request = {
+            endPoint: 'quiz/51/questions',
+            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
+            authenticate: true,
+            temp: false,
+            params: {
+                'questions': answers
+            }
+        }
+        return (await postService(request));
+    } catch (error) {
+        return false;
+    }
+};
+
+const retrivePreviousAttemps = async () => {
+    try {
+        let request = {
+            endPoint: 'quiz/51/attempts',
+            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/attempts',
+            authenticate: true,
+            temp: false
         }
         return (await getService(request));
     } catch (error) {
@@ -17,9 +50,20 @@ const retriveQuizDetails = async () => {
 };
 
 
-
 export const setQuiz = function* (action) {
     let quizDetails = yield call(retriveQuizDetails);
-    console.log(quizDetails, "here");
-    // blogs.success && blogs.data && (yield put({ type: GET_BLOGS_RETURN, payload: blogs.data.data }));
+    quizDetails.success && quizDetails.data && (yield put({ type: SET_QUIZ_DONE, payload: quizDetails.data }));
+};
+
+export const submitQuiz = function* (action) {
+    let submitAnswers = yield call(submitQuizResults, action.payload);
+    yield put({
+        type: SUBMIT_QUIZ_RETURN,
+        payload: action.payload
+    });
+};
+
+export const getPreviousAttemps = function* (action) {
+    let attemps = yield call(retrivePreviousAttemps);
+    attemps.success && attemps.data && (yield put({ type: GET_PREVIOUS_ATTEMPS_RETURN, payload: attemps.data }));
 };

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { getScholarships } from '../../redux/actions/ScholarshipsActions';
 import { getBlogs } from '../../redux/actions/BlogActions';
+import { getSubjects } from '../../redux/actions/SubjectActions';
 
 import colors from '../../global/../global/colors'
 import styles from './styles';
@@ -25,6 +26,7 @@ class Loader extends Component {
     switchToApp = async () => {
         await this.props.getScholarships();
         await this.props.getBlogs();
+        await this.props.getSubjects();
         this.props.navigation.navigate('App');
     }
 
@@ -56,5 +58,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { checkAuth, getScholarships, getBlogs }
+    { checkAuth, getScholarships, getBlogs, getSubjects }
 )(Loader);

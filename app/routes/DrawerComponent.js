@@ -61,7 +61,7 @@ class DrawerComponent extends Component {
                     </View>
                 </View>
                 <DrawerItems
-                    itemStyle={{ borderBottomColor: 'gray', borderBottomWidth: .5 }} activeLabelStyle={{ color: colors.appTheme }} {...this.props}
+                    itemStyle={{ borderBottomColor: 'gray', borderBottomWidth: 0 }} activeLabelStyle={{ color: colors.appTheme }} {...this.props}
                 />
                 <TouchableOpacity
                     onPress={() => this.shareApp()}
@@ -73,7 +73,6 @@ class DrawerComponent extends Component {
                         <Text style={{ fontWeight: 'bold', color: 'rgba(0,0,0,.87)' }}>Share The App</Text>
                     </View>
                 </TouchableOpacity>
-
             </View>
         )
     }

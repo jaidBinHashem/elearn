@@ -24,7 +24,7 @@ class MyProfile extends Component {
 
     async componentDidMount() {
         let token = await AsyncStorage.getItem('USER_TOKEN')
-        // console.log(token, "token in dash")
+        console.log(token, "token in dash");
     }
 
     signOut = async () => {

@@ -1,54 +1,311 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar, ScrollView, TouchableOpacity } from 'react-native'
+import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert } from 'react-native'
 import { Icon } from 'react-native-elements';
+import Swiper from 'react-native-swiper';
+import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
+import BusyIndicator from 'react-native-busy-indicator';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
-import { setQuiz } from '../../redux/actions/QuizActions';
+import Katex from 'react-native-katex';
+
+import { setQuiz, submitQuiz } from '../../redux/actions/QuizActions';
 import { connect } from "react-redux";
 
 import colors from '../../global/colors'
 import styles from './styles';
+
+const deviceHeight = Dimensions.get("window").height;
+const deviceWidth = Dimensions.get("window").width;
+
+
+const inlineStyle = `
+html, body {
+  
+  background-color: white;
+  position:fixed;
+  width: 100%;
+height: 100%;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+.katex {
+  font-size: 2em;
+  margin: 0;
+  
+}
+`;
+
 
 class Quiz extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Quiz',
     });
 
+    constructor(props) {
+        super(props);
+        let minutes = parseInt(this.props.quiz.time / 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time / 60, 10) : parseInt(this.props.quiz.time / 60, 10);
+        let seconds = parseInt(this.props.quiz.time % 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time % 60, 10) : parseInt(this.props.quiz.time % 60, 10);
+        this.state = {
+            swiperIndex: 0,
+            time: minutes + ":" + seconds,
+            answers: [],
+            answerdQuestions: [],
+            selectedAnswerIdArray: []
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
-            : null
+            : null;
+        nextProps.quiz.completedQuiz && this.props.navigation.replace('QuizHighlights');
     }
 
     componentDidMount() {
-        this.props.setQuiz();
+        !this.props.navigation.state.params.showExplanation && this.startTimer((this.props.quiz.time - 1));
     }
 
+    startTimer = async (duration) => {
+        let timer = duration, minutes, seconds;
+        this.myTimer = setInterval(() => {
+            minutes = parseInt(timer / 60, 10)
+            seconds = parseInt(timer % 60, 10);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            // this.setState({ time: minutes + ":" + seconds });
+            if (--timer < 1) {
+                clearInterval(this.myTimer);
+                // loaderHandler.showLoader("Loading");
+                setTimeout(() => {
+                    // this.submitExam();
+                }, 1000);
+            }
+        }, 1000);
+    }
+
+    scrollTo = i => {
+        this.scroll.scrollBy(i);
+    };
+
+
+    _groupButtonOnSelectedValuesChange = (selectedValues, question) => {
+        let answers = [...this.state.answers],
+            answerdQuestions = [...this.state.answerdQuestions],
+            selectedAnswerIdArray = [...this.state.selectedAnswerIdArray],
+            selectedAnswersObject = null,
+            selectedAnswers = question.answers.filter(answer => selectedValues.includes(answer.id));
+        selectedAnswers.map((selectedAnswer) => {
+            selectedAnswersObject = {
+                "id": selectedAnswer.id,
+                "answer": selectedAnswer.answer,
+                "correct": selectedAnswer.correct
+            };
+        });
+        if (answerdQuestions.includes(question.id)) {
+            answers[answerdQuestions.indexOf(question.id)] = {
+                'question': {
+                    'id': question.id,
+                    'question': question.question,
+                    "selectedAnswer": selectedAnswersObject
+                }
+            }
+        } else {
+            answers.push({
+                'question': {
+                    'id': question.id,
+                    'question': question.question,
+                    "selectedAnswer": selectedAnswersObject
+                }
+            });
+            answerdQuestions.push(question.id);
+        }
+        this.setState({ answers, answerdQuestions });
+    }
+
+    confirmExamSubmit = () => {
+        // this.state.answers.length === 0 && (return);
+        if (this.state.answers.length === 0) {
+            Alert.alert(
+                'Please answer at least a question !',
+                '', // <- this part is optional, you can pass an empty string
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ],
+                { cancelable: false },
+            );
+            return
+        }
+        Alert.alert(
+            'Submit Quiz',
+            'Are you sure you want to submit the quiz ?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'Submit',
+                    onPress: () => {
+                        loaderHandler.showLoader("Loading");
+                        setTimeout(() => {
+                            this.submitExam();
+                        }, 1000);
+                    }
+                },
+            ],
+            { cancelable: true },
+        );
+    }
+
+    submitExam = () => {
+        let answers = [...this.state.answers];
+        let selectedAnswerIdArray = [], rightAnswers = [], wrongAnswers = [];
+        answers.map(answer => {
+            let rightAnswer = true;
+            answer.question.selectedAnswer.correct === false && (rightAnswer = false);
+            selectedAnswerIdArray.push(answer.question.selectedAnswer.id);
+            rightAnswer === true
+                ? rightAnswers.push(rightAnswer)
+                : wrongAnswers.push(rightAnswer);
+        });
+        this.props.submitQuiz(this.state.answers, selectedAnswerIdArray, rightAnswers, wrongAnswers);
+    }
+
+    strippedContent = (text) => {
+        return text.split(/<latex>(.*?)<latex>/gi);
+    }
 
 
     componentWillUnmount() {
-        clearInterval(this.timer);
+        clearInterval(this.myTimer);
     }
 
     render() {
+        let questions = [...this.props.quiz.questions], answers = [...this.props.quiz.answers], selectedAnswersIdArray = [...this.props.quiz.selectedAnswersIdArray], questionViews = [], explanationView = [];
+        const INJECTEDJAVASCRIPT = `const meta = document.createElement('meta'); meta.setAttribute('content', 'width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `
+        questions.map((question, index) => {
+
+            let questionContent = question.question.split(/<latex>(.*?)<latex>/gi);
+
+            let buttonData = question.answers.map((answer) => {
+                return ({
+                    value: answer.id,
+                    displayValue: answer.answer
+                })
+            });
+            questionViews.push(
+                <ScrollView showsVerticalScrollIndicator={false} key={index} style={styles.questionContainer}>
+                    <View style={styles.questionCounter}>
+                        <Text>{index + 1}</Text>
+                    </View>
+                    <View style={styles.question}>
+                        <View style={{ marginTop: 10 }}>
+                            {questionContent.map((value, index) => {
+                                if (index % 2 === 0) {
+                                    if (value.length > 0) {
+                                        return (<View key={index} ><Text style={{ fontSize: 26 }}>{value}</Text></View>)
+                                    }
+                                } else {
+                                    return (
+                                        <ScrollView key={index} style={{ padding: 5 }}>
+                                            <Katex
+                                                style={{ height: 110 }}
+                                                scalesPageToFit={false}
+                                                expression={value}
+                                                scrollEnabled={false}
+                                                displayMode={false}
+                                                throwOnError={false}
+                                                errorColor="#f00"
+                                                macros={{}}
+                                                colorIsTextColor={false}
+                                                onLoad={() => console.log('Loaded')}
+                                                onError={() => console.error('Error')}
+                                            />
+                                        </ScrollView>
+                                    )
+                                }
+                            })}
+                        </View>
+                        <View style={styles.optionsContainer}>
+                            <SelectMultipleGroupButton
+                                containerViewStyle={{
+                                    justifyContent: 'center',
+                                    marginTop: 5
+                                }}
+                                buttonViewStyle={{
+                                    height: 50,
+                                    width: deviceWidth - 60,
+                                    marginVertical: 10,
+                                    elevation: 5
+                                }}
+                                highLightStyle={{
+                                    height: 50,
+                                    borderColor: colors.appTheme,
+                                    backgroundColor: "#fff",
+                                    textColor: colors.appTheme,
+                                    borderTintColor: colors.appTheme,
+                                    backgroundTintColor: colors.appTheme,
+                                    textTintColor: '#fff',
+                                    elevation: 5,
+                                }}
+                                multiple={false}
+                                onSelectedValuesChange={selectedValues => this._groupButtonOnSelectedValuesChange(selectedValues, question)}
+                                group={buttonData}
+                            />
+                        </View>
+                    </View>
+                </ScrollView>
+            );
+
+            explanationView.push(
+                <View key={index} style={styles.questionContainer}>
+                    <View style={styles.questionCounter}>
+                        <Text>{index + 1}</Text>
+                    </View>
+                    <View style={styles.question}>
+                        <View >
+                            <Text style={styles.questionTitle}>{question.question.replace(/<[^>]*>/g, '')}</Text>
+                        </View>
+                        <View style={styles.optionsContainer}>
+                            {
+                                question.answers.map((answer) => {
+                                    let wrongStyle = null;
+                                    if (selectedAnswersIdArray.includes(answer.id)) {
+                                        !answer.correct && (wrongStyle = {
+                                            borderColor: 'red',
+                                            borderWidth: 3
+                                        })
+                                    }
+                                    return (
+                                        <TouchableOpacity key={answer.id} style={[styles.option, answer.correct && styles.explanation, wrongStyle]}>
+                                            <Text style={styles.optionText}>{answer.answer}</Text>
+                                            {
+                                                answer.correct && answer.explanation != null && (<Text style={styles.explanationText}>
+                                                    <Text style={{ color: colors.appTheme }}>
+                                                        Explanation:
+                                                        </Text> {answer.explanation}</Text>)
+                                            }
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
+                        </View>
+                    </View>
+                </View>
+            )
+
+
+        });
         return (
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
+                <ScrollView>
                     <View style={{ flex: 1 }}>
-                        <View style={styles.quesationNumberAndTimeContainer}>
+                        {!this.props.navigation.state.params.showExplanation && (<View style={styles.quesationNumberAndTimeContainer}>
                             <View style={styles.quationNumberContainer}>
-                                <Icon
-                                    name='questioncircleo'
-                                    type='antdesign'
-                                    color={colors.appTheme}
-                                    size={33}
-                                    containerStyle={styles.numberIconContainer}
-                                />
-                                <View>
-                                    <Text style={styles.qustionNumber}>10</Text>
-                                    <Text>Questions</Text>
-                                </View>
-                            </View>
-                            <View style={styles.timeContainer}>
                                 <Icon
                                     name='back-in-time'
                                     type='entypo'
@@ -57,30 +314,62 @@ class Quiz extends Component {
                                     containerStyle={styles.numberIconContainer}
                                 />
                                 <View>
-                                    <Text style={styles.time}>10</Text>
-                                    <Text>Minutes</Text>
+                                    <Text style={styles.qustionNumber}>{this.state.time}</Text>
                                 </View>
                             </View>
-                        </View>
-                        <View style={styles.instructionContainer}>
-                            <Text style={styles.instructionTitle}>Instructions</Text>
-                            <Text style={styles.instruction}>There will be a good amount of instruction. There will be a good amount of instruction. There will be a good amount of instruction. There will be a good amount of instruction.</Text>
-                            {/* <Text>Instructions</Text> */}
-                            {/* <Text>Instructions</Text> */}
+                            <View style={styles.timeContainer}>
+                                <TouchableOpacity onPress={() => this.confirmExamSubmit()}>
+                                    <Text style={styles.submitExam}>Submit</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>)}
+                        <View style={{ height: deviceHeight - 200 }}>
+                            <Swiper style={styles.wrapper}
+                                ref={node => (this.scroll = node)}
+                                showsButtons={false}
+                                showsPagination={false}
+                                loop={false}
+                                scrollEnabled={false}
+                                index={0}
+                                automaticallyAdjustContentInsets={true}
+                                onIndexChanged={(index) => this.setState({ swiperIndex: index })}
+                            >
+                                {this.props.navigation.state.params.showExplanation ? explanationView : questionViews}
+                            </Swiper>
                         </View>
                     </View>
-                    <View style={{ flex: .2, paddingHorizontal: 30 }}>
-                        <TouchableOpacity style={styles.submitButtom} onPress={() => this.sendCourse()}>
-                            <Text style={styles.submitText}>Start Quiz</Text>
-                            <Icon
-                                name='arrowright'
-                                size={22}
-                                type='antdesign'
-                                color='black'
-                                containerStyle={styles.submitButtomIconContainer}
-                            />
-                        </TouchableOpacity>
-                    </View>
+                </ScrollView>
+                <View style={styles.questionNavigationContainer}>
+                    <TouchableOpacity
+                        onPress={() => this.scrollTo(-1)}
+                        style={styles.nextButton}>
+                        {this.state.swiperIndex > 0 && (
+                            <View style={{ flexDirection: 'row' }}>
+                                <Icon
+                                    name='arrowleft'
+                                    size={22}
+                                    type='antdesign'
+                                    color={colors.appTheme}
+                                    containerStyle={styles.nextIconContainer}
+                                />
+                                <Text style={styles.nextText}>Previous</Text>
+                            </View>
+                        )}
+                    </TouchableOpacity>
+                    {this.props.quiz.questions.length != (this.state.swiperIndex + 1) && (<TouchableOpacity
+                        onPress={() => this.scrollTo(1)}
+                        style={styles.nextButton}>
+                        <Text style={styles.nextText}>Next</Text>
+                        <Icon
+                            name='arrowright'
+                            size={22}
+                            type='antdesign'
+                            color={colors.appTheme}
+                            containerStyle={styles.nextIconContainer}
+                        />
+                    </TouchableOpacity>)}
+                </View>
+                <BusyIndicator />
             </View>
         )
     }
@@ -89,11 +378,12 @@ class Quiz extends Component {
 
 function mapStateToProps(state) {
     return {
-        auth: state.AuthReducer
+        auth: state.AuthReducer,
+        quiz: state.QuizReducer
     };
 }
 
 export default connect(
     mapStateToProps,
-    {setQuiz}
+    { setQuiz, submitQuiz }
 )(Quiz);
