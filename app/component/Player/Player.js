@@ -31,7 +31,7 @@ class Player extends Component {
                 <VideoView
                     originWhitelist={['*']}
                     style={{ height: 300 }}
-                    source={{ uri: 'http://172.16.228.145:8080/api/webview' }}
+                    source={{ uri: 'http://172.16.228.145:8080/api/lesso' }}
                 />
             </View>
         )

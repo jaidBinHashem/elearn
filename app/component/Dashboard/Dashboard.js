@@ -41,7 +41,8 @@ class Dashboard extends Component {
     }
 
     render() {
-        let subj = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+        let subjects = [...this.props.subjects];
+        let subj = [...this.props.subjectsTitleArr];
         let colors = ['#BC9CFF', '#F6D365', '#F093FB', '#0BA360', '#74DBC9', '#677DCB', '#501A57', '#F07B52'];
         let colorsArr = [...colors];
         let views = [], length = Math.ceil(subj.length / 4);
@@ -50,25 +51,25 @@ class Dashboard extends Component {
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard')} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
-                                <Text>{subj.shift()}</Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
+                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
                             <TouchableOpacity style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text>{subj.shift()}</Text>
+                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
                             <TouchableOpacity style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
-                                <Text>{subj.shift()}</Text>
+                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
                             <TouchableOpacity style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text>{subj.shift()}</Text>
+                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -232,6 +233,8 @@ function mapStateToProps(state) {
         scholarships: state.ScholarshipsReducer,
         newsAndUpdates: state.BlogReducer.newsAndUpdates,
         tipsAndTricks: state.BlogReducer.tipsAndTricks,
+        subjects: state.SubjectsReducer.subjects,
+        subjectsTitleArr: state.SubjectsReducer.subjectsTitleArr
     };
 }
 

@@ -13,8 +13,8 @@ export default StyleSheet.create({
     marginTop: 30
   },
   topicContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
   },
   topic: {
     justifyContent: 'center',
@@ -24,9 +24,15 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     elevation: 3,
     borderRadius: 3,
-    marginVertical: 20
+    marginVertical: 20,
+    marginRight: 15,
+    marginLeft: 3
   },
   topicText: {
-    top: 5
+    top: 5,
+    marginHorizontal: 5
+  },
+  chaptersCount: {
+    marginTop: 5
   }
 });

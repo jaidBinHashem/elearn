@@ -60,5 +60,11 @@ export default StyleSheet.create({
     marginVertical: 20,
     borderRadius: 5,
     marginHorizontal: 10
+  },
+  subjectTitle: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '600',
+    marginHorizontal: 10
   }
 });
