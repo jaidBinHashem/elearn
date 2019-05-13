@@ -35,7 +35,7 @@ import colors from '../global/colors'
 const transitionConfig = () => {
     return {
         transitionSpec: {
-            duration: 750,
+            duration: 500,
             easing: Easing.out(Easing.poly(4)),
             timing: Animated.timing,
             useNativeDriver: true,
