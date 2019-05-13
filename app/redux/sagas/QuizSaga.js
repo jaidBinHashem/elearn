@@ -6,10 +6,10 @@ import { getService, postService } from '../../network'
 const retriveQuizDetails = async () => {
     try {
         let request = {
-            endPoint: '',
-            baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
+            endPoint: 'quiz/55/questions',
+            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
             authenticate: true,
-            temp: true
+            temp: false
         }
         return (await getService(request));
     } catch (error) {
@@ -21,10 +21,10 @@ const submitQuizResults = async (payload) => {
     let answers = [...payload.answers]
     try {
         let request = {
-            endPoint: '',
-            baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
+            endPoint: 'quiz/51/questions',
+            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
             authenticate: true,
-            temp: true,
+            temp: false,
             params: {
                 'questions': answers
             }
@@ -38,10 +38,10 @@ const submitQuizResults = async (payload) => {
 const retrivePreviousAttemps = async () => {
     try {
         let request = {
-            endPoint: '',
-            baseUrl: 'http://172.16.228.145:8080/api/quiz/51/attempts',
+            endPoint: 'quiz/51/attempts',
+            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/attempts',
             authenticate: true,
-            temp: true
+            temp: false
         }
         return (await getService(request));
     } catch (error) {
@@ -57,7 +57,6 @@ export const setQuiz = function* (action) {
 
 export const submitQuiz = function* (action) {
     let submitAnswers = yield call(submitQuizResults, action.payload);
-    console.log(submitAnswers, "here");
     yield put({
         type: SUBMIT_QUIZ_RETURN,
         payload: action.payload
@@ -66,6 +65,5 @@ export const submitQuiz = function* (action) {
 
 export const getPreviousAttemps = function* (action) {
     let attemps = yield call(retrivePreviousAttemps);
-    console.log(attemps, "attemps");
     attemps.success && attemps.data && (yield put({ type: GET_PREVIOUS_ATTEMPS_RETURN, payload: attemps.data }));
 };
