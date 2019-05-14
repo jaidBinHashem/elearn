@@ -13,6 +13,7 @@ import EditProfile from '../component/EditProfile';
 import MySubjects from '../component/MySubjects';
 import Cupon from '../component/Cupon';
 import BuyPackage from '../component/BuyPackage';
+import ConfirmBuyPackage from '../component/BuyPackage/ConfirmBuyPackage';
 import Scolarships from '../component/Scolarships';
 import Upcoming from '../component/SuperLeague/Upcoming';
 import Completed from '../component/SuperLeague/Completed';
@@ -183,6 +184,7 @@ const CuponStack = createStackNavigator(
 const BuyPackageStack = createStackNavigator(
     {
         BuyPackage: BuyPackage,
+        ConfirmBuyPackage: ConfirmBuyPackage
     },
     {
         initialRouteName: 'BuyPackage',

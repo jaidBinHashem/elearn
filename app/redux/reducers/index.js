@@ -6,6 +6,7 @@ import BlogReducer from "./BlogReducer";
 import QuizReducer from "./QuizReducer";
 import UserReducer from "./UserReducer";
 import SubjectsReducer from "./SubjectsReducer";
+import PackageReducer from "./PackageReducer";
 
 export default combineReducers({
     AuthReducer,
@@ -13,6 +14,7 @@ export default combineReducers({
     UserReducer,
     BlogReducer,
     QuizReducer,
-    SubjectsReducer
+    SubjectsReducer,
+    PackageReducer
 });
 
