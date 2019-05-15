@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { BASE_URL, TEMP_URL } from './URL'
 import { ERROR_CODE, ERROR_BODY, ERROR_CODE_VALUE, BAD_REQUEST_ERROR, OTHER_ERROR_CODE, SERVER_ERROR_CODE_VALUE } from '../constant/ErrorStatusCode';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 
 const checkStatus = (response) => {
@@ -30,6 +31,9 @@ export const getService = async (request) => {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         };
+
+        request.showLoader && loaderHandler.showLoader("Loading");
+
         if (request.authenticate) {
             let accessToken = await AsyncStorage.getItem("USER_TOKEN");
             requestHeaders.authorization = 'Bearer ' + accessToken;
@@ -39,6 +43,7 @@ export const getService = async (request) => {
             headers: requestHeaders,
         });
         response = await checkStatus(response).json();
+        request.showLoader && loaderHandler.hideLoader();
         return { success: true, data: response };
     }
     catch (err) {

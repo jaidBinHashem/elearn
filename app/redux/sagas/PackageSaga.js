@@ -8,7 +8,8 @@ const retrievePackages = async () => {
         let request = {
             endPoint: '',
             baseUrl: 'https://pastebin.com/raw/JgHsnhAZ',
-            temp: true
+            temp: true,
+            showLoader: true
         }
         return (await getService(request));
     } catch (error) {

@@ -10,7 +10,8 @@ const retrieveSubjects = async () => {
             endPoint: '',
             baseUrl: 'http://172.16.228.145:8080/api/user/courses',
             temp: true,
-            authenticate: true
+            authenticate: true,
+            showLoader : true
         }
         return (await getService(request));
     } catch (error) {
@@ -24,7 +25,8 @@ const retrieveSubjectDetails = async () => {
             endPoint: '',
             baseUrl: 'http://172.16.228.145:8080/api/user/courses/advanced-angular-4-development',
             temp: true,
-            authenticate: true
+            authenticate: true,
+            showLoader : true
         }
         return (await getService(request));
     } catch (error) {

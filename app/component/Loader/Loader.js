@@ -24,9 +24,9 @@ class Loader extends Component {
     }
 
     switchToApp = async () => {
+        await this.props.getSubjects();
         await this.props.getScholarships();
         await this.props.getBlogs();
-        await this.props.getSubjects();
         this.props.navigation.navigate('App');
     }
 
