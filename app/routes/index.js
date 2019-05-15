@@ -10,6 +10,7 @@ import Dashboard from '../component/Dashboard';
 import ArticleWebView from '../component/ArticleWebView'
 import MyProfile from '../component/MyProfile';
 import EditProfile from '../component/EditProfile';
+import EditStudyLevel from '../component/EditProfile/EditStudyLevel';
 import MySubjects from '../component/MySubjects';
 import Cupon from '../component/Cupon';
 import BuyPackage from '../component/BuyPackage';
@@ -125,7 +126,8 @@ const AppStack = createStackNavigator(
 const ProfileStack = createStackNavigator(
     {
         MyProfile: MyProfile,
-        EditProfile: EditProfile
+        EditProfile: EditProfile,
+        EditStudyLevel : EditStudyLevel
     },
     {
         initialRouteName: 'MyProfile',

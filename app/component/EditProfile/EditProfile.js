@@ -19,10 +19,11 @@ class EditProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "Rakib",
+            name: this.props.user.name,
             nameError: "",
-            email: "",
+            email: this.props.user.email,
             emailError: "",
+            location : null
         }
     }
 
@@ -33,7 +34,7 @@ class EditProfile extends Component {
     }
 
     async componentDidMount() {
-        let token = await AsyncStorage.getItem('USER_TOKEN')
+        // let token = await AsyncStorage.getItem('USER_TOKEN')
         // console.log(token, "token in dash")
     }
 
@@ -131,8 +132,8 @@ class EditProfile extends Component {
                                 placeholder='Your Location'
                                 errorStyle={{ color: 'red' }}
                                 errorMessage={this.props.emailError}
-                                onChangeText={(email) => this.setState({ email })}
-                                value={this.state.email}
+                                onChangeText={(email) => this.setState({ location })}
+                                value={this.state.location}
                                 keyboardType={'email-address'}
                                 leftIcon={
                                     <Icon
@@ -197,7 +198,8 @@ class EditProfile extends Component {
 
 function mapStateToProps(state) {
     return {
-        auth: state.AuthReducer
+        auth: state.AuthReducer,
+        user: state.UserReducer
     };
 }
 

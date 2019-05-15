@@ -3,6 +3,7 @@ package com.eshosikhi;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.airship.customwebview.CustomWebViewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImagePickerPackage(),
             new CustomWebViewPackage(),
             new RNCWebViewPackage(),
             new RNSpinkitPackage(),
