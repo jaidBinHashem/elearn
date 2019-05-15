@@ -50,7 +50,6 @@ export const getService = async (request) => {
 
 
 export const postService = async (request) => {
-    console.log(request, "request");
     try {
         let requestHeaders = {
             'Content-Type': 'application/json',
@@ -69,6 +68,7 @@ export const postService = async (request) => {
         return { success: true, data: response };
     }
     catch (err) {
+        console.log(err, "Error in post service")
         response = await err.ERROR_BODY.json();
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }
