@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.imagepicker.ImagePickerPackage;
+import com.airship.customwebview.CustomWebViewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new ImagePickerPackage(),
+            new CustomWebViewPackage(),
             new RNCWebViewPackage(),
             new RNSpinkitPackage(),
             new RNGestureHandlerPackage(),

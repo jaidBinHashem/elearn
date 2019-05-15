@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
@@ -21,7 +21,7 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            refreshing: false
         }
     }
 
@@ -36,8 +36,13 @@ class Dashboard extends Component {
         loaderHandler.showLoader("Loading");
     }
 
+    _onRefresh = () => {
+        this.props.navigation.navigate('Loader')
+    }
+
     render() {
-        let subj = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+        let subjects = [...this.props.subjects];
+        let subj = [...this.props.subjectsTitleArr];
         let colors = ['#BC9CFF', '#F6D365', '#F093FB', '#0BA360', '#74DBC9', '#677DCB', '#501A57', '#F07B52'];
         let colorsArr = [...colors];
         let views = [], length = Math.ceil(subj.length / 4);
@@ -46,25 +51,25 @@ class Dashboard extends Component {
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
-                                <Text>{subj.shift()}</Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
+                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
                             <TouchableOpacity style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text>{subj.shift()}</Text>
+                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
                             <TouchableOpacity style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
-                                <Text>{subj.shift()}</Text>
+                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
                             <TouchableOpacity style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text>{subj.shift()}</Text>
+                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -143,7 +148,13 @@ class Dashboard extends Component {
         return (
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh} />
+                    }
+                    showsVerticalScrollIndicator={false}>
                     <View>
                         <Text style={styles.name}>Rakib</Text>
                     </View>
@@ -168,41 +179,46 @@ class Dashboard extends Component {
                         </View>
                     </View>
                     <View style={styles.swiperContainer}>
-                        <Swiper
-                            height={250}
-                            ref={node => (this.scroll = node)}
-                            showsButtons={false}
-                            showsPagination={false}
-                            loop={true}
-                            scrollEnabled={true}
-                        >
-                            {views}
-                        </Swiper>
+                        {
+                            views.length === length && (
+                                <Swiper
+                                    height={250}
+                                    index={0}
+                                    ref={node => (this.scroll = node)}
+                                    showsButtons={false}
+                                    showsPagination={false}
+                                    loop={true}
+                                    scrollEnabled={true}
+                                >
+                                    {views}
+                                </Swiper>
+                            )
+                        }
                     </View>
-                    <View>
-                        {scholarshipsView.length > 0 && (<View>
+                    {scholarshipsView.length > 0 && (<View>
+                        <View>
                             <Text style={styles.newsAndUpdatesTitle}>Scholarships</Text>
-                        </View>)}
+                        </View>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {scholarshipsView}
                         </ScrollView>
-                    </View>
-                    <View>
+                    </View>)}
+                    {newsAndUpdatesView.length > 0 && (<View>
                         <View>
                             <Text style={styles.newsAndUpdatesTitle}>News & Updates</Text>
                         </View>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {newsAndUpdatesView}
                         </ScrollView>
-                    </View>
-                    <View>
+                    </View>)}
+                    {tipsAndTricksView.length > 0 && (<View>
                         <View>
                             <Text style={styles.newsAndUpdatesTitle}>Tips & Tricks</Text>
                         </View>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {tipsAndTricksView}
                         </ScrollView>
-                    </View>
+                    </View>)}
                 </ScrollView>
                 <BusyIndicator />
             </View>
@@ -217,6 +233,8 @@ function mapStateToProps(state) {
         scholarships: state.ScholarshipsReducer,
         newsAndUpdates: state.BlogReducer.newsAndUpdates,
         tipsAndTricks: state.BlogReducer.tipsAndTricks,
+        subjects: state.SubjectsReducer.subjects,
+        subjectsTitleArr: state.SubjectsReducer.subjectsTitleArr
     };
 }
 

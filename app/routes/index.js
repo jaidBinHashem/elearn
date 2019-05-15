@@ -18,6 +18,15 @@ import Scolarships from '../component/Scolarships';
 import Upcoming from '../component/SuperLeague/Upcoming';
 import Completed from '../component/SuperLeague/Completed';
 
+import SubjectDashboard from '../component/SubjectDashboard'
+
+import QuizDashboard from '../component/Quiz';
+import QuizHighlights from '../component/Quiz/QuizHighlights';
+import PreviousAttemps from '../component/Quiz/PreviousAttemps';
+import Quiz from '../component/Quiz/Quiz';
+
+import Player from '../component/Player'
+
 import DrawerComponent from './DrawerComponent';
 
 import colors from '../global/colors'
@@ -27,7 +36,7 @@ import colors from '../global/colors'
 const transitionConfig = () => {
     return {
         transitionSpec: {
-            duration: 750,
+            duration: 500,
             easing: Easing.out(Easing.poly(4)),
             timing: Animated.timing,
             useNativeDriver: true,
@@ -89,7 +98,14 @@ const AuthStack = createStackNavigator(
 const AppStack = createStackNavigator(
     {
         Dashboard: Dashboard,
-        ArticleWebView: ArticleWebView
+        SubjectDashboard: SubjectDashboard,
+        ArticleWebView: ArticleWebView,
+        QuizDashboard: QuizDashboard,
+        Quiz: Quiz,
+        QuizSolutions: Quiz,
+        QuizHighlights: QuizHighlights,
+        PreviousAttemps: PreviousAttemps,
+        Player: Player
     },
     {
         initialRouteName: 'Dashboard',
