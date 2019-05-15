@@ -4,8 +4,9 @@ import { getScholarships } from './ScholarshipsSaga';
 import { getBlogs } from './BlogsSaga';
 import { setQuiz, submitQuiz, getPreviousAttemps } from './QuizSaga';
 import { getSubjects, getSubjectDetails } from './SubjectsSaga';
+import { getPackages } from './PackageSaga';
 
-import { GET_SUBJECT_DETAILS, GET_SUBJECTS, SUBMIT_QUIZ, SET_QUIZ, GET_BLOGS, SIGN_OUT, MAKE_LOGIN_REQUEST, CHECK_AUTH, SIGN_UP, SUBMIT_STUDY_DETAILS, SUBMIT_COURSES, REGISTER_USER, GET_SCHOLARSHIPS, GET_PREVIOUS_ATTEMPS } from '../actions/types'
+import {GET_PACKAGES, GET_SUBJECT_DETAILS, GET_SUBJECTS, SUBMIT_QUIZ, SET_QUIZ, GET_BLOGS, SIGN_OUT, MAKE_LOGIN_REQUEST, CHECK_AUTH, SIGN_UP, SUBMIT_STUDY_DETAILS, SUBMIT_COURSES, REGISTER_USER, GET_SCHOLARSHIPS, GET_PREVIOUS_ATTEMPS } from '../actions/types'
 
 export function* rootSaga() {
     yield takeEvery(CHECK_AUTH, isAuthenticated);
@@ -22,6 +23,7 @@ export function* rootSaga() {
     yield takeEvery(SIGN_OUT, signOut);
     yield takeEvery(GET_SUBJECTS, getSubjects);
     yield takeEvery(GET_SUBJECT_DETAILS, getSubjectDetails);
+    yield takeEvery(GET_PACKAGES, getPackages);
 }
 
 export default rootSaga;
