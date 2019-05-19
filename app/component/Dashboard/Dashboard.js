@@ -47,28 +47,38 @@ class Dashboard extends Component {
         let colorsArr = [...colors];
         let views = [], length = Math.ceil(subj.length / 4);
         for (let i = 0; i < length; i++) {
+            let subjectArr = [];
+            if (subjects.length > 4) {
+                for (let i = 0; i < 4; i++) {
+                    subjectArr.push(subjects.shift());
+                }
+            } else {
+                for (let i = 0; i <= subjects.length; i++) {
+                    subjectArr.push(subjects.shift());
+                }
+            }
             view = (
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjects.shift() })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}

@@ -1,8 +1,9 @@
-import { GET_PACKAGES_RETURN, PROCEED_PACKAGES } from '../actions/types'
+import { GET_PACKAGES_RETURN, PROCEED_PACKAGES, SUBMIT_BUY_PKG_RETURN } from '../actions/types'
 const initialState = {
   packages: [],
   selectedPackages: [],
-  totalPrice: 0
+  totalPrice: 0,
+  paymentHTML: null
 };
 
 export default function (state = initialState, action) {
@@ -17,6 +18,11 @@ export default function (state = initialState, action) {
         ...state,
         selectedPackages: action.payload.selectedPackages,
         totalPrice: action.payload.totalPrice
+      }
+    case SUBMIT_BUY_PKG_RETURN:
+      return {
+        ...state,
+        paymentHTML: action.payload
       }
     default:
       return state;

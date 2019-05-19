@@ -11,9 +11,11 @@ import colors from '../../global/colors'
 import styles from './styles';
 
 class SubjectDashboard extends Component {
-    static navigationOptions = ({ navigation }) => ({
-        title: 'Subject Title',
-    });
+    static navigationOptions = ({ navigation }) => {
+        return ({
+            title: navigation.state.params.subjectDetails.title,
+        })
+    };
 
     componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged

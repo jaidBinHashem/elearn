@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Picker, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
+import BusyIndicator from 'react-native-busy-indicator';
 import { Icon, Input, CheckBox } from 'react-native-elements';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
@@ -36,9 +37,9 @@ class BuyPackage extends Component {
                     slug: pkg.slug,
                     title: pkg.title,
                     selectedPkg: {
-                        duration: pkg.packages[0].duration,
-                        id: pkg.packages[0].id,
-                        price: pkg.packages[0].price
+                        name: pkg.packages.data[0].name,
+                        id: pkg.packages.data[0].id,
+                        price: pkg.packages.data[0].price
                     }
                 }
                 selectedPackages.push(initialSelectedPkg);
@@ -47,13 +48,20 @@ class BuyPackage extends Component {
         };
     }
 
-    async componentWillMount() {
-        this.props.getPackages();
+    componentWillMount() {
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener("didFocus", () => {
+            this.props.getPackages();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
     }
 
     selectedPackage = (index, itemIndex) => {
         let selectedPackage = [...this.state.selectedPackages];
-        selectedPackage[index].selectedPkg = this.props.packages[index].packages[itemIndex];
+        selectedPackage[index].selectedPkg = this.props.packages[index].packages.data[itemIndex];
         this.setState({ selectedPackage }, () => this.calculatePrice());
     }
 
@@ -71,7 +79,7 @@ class BuyPackage extends Component {
     calculatePrice = () => {
         let selectedPackage = [...this.state.selectedPackages];
         let totalPrice = 0;
-        selectedPackage.map((pkg) => this.state.selectedSubjects.includes(pkg.slug) && (totalPrice = totalPrice + pkg.selectedPkg.price));
+        selectedPackage.map((pkg) => this.state.selectedSubjects.includes(pkg.slug) && (totalPrice = totalPrice + parseInt(pkg.selectedPkg.price)));
         this.setState({ totalPrice });
     }
 
@@ -91,23 +99,22 @@ class BuyPackage extends Component {
                         {
                             this.state.selectedPackages.length > 0 && this.props.packages.map((mainPackage, index) => {
                                 return (
-                                    <View key={index} style={{ flex: 1, borderTopWidth: 2, borderTopColor: Colors.appTheme, padding: 20, backgroundColor: '#fff', height: 80, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <View key={index} style={{ flex: 1, borderTopWidth: 2, borderTopColor: Colors.appTheme, padding: 20, backgroundColor: '#fff', height: 120, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                         <View>
-                                            <Text style={{ fontSize: 18, fontWeight: '700' }}>{mainPackage.title}</Text>
-                                            <Text style={{ fontSize: 18, fontWeight: '300' }}>Duration</Text>
+                                            <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 120, textAlign: 'center' }}>{mainPackage.title}</Text>
+                                            <Text style={{ fontSize: 18, fontWeight: '300', textAlign: 'center' }}>Duration</Text>
                                         </View>
                                         <View>
                                             <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{this.state.selectedPackages[index].selectedPkg.price}tk</Text>
                                             <Picker
-                                                itemStyle={{ color: 'blue' }}
                                                 selectedValue={this.state.selectedPackages[index].selectedPkg.id}
-                                                style={{ height: 25, width: 140 }}
-                                                onValueChange={(itemValue, itemIndex) => this.selectedPackage(index, itemIndex)
-                                                }>
+                                                style={{ height: 25, width: 130 }}
+                                                onValueChange={(itemValue, itemIndex) => this.selectedPackage(index, itemIndex)}
+                                            >
                                                 {
-                                                    mainPackage.packages.map((pkg, key) => {
+                                                    mainPackage.packages.data.map((pkg, keyIndex) => {
                                                         return (
-                                                            <Picker.Item key={key} style={{ color: 'blue' }} label={pkg.duration} value={pkg.id} />
+                                                            <Picker.Item key={keyIndex} label={pkg.name} value={pkg.id} />
                                                         )
                                                     })
                                                 }
@@ -128,6 +135,7 @@ class BuyPackage extends Component {
                 <TouchableOpacity style={{ flex: .1, backgroundColor: Colors.appTheme, marginVertical: 3, justifyContent: 'center' }} onPress={() => this.proceedToCheckout()}>
                     <Text style={{ textAlign: 'center', color: '#fff', fontWeight: '600', fontSize: 20 }}>Proceed : {this.state.totalPrice} tk</Text>
                 </TouchableOpacity>
+                <BusyIndicator />
             </View>
         )
     }

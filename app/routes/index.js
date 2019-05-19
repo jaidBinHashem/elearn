@@ -15,6 +15,7 @@ import MySubjects from '../component/MySubjects';
 import Cupon from '../component/Cupon';
 import BuyPackage from '../component/BuyPackage';
 import ConfirmBuyPackage from '../component/BuyPackage/ConfirmBuyPackage';
+import Payment from '../component/BuyPackage/Payment';
 import Scolarships from '../component/Scolarships';
 import Upcoming from '../component/SuperLeague/Upcoming';
 import Completed from '../component/SuperLeague/Completed';
@@ -128,7 +129,7 @@ const ProfileStack = createStackNavigator(
     {
         MyProfile: MyProfile,
         EditProfile: EditProfile,
-        EditStudyLevel : EditStudyLevel
+        EditStudyLevel: EditStudyLevel
     },
     {
         initialRouteName: 'MyProfile',
@@ -186,7 +187,8 @@ const CuponStack = createStackNavigator(
 const BuyPackageStack = createStackNavigator(
     {
         BuyPackage: BuyPackage,
-        ConfirmBuyPackage: ConfirmBuyPackage
+        ConfirmBuyPackage: ConfirmBuyPackage,
+        Payment: Payment
     },
     {
         initialRouteName: 'BuyPackage',

@@ -1,4 +1,4 @@
-import { GET_PACKAGES, PROCEED_PACKAGES } from "./types";
+import { GET_PACKAGES, PROCEED_PACKAGES, SUBMIT_BUY_PKG } from "./types";
 
 export const getPackages = () => {
     return {
@@ -12,6 +12,15 @@ export const proceedPackages = (selectedPackages, totalPrice) => {
         payload: {
             'selectedPackages': selectedPackages,
             'totalPrice': totalPrice
+        }
+    };
+};
+
+export const submitPackages = (selectedPackages) => {
+    return {
+        type: SUBMIT_BUY_PKG,
+        payload: {
+            'selectedPackages': selectedPackages,
         }
     };
 };
