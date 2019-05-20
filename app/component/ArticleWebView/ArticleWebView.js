@@ -4,12 +4,15 @@ import { WebView } from 'react-native-webview';
 import { connect } from "react-redux";
 import { getService } from '../../network'
 
+import BusyIndicator from 'react-native-busy-indicator';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+
 import Colors from '../../global/colors';
 import styles from './styles';
 
 class ArticleWebView extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: navigation.state.params.scholarshipTitle,
+        title: navigation.state.params.title,
         // headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
         // headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => console.log("here")}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
     });
@@ -17,7 +20,7 @@ class ArticleWebView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            scolarship: null
+            content: null
         }
     }
 
@@ -27,11 +30,11 @@ class ArticleWebView extends Component {
 
     async componentDidMount() {
         const request = {
-            endPoint: 'scholarships/' + this.props.navigation.state.params.scholarshipSlug,
+            endPoint: this.props.navigation.state.params.category + '/' + this.props.navigation.state.params.slug,
             authenticate: true
         }
-        let scolarship = await getService(request);
-        this.setState({ scolarship: scolarship.data.data })
+        let content = await getService(request);
+        this.setState({ content: content.data.data })
     }
 
 
@@ -40,12 +43,15 @@ class ArticleWebView extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                {this.state.scolarship && (
+                {this.state.content && (
                     <WebView
                         originWhitelist={['*']}
                         scalesPageToFit={false}
-                        source={{ html: this.state.scolarship.description }}
-                    />)}
+                        source={{ html: this.state.content.description }}
+                        onLoadStart={() => loaderHandler.showLoader("Loading")}
+                        onLoadEnd={() => loaderHandler.hideLoader() }
+            />)}
+                <BusyIndicator />
             </View>
         )
     }

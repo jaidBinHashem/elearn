@@ -36,12 +36,10 @@ const retrieveSubjectDetails = async () => {
 
 export const getSubjects = function* (action) {
     let subjects = yield call(retrieveSubjects);
-    console.log(subjects, "subje her it is");
     subjects.success && subjects.data && (yield put({ type: GET_SUBJECTS_RETURN, payload: subjects.data.data }));
 };
 
 export const getSubjectDetails = function* (action) {
-    console.log(action, "her it is");
     let subjectDetails = yield call(retrieveSubjectDetails);
     subjectDetails.success && subjectDetails.data && (yield put({ type: GET_SUBJECT_DETAILS_RETURN, payload: subjectDetails.data.data }));
     loaderHandler.hideLoader();
