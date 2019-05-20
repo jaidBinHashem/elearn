@@ -6,9 +6,7 @@ import { getService } from '../../network'
 const retrieveBlogs = async () => {
     try {
         let request = {
-            endPoint: '',
-            baseUrl: 'https://pastebin.com/raw/xGF4ZLFS',
-            temp: true
+            endPoint: 'articles',
         }
         return (await getService(request));
     } catch (error) {

@@ -47,7 +47,6 @@ export const getService = async (request) => {
         return { success: true, data: response };
     }
     catch (err) {
-        console.log(err, "Error in get service")
         response = await err.ERROR_BODY.json();
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }
