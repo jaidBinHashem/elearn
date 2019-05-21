@@ -48,6 +48,7 @@ export const getService = async (request) => {
     }
     catch (err) {
         response = await err.ERROR_BODY.json();
+        request.showLoader && loaderHandler.hideLoader();
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }
 }
@@ -74,6 +75,7 @@ export const postService = async (request) => {
     catch (err) {
         console.log(err, "Error in post service")
         response = await err.ERROR_BODY.json();
+        request.showLoader && loaderHandler.hideLoader();
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }
 }

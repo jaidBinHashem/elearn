@@ -13,8 +13,6 @@ import styles from './styles';
 class ArticleWebView extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: navigation.state.params.title,
-        // headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
-        // headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => console.log("here")}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
     });
 
     constructor(props) {
@@ -31,7 +29,8 @@ class ArticleWebView extends Component {
     async componentDidMount() {
         const request = {
             endPoint: this.props.navigation.state.params.category + '/' + this.props.navigation.state.params.slug,
-            authenticate: true
+            authenticate: true,
+            showLoader: true
         }
         let content = await getService(request);
         this.setState({ content: content.data.data })
@@ -47,10 +46,10 @@ class ArticleWebView extends Component {
                     <WebView
                         originWhitelist={['*']}
                         scalesPageToFit={false}
-                        source={{ html: this.state.content.description }}
+                        source={{ html: this.props.navigation.state.params.lesson ? this.state.content.content.description : this.state.content.description }}
                         onLoadStart={() => loaderHandler.showLoader("Loading")}
-                        onLoadEnd={() => loaderHandler.hideLoader() }
-            />)}
+                        onLoadEnd={() => loaderHandler.hideLoader()}
+                    />)}
                 <BusyIndicator />
             </View>
         )
