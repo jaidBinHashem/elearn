@@ -1,7 +1,9 @@
-import { GET_SUBJECTS_RETURN, GET_SUBJECT_DETAILS_RETURN } from '../actions/types'
+import { GET_SUBJECTS_RETURN, GET_SUBJECT_DETAILS_RETURN, GET_ALL_SUBJECTS_RETURN } from '../actions/types'
 const initialState = {
   subjects: [],
+  allSubjects: [],
   subjectsTitleArr: [],
+  allSubjectsTitleArr: [],
   subjectDetails: []
 };
 
@@ -20,6 +22,12 @@ export default function (state = initialState, action) {
         ...state,
         subjects: action.payload,
         subjectsTitleArr: getSubjectArr(action.payload)
+      }
+    case GET_ALL_SUBJECTS_RETURN:
+      return {
+        ...state,
+        allSubjects: action.payload,
+        allSubjectsTitleArr: getSubjectArr(action.payload)
       }
     case GET_SUBJECT_DETAILS_RETURN:
       return {

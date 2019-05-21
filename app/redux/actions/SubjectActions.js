@@ -1,8 +1,14 @@
-import { GET_SUBJECTS, GET_SUBJECT_DETAILS } from "./types";
+import { GET_SUBJECTS, GET_SUBJECT_DETAILS, GET_ALL_SUBJECTS } from "./types";
 
 export const getSubjects = () => {
     return {
         type: GET_SUBJECTS,
+    };
+};
+
+export const getAllSubjects = () => {
+    return {
+        type: GET_ALL_SUBJECTS,
     };
 };
 

@@ -31,7 +31,6 @@ export default StyleSheet.create({
   },
   subject: {
     flex: 1,
-    // backgroundColor: Colors.appTheme,
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',

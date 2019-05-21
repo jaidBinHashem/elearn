@@ -4,8 +4,9 @@ import Spinner from 'react-native-spinkit';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { getScholarships } from '../../redux/actions/ScholarshipsActions';
+import { getCategories } from '../../redux/actions/CategoryActions';
 import { getBlogs } from '../../redux/actions/BlogActions';
-import { getSubjects } from '../../redux/actions/SubjectActions';
+import { getSubjects, getAllSubjects } from '../../redux/actions/SubjectActions';
 
 import colors from '../../global/../global/colors'
 import styles from './styles';
@@ -24,7 +25,9 @@ class Loader extends Component {
     }
 
     switchToApp = async () => {
+        await this.props.getCategories();
         await this.props.getSubjects();
+        await this.props.getAllSubjects();
         await this.props.getScholarships();
         await this.props.getBlogs();
         this.props.navigation.navigate('App');
@@ -58,5 +61,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { checkAuth, getScholarships, getBlogs, getSubjects }
+    { checkAuth, getScholarships, getBlogs, getSubjects, getAllSubjects, getCategories }
 )(Loader);
