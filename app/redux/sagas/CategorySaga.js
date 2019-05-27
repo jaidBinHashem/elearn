@@ -38,6 +38,6 @@ export const getCategories = function* (action) {
 };
 
 export const setCategories = function* (action) {
-    yield put({ type: SET_CATEGORIES_RETURN, payload: action.payload });
     let response = yield call(setSelectedCategory, action.payload);
+    response.success && (yield put({ type: SET_CATEGORIES_RETURN, payload: action.payload }));
 };

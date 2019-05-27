@@ -33,7 +33,6 @@ class ConfirmBuyPackage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps, "here next");
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null
@@ -64,7 +63,7 @@ class ConfirmBuyPackage extends Component {
                 </View>
                 <TouchableOpacity onPress={() => {
                     this.props.submitPackages(this.state.pkgArr);
-                    this.props.navigation.navigate('Payment');
+                    this.props.navigation.replace('Payment');
                 }
                 } style={{ flex: .1, backgroundColor: Colors.appTheme, marginVertical: 3, justifyContent: 'center' }}>
                     <Text style={{ textAlign: 'center', color: '#fff', fontWeight: '600', fontSize: 20 }}>Checkout : {this.props.totalPrice} tk</Text>

@@ -26,7 +26,6 @@ class Dashboard extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.props.selectedCategoryID != null && nextProps.selectedCategoryID != this.props.selectedCategoryID && this._onRefresh();
-        loaderHandler.hideLoader();
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null
@@ -34,6 +33,9 @@ class Dashboard extends Component {
 
     componentDidMount() {
         loaderHandler.showLoader("Loading");
+        setTimeout(() => {
+            loaderHandler.hideLoader();
+        }, 1500)
     }
 
     _onRefresh = () => {
@@ -57,7 +59,7 @@ class Dashboard extends Component {
                     subjectArr.push(subjects.shift());
                 }
             } else {
-                for (let i = 0; i <= subjects.length; i++) {
+                for (let i = 0; i <= subj.length; i++) {
                     subjectArr.push(subjects.shift());
                 }
             }
@@ -94,38 +96,39 @@ class Dashboard extends Component {
         }
 
         for (let i = 0; i < allSubjectLength; i++) {
-            let subjectArr = [];
+            let allSubjectArr = [];
             if (allSubjects.length > 4) {
                 for (let i = 0; i < 4; i++) {
-                    subjectArr.push(allSubjects.shift());
+                    allSubjectArr.push(allSubjects.shift());
                 }
             } else {
-                for (let i = 0; i <= allSubjects.length; i++) {
-                    subjectArr.push(allSubjects.shift());
+                for (let j = 0; j < allSubjectsTitleArr.length; j++) {
+                    allSubjectArr.push(allSubjects.shift());
                 }
             }
+
             view = (
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
                             </TouchableOpacity>
                         )}
@@ -201,19 +204,6 @@ class Dashboard extends Component {
             )
         });
 
-        getSujectHeight = (length) => {
-            console.log("here");
-            // length > 2
-            //     ? 250
-            //     : 150
-
-            if (length > 2) {
-                return 250;
-            } else {
-                return 150;
-            }
-        }
-
         return (
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
@@ -225,7 +215,7 @@ class Dashboard extends Component {
                     }
                     showsVerticalScrollIndicator={false}>
                     <View>
-                        <Text style={styles.name}>Rakib</Text>
+                        <Text style={styles.name}>{this.props.user.name}</Text>
                     </View>
                     <View>
                         <Text style={styles.grettings}>Good Morning</Text>
@@ -247,17 +237,15 @@ class Dashboard extends Component {
                                     })
                                 }
                             </Picker>}
-
-
                         </View>
-                        <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
+                        {views.length > 0 && <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
                             <TouchableOpacity onPress={() => this.scroll.scrollBy(-1)}>
                                 <Icon name='chevron-left' type='feather' color='gray' size={30} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => this.scroll.scrollBy(1)}>
                                 <Icon name='chevron-right' type='feather' color='gray' size={30} />
                             </TouchableOpacity>
-                        </View>
+                        </View>}
                     </View>
 
                     {views.length > 0 && <View style={styles.swiperContainer}>
@@ -277,6 +265,7 @@ class Dashboard extends Component {
                             )
                         }
                     </View>}
+
                     {allSubjectViews.length > 0 && <View>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flex: 1, left: 2 }}>
@@ -311,13 +300,13 @@ class Dashboard extends Component {
                     </View>}
                     {scholarshipsView.length > 0 && (<View>
                         <View>
-                            <Text style={styles.newsAndUpdatesTitle}>Scholarships</Text>
+                            <Text style={styles.newsAndUpdatesTitle}>News & Info</Text>
                         </View>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {scholarshipsView}
                         </ScrollView>
                     </View>)}
-                    {newsAndUpdatesView.length > 0 && (<View>
+                    {/* {newsAndUpdatesView.length > 0 && (<View>
                         <View>
                             <Text style={styles.newsAndUpdatesTitle}>News & Updates</Text>
                         </View>
@@ -332,7 +321,7 @@ class Dashboard extends Component {
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {tipsAndTricksView}
                         </ScrollView>
-                    </View>)}
+                    </View>)} */}
                 </ScrollView>
                 <BusyIndicator />
             </View>
@@ -344,6 +333,7 @@ class Dashboard extends Component {
 function mapStateToProps(state) {
     return {
         auth: state.AuthReducer,
+        user: state.UserReducer,
         scholarships: state.ScholarshipsReducer,
         newsAndUpdates: state.BlogReducer.newsAndUpdates,
         tipsAndTricks: state.BlogReducer.tipsAndTricks,

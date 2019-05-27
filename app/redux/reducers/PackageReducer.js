@@ -1,4 +1,4 @@
-import { GET_PACKAGES_RETURN, PROCEED_PACKAGES, SUBMIT_BUY_PKG_RETURN } from '../actions/types'
+import { GET_PACKAGES_RETURN, PROCEED_PACKAGES, SUBMIT_BUY_PKG_RETURN, RESET_SELECTED_PACKAGE } from '../actions/types'
 const initialState = {
   packages: [],
   selectedPackages: [],
@@ -23,6 +23,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         paymentHTML: action.payload
+      }
+    case RESET_SELECTED_PACKAGE:
+      return {
+        ...state,
+        selectedPackages: []
       }
     default:
       return state;

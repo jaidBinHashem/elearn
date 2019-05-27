@@ -33,7 +33,7 @@ class BuyPackage extends Component {
         if (nextProps.packages.length > 0 && !this.state.loaded) {
             let selectedPackages = [];
             nextProps.packages.map((pkg) => {
-                initialSelectedPkg = {
+                pkg.packages.data.length > 0 && (initialSelectedPkg = {
                     slug: pkg.slug,
                     title: pkg.title,
                     selectedPkg: {
@@ -41,8 +41,8 @@ class BuyPackage extends Component {
                         id: pkg.packages.data[0].id,
                         price: pkg.packages.data[0].price
                     }
-                }
-                selectedPackages.push(initialSelectedPkg);
+                });
+                pkg.packages.data.length > 0 && selectedPackages.push(initialSelectedPkg);
             });
             this.setState({ selectedPackages, loaded: true })
         };
@@ -51,6 +51,10 @@ class BuyPackage extends Component {
     componentWillMount() {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener("didFocus", () => {
+            this.setState({
+                selectedSubjects: [],
+                totalPrice: 0
+            })
             this.props.getPackages();
         });
     }
@@ -98,36 +102,38 @@ class BuyPackage extends Component {
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {
                             this.state.selectedPackages.length > 0 && this.props.packages.map((mainPackage, index) => {
-                                return (
-                                    <View key={index} style={{ flex: 1, borderTopWidth: 2, borderTopColor: Colors.appTheme, padding: 20, backgroundColor: '#fff', height: 120, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                                        <View>
-                                            <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 120, textAlign: 'center' }}>{mainPackage.title}</Text>
-                                            <Text style={{ fontSize: 18, fontWeight: '300', textAlign: 'center' }}>Duration</Text>
+                                if (mainPackage.packages.data.length > 0) {
+                                    return (
+                                        <View key={index} style={{ flex: 1, borderTopWidth: 2, borderTopColor: Colors.appTheme, padding: 20, backgroundColor: '#fff', height: 120, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                            <View>
+                                                <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 120, textAlign: 'center' }}>{mainPackage.title}</Text>
+                                                <Text style={{ fontSize: 18, fontWeight: '300', textAlign: 'center' }}>Duration</Text>
+                                            </View>
+                                            <View>
+                                                <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{this.state.selectedPackages[index].selectedPkg.price}tk</Text>
+                                                <Picker
+                                                    selectedValue={this.state.selectedPackages[index].selectedPkg.id}
+                                                    style={{ height: 25, width: 130 }}
+                                                    onValueChange={(itemValue, itemIndex) => this.selectedPackage(index, itemIndex)}
+                                                >
+                                                    {
+                                                        mainPackage.packages.data.length > 0 && mainPackage.packages.data.map((pkg, keyIndex) => {
+                                                            return (
+                                                                <Picker.Item key={keyIndex} label={pkg.name} value={pkg.id} />
+                                                            )
+                                                        })
+                                                    }
+                                                </Picker>
+                                            </View>
+                                            <View>
+                                                <CheckBox
+                                                    checked={this.state.selectedSubjects.includes(mainPackage.slug) ? true : false}
+                                                    onPress={() => this.selectSubject(mainPackage.slug)}
+                                                />
+                                            </View>
                                         </View>
-                                        <View>
-                                            <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{this.state.selectedPackages[index].selectedPkg.price}tk</Text>
-                                            <Picker
-                                                selectedValue={this.state.selectedPackages[index].selectedPkg.id}
-                                                style={{ height: 25, width: 130 }}
-                                                onValueChange={(itemValue, itemIndex) => this.selectedPackage(index, itemIndex)}
-                                            >
-                                                {
-                                                    mainPackage.packages.data.map((pkg, keyIndex) => {
-                                                        return (
-                                                            <Picker.Item key={keyIndex} label={pkg.name} value={pkg.id} />
-                                                        )
-                                                    })
-                                                }
-                                            </Picker>
-                                        </View>
-                                        <View>
-                                            <CheckBox
-                                                checked={this.state.selectedSubjects.includes(mainPackage.slug) ? true : false}
-                                                onPress={() => this.selectSubject(mainPackage.slug)}
-                                            />
-                                        </View>
-                                    </View>
-                                )
+                                    )
+                                }
                             })
                         }
                     </ScrollView>

@@ -5,6 +5,9 @@ import VideoView from 'react-native-android-fullscreen-webview-video';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 
+import { resetSelectedPackages } from '../../redux/actions/PackageActions';
+import { getSubjects } from '../../redux/actions/SubjectActions';
+
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
@@ -48,6 +51,11 @@ class Payment extends Component {
                         source={{ html: this.state.paymentHTML }}
                         onLoadEnd={() => console.log("loaded")}
                         onError={(err) => console.log(err, "here err")}
+                        onNavigationStateChange={(state) => {
+                            state.title === "Payment Success" && (this.props.resetSelectedPackages(), this.props.getSubjects(), setTimeout(() => { this.props.navigation.goBack(); this.props.navigation.navigate('MySubjects') }, 2000));
+                            state.title === "Payment Failed" && (this.props.resetSelectedPackages(), this.props.navigation.goBack());
+                            state.title === "Payment Cancelled" && (this.props.resetSelectedPackages(), this.props.navigation.navigate('Loader'));
+                        }}
                     />)
                 }
             </View>
@@ -65,5 +73,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { checkAuth }
+    { checkAuth, resetSelectedPackages, getSubjects }
 )(Payment);

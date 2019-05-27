@@ -3,10 +3,10 @@ import { SET_QUIZ_DONE, SIGN_OUT, SUBMIT_QUIZ_RETURN, GET_PREVIOUS_ATTEMPS_RETUR
 
 import { getService, postService } from '../../network'
 
-const retriveQuizDetails = async () => {
+const retriveQuizDetails = async (lessonId) => {
     try {
         let request = {
-            endPoint: 'quiz/55/questions',
+            endPoint: 'quiz/' + lessonId + '/questions',
             // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
             authenticate: true,
             temp: false
@@ -21,7 +21,7 @@ const submitQuizResults = async (payload) => {
     let answers = [...payload.answers]
     try {
         let request = {
-            endPoint: 'quiz/51/questions',
+            endPoint: 'quiz/' + payload.lessonId + '/questions',
             // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
             authenticate: true,
             temp: false,
@@ -35,10 +35,11 @@ const submitQuizResults = async (payload) => {
     }
 };
 
-const retrivePreviousAttemps = async () => {
+const retrivePreviousAttemps = async (lessonId) => {
+    console.log(lessonId, "lesson id");
     try {
         let request = {
-            endPoint: 'quiz/51/attempts',
+            endPoint: 'quiz/' + lessonId + '/attempts',
             // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/attempts',
             authenticate: true,
             temp: false
@@ -51,7 +52,7 @@ const retrivePreviousAttemps = async () => {
 
 
 export const setQuiz = function* (action) {
-    let quizDetails = yield call(retriveQuizDetails);
+    let quizDetails = yield call(retriveQuizDetails, action.payload);
     quizDetails.success && quizDetails.data && (yield put({ type: SET_QUIZ_DONE, payload: quizDetails.data }));
 };
 
@@ -64,6 +65,7 @@ export const submitQuiz = function* (action) {
 };
 
 export const getPreviousAttemps = function* (action) {
-    let attemps = yield call(retrivePreviousAttemps);
+    let attemps = yield call(retrivePreviousAttemps, action.payload);
+    console.log(attemps, "attemps");
     attemps.success && attemps.data && (yield put({ type: GET_PREVIOUS_ATTEMPS_RETURN, payload: attemps.data }));
 };

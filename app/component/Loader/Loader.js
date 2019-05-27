@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, View, StatusBar } from 'react-native'
+import { View, StatusBar } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage';
 import Spinner from 'react-native-spinkit';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
@@ -18,23 +19,22 @@ class Loader extends Component {
             : this.switchToApp();
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let token = await AsyncStorage.getItem('USER_TOKEN');
+        if (token != null) {
+            this.props.getCategories();
+            this.props.getSubjects();
+            this.props.getAllSubjects();
+            this.props.getScholarships();
+            this.props.getBlogs();
+        }
         setTimeout(() => {
             this.props.checkAuth();
-        }, 1000)
+        }, 4000)
     }
 
     switchToApp = async () => {
-        await this.props.getCategories();
-        await this.props.getSubjects();
-        await this.props.getAllSubjects();
-        await this.props.getScholarships();
-        await this.props.getBlogs();
         this.props.navigation.navigate('App');
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timer);
     }
 
     render() {

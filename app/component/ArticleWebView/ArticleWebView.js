@@ -33,7 +33,7 @@ class ArticleWebView extends Component {
             showLoader: true
         }
         let content = await getService(request);
-        this.setState({ content: content.data.data })
+        this.setState({ content: content.data.data });
     }
 
 
@@ -45,7 +45,7 @@ class ArticleWebView extends Component {
                 {this.state.content && (
                     <WebView
                         originWhitelist={['*']}
-                        scalesPageToFit={false}
+                        scalesPageToFit={this.props.navigation.state.params.lesson ? true : false}
                         source={{ html: this.props.navigation.state.params.lesson ? this.state.content.content.description : this.state.content.description }}
                         onLoadStart={() => loaderHandler.showLoader("Loading")}
                         onLoadEnd={() => loaderHandler.hideLoader()}

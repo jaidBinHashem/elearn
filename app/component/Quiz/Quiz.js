@@ -60,7 +60,7 @@ class Quiz extends Component {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null;
-        nextProps.quiz.completedQuiz && this.props.navigation.replace('QuizHighlights');
+        nextProps.quiz.completedQuiz && this.props.navigation.replace('QuizHighlights', { lessonId: this.props.navigation.state.params.lessonId });
     }
 
     componentDidMount() {
@@ -74,12 +74,12 @@ class Quiz extends Component {
             seconds = parseInt(timer % 60, 10);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            // this.setState({ time: minutes + ":" + seconds });
+            this.setState({ time: minutes + ":" + seconds });
             if (--timer < 1) {
                 clearInterval(this.myTimer);
-                // loaderHandler.showLoader("Loading");
+                loaderHandler.showLoader("Loading");
                 setTimeout(() => {
-                    // this.submitExam();
+                    this.submitExam();
                 }, 1000);
             }
         }, 1000);
@@ -171,7 +171,7 @@ class Quiz extends Component {
                 ? rightAnswers.push(rightAnswer)
                 : wrongAnswers.push(rightAnswer);
         });
-        this.props.submitQuiz(this.state.answers, selectedAnswerIdArray, rightAnswers, wrongAnswers);
+        this.props.submitQuiz(this.state.answers, selectedAnswerIdArray, rightAnswers, wrongAnswers, this.props.navigation.state.params.lessonId);
     }
 
     strippedContent = (text) => {
@@ -261,13 +261,37 @@ class Quiz extends Component {
             );
 
             explanationView.push(
-                <View key={index} style={styles.questionContainer}>
+                <ScrollView key={index} style={styles.questionContainer}>
                     <View style={styles.questionCounter}>
                         <Text>{index + 1}</Text>
                     </View>
                     <View style={styles.question}>
-                        <View >
-                            <Text style={styles.questionTitle}>{question.question.replace(/<[^>]*>/g, '')}</Text>
+                        <View style={{ marginTop: 10 }}>
+                            {questionContent.map((value, index) => {
+                                if (index % 2 === 0) {
+                                    if (value.length > 0) {
+                                        return (<View key={index} ><Text style={{ fontSize: 26 }}>{value}</Text></View>)
+                                    }
+                                } else {
+                                    return (
+                                        <ScrollView key={index} style={{ padding: 5 }}>
+                                            <Katex
+                                                style={{ height: 110 }}
+                                                scalesPageToFit={false}
+                                                expression={value}
+                                                scrollEnabled={false}
+                                                displayMode={false}
+                                                throwOnError={false}
+                                                errorColor="#f00"
+                                                macros={{}}
+                                                colorIsTextColor={false}
+                                                onLoad={() => console.log('Loaded')}
+                                                onError={() => console.error('Error')}
+                                            />
+                                        </ScrollView>
+                                    )
+                                }
+                            })}
                         </View>
                         <View style={styles.optionsContainer}>
                             {
@@ -294,7 +318,7 @@ class Quiz extends Component {
                             }
                         </View>
                     </View>
-                </View>
+                </ScrollView>
             )
 
 

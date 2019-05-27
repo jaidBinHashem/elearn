@@ -6,6 +6,7 @@ import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 
 const checkStatus = (response) => {
+    // console.log(response, "here");
     if (response.status >= 200 && response.status < 300) {
         return response;
     }
@@ -55,6 +56,7 @@ export const getService = async (request) => {
 
 
 export const postService = async (request) => {
+    console.log(request, "here request");
     try {
         let requestHeaders = {
             'Content-Type': 'application/json',

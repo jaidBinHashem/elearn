@@ -48,7 +48,7 @@ class SubjectDashboard extends Component {
                                 return (
                                     <TouchableOpacity key={index} onPress={() => {
                                         if (lesson.lesson_type === 'video') {
-                                            this.props.navigation.navigate('Player')
+                                            this.props.navigation.navigate('Player', { title: lesson.title, slug: lesson.slug, description: lesson.description })
                                         } else if (lesson.lesson_type === 'quiz') {
                                             this.props.navigation.navigate('QuizDashboard', { lessonId: lesson.id })
                                         } else {

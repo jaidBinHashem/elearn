@@ -1,4 +1,4 @@
-import { GET_PACKAGES, PROCEED_PACKAGES, SUBMIT_BUY_PKG } from "./types";
+import { GET_PACKAGES, PROCEED_PACKAGES, SUBMIT_BUY_PKG, RESET_SELECTED_PACKAGE } from "./types";
 
 export const getPackages = () => {
     return {
@@ -22,5 +22,11 @@ export const submitPackages = (selectedPackages) => {
         payload: {
             'selectedPackages': selectedPackages,
         }
+    };
+};
+
+export const resetSelectedPackages = () => {
+    return {
+        type: RESET_SELECTED_PACKAGE,
     };
 };

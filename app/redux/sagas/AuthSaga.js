@@ -99,7 +99,6 @@ export const isAuthenticated = function* (action) {
 
 export const makeLoginRequest = function* (action) {
     let response = yield call(getToken, action.payload);
-    console.log(response, "hereeeeeeeeeee");
     if (response) {
         !response.success && (yield put({ type: MAKE_LOGIN_REQUEST_FAILED, payload: LOGIN_FAILED }));
         response.success && (yield call(setToken, response), yield put({ type: SET_USER, payload: response }));

@@ -16,7 +16,7 @@ class PreviousAttemps extends Component {
     });
 
     componentWillMount() {
-        this.props.getPreviousAttemps();
+        this.props.getPreviousAttemps(this.props.navigation.state.params.lessonId);
         loaderHandler.showLoader("Loading");
     }
 
@@ -24,7 +24,7 @@ class PreviousAttemps extends Component {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null;
-        nextProps.quiz.previousAttemps.length > 0 && loaderHandler.hideLoader();
+        loaderHandler.hideLoader();
     }
 
     render() {

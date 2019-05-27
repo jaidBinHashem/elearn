@@ -20,7 +20,7 @@ class QuizDashboard extends Component {
     }
 
     componentDidMount() {
-        this.props.setQuiz();
+        this.props.setQuiz(this.props.navigation.state.params.lessonId);
     }
 
 
@@ -72,7 +72,7 @@ class QuizDashboard extends Component {
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => {
-                        this.props.quiz.questions && this.props.quiz.questions.length > 0 && this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation })
+                        this.props.quiz.questions && this.props.quiz.questions.length > 0 && this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation, lessonId:this.props.navigation.state.params.lessonId })
                     }
                     }>
                         <Text style={styles.submitText}>Start Quiz</Text>
