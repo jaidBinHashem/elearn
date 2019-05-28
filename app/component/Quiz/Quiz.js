@@ -74,7 +74,7 @@ class Quiz extends Component {
             seconds = parseInt(timer % 60, 10);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            this.setState({ time: minutes + ":" + seconds });
+            // this.setState({ time: minutes + ":" + seconds });
             if (--timer < 1) {
                 clearInterval(this.myTimer);
                 loaderHandler.showLoader("Loading");
@@ -187,6 +187,7 @@ class Quiz extends Component {
         let questions = [...this.props.quiz.questions], answers = [...this.props.quiz.answers], selectedAnswersIdArray = [...this.props.quiz.selectedAnswersIdArray], questionViews = [], explanationView = [];
         const INJECTEDJAVASCRIPT = `const meta = document.createElement('meta'); meta.setAttribute('content', 'width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `
         questions.map((question, index) => {
+            console.log(question, "question")
 
             let questionContent = question.question.split(/<latex>(.*?)<latex>/gi);
 
@@ -327,7 +328,7 @@ class Quiz extends Component {
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1}}>
                         {!this.props.navigation.state.params.showExplanation && (<View style={styles.quesationNumberAndTimeContainer}>
                             <View style={styles.quationNumberContainer}>
                                 <Icon
@@ -347,7 +348,7 @@ class Quiz extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>)}
-                        <View style={{ height: deviceHeight - 200 }}>
+                        <View style={{ height: deviceHeight - 180 }}>
                             <Swiper style={styles.wrapper}
                                 ref={node => (this.scroll = node)}
                                 showsButtons={false}

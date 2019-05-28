@@ -73,7 +73,7 @@ export default StyleSheet.create({
     color: Colors.appTheme
   },
   questionContainer: {
-    marginVertical: 25,
+    // marginVertical: 25,
     flex: 1
   },
   questionCounter: {

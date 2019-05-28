@@ -74,11 +74,11 @@ class MyProfile extends Component {
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View>
+                        <View style={{ justifyContent: 'center' }}>
                             <View>
                                 <Text style={styles.name}>{this.props.user.name}</Text>
                             </View>
-                            <View>
+                            {/* <View>
                                 {this.state.selectedStudyLevel && (
                                     <Picker
                                         mode="dialog"
@@ -95,7 +95,7 @@ class MyProfile extends Component {
                                         }
                                     </Picker>
                                 )}
-                            </View>
+                            </View> */}
                         </View>
                         <View style={{ elevation: 10, marginRight: 20 }}>
                             <Avatar
