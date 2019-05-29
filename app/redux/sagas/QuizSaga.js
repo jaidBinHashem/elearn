@@ -36,7 +36,6 @@ const submitQuizResults = async (payload) => {
 };
 
 const retrivePreviousAttemps = async (lessonId) => {
-    console.log(lessonId, "lesson id");
     try {
         let request = {
             endPoint: 'quiz/' + lessonId + '/attempts',
@@ -66,6 +65,5 @@ export const submitQuiz = function* (action) {
 
 export const getPreviousAttemps = function* (action) {
     let attemps = yield call(retrivePreviousAttemps, action.payload);
-    console.log(attemps, "attemps");
     attemps.success && attemps.data && (yield put({ type: GET_PREVIOUS_ATTEMPS_RETURN, payload: attemps.data }));
 };

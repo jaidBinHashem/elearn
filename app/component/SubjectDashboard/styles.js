@@ -6,8 +6,9 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   horizontal: {
-    padding: 10,
-    paddingHorizontal: 20
+    margin: 10,
+    marginRight: 0
+    // paddingHorizontal: 20
   },
   chapterContainer: {
     marginTop: 30
@@ -19,8 +20,8 @@ export default StyleSheet.create({
   topic: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 88,
-    height: 80,
+    width: 105,
+    height: 108,
     backgroundColor: '#fff',
     elevation: 3,
     borderRadius: 3,
@@ -30,9 +31,15 @@ export default StyleSheet.create({
   },
   topicText: {
     top: 5,
-    marginHorizontal: 5
+    marginHorizontal: 8,
   },
   chaptersCount: {
-    marginTop: 5
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+  chapterTitle: {
+    color:'black',
+    marginHorizontal:5,
+    fontWeight: 'bold'
   }
 });

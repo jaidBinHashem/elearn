@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
+import moment from 'moment';
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { connect } from "react-redux";
@@ -42,6 +43,24 @@ class Dashboard extends Component {
         this.props.navigation.navigate('Loader')
     }
 
+    getGreetingTime = (currentTime) => {
+        if (!currentTime || !currentTime.isValid()) { return 'Hello'; }
+
+        const splitAfternoon = 12; // 24hr time to split the afternoon
+        const splitEvening = 17; // 24hr time to split the evening
+        const currentHour = parseFloat(currentTime.format('HH'));
+
+        if (currentHour >= splitAfternoon && currentHour <= splitEvening) {
+            // Between 12 PM and 5PM
+            return 'Good afternoon';
+        } else if (currentHour >= splitEvening) {
+            // Between 5PM and Midnight
+            return 'Good evening';
+        }
+        // Between dawn and noon
+        return 'Good morning';
+    }
+
     render() {
         let subjects = [...this.props.subjects];
         let subj = [...this.props.subjectsTitleArr];
@@ -67,24 +86,24 @@ class Dashboard extends Component {
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
                         {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
                                 <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
                             </TouchableOpacity>
                         )}
@@ -218,7 +237,7 @@ class Dashboard extends Component {
                         <Text style={styles.name}>{this.props.user.name}</Text>
                     </View>
                     <View>
-                        <Text style={styles.grettings}>Good Morning</Text>
+                        <Text style={styles.grettings}>{this.getGreetingTime(moment())}</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row' }}>

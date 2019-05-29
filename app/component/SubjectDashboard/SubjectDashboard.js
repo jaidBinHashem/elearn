@@ -39,7 +39,7 @@ class SubjectDashboard extends Component {
             return (
                 <View key={index}>
                     <View>
-                        <Text>{chapter.title}</Text>
+                        <Text style={styles.chapterTitle}>{chapter.title}</Text>
                     </View>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.topicContainer}>
                         {
@@ -50,7 +50,7 @@ class SubjectDashboard extends Component {
                                         if (lesson.lesson_type === 'video') {
                                             this.props.navigation.navigate('Player', { title: lesson.title, slug: lesson.slug, description: lesson.description })
                                         } else if (lesson.lesson_type === 'quiz') {
-                                            this.props.navigation.navigate('QuizDashboard', { lessonId: lesson.id })
+                                            this.props.navigation.navigate('QuizDashboard', { showExplanation: false, lessonId: lesson.id })
                                         } else {
                                             this.props.navigation.navigate('ArticleWebView', { lesson: true, title: lesson.title, slug: lesson.slug, category: 'user/lessons' })
                                         }
@@ -58,7 +58,7 @@ class SubjectDashboard extends Component {
                                         {
                                             lesson.lesson_type === 'video' && (<Icon
                                                 name='controller-play'
-                                                size={35}
+                                                size={55}
                                                 type='entypo'
                                                 color='black'
                                                 containerStyle={styles.scoreIconContainer}
@@ -67,7 +67,7 @@ class SubjectDashboard extends Component {
                                         {
                                             lesson.lesson_type === 'article' && (<Icon
                                                 name='text-document'
-                                                size={35}
+                                                size={55}
                                                 type='entypo'
                                                 color='black'
                                                 containerStyle={styles.scoreIconContainer}
@@ -76,13 +76,13 @@ class SubjectDashboard extends Component {
                                         {
                                             lesson.lesson_type === 'quiz' && (<Icon
                                                 name='format-list-checks'
-                                                size={35}
+                                                size={55}
                                                 type='material-community'
                                                 color='black'
                                                 containerStyle={styles.scoreIconContainer}
                                             />)
                                         }
-                                        <Text numberOfLines={1} style={styles.topicText}>{lesson.title}</Text>
+                                        <Text numberOfLines={2} style={styles.topicText}>{lesson.title}</Text>
                                     </TouchableOpacity>
                                 )
                             })

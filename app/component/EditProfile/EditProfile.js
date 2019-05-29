@@ -9,6 +9,18 @@ import { checkAuth } from '../../redux/actions/AuthActions';
 import Colors from '../../global/colors';
 import styles from './styles';
 
+import ImagePicker from 'react-native-image-picker';
+
+// More info on all the options is below in the API Reference... just some common use cases shown here
+const options = {
+    title: 'Select Avatar',
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
+
+
 class EditProfile extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Edit Profile',
@@ -23,7 +35,8 @@ class EditProfile extends Component {
             nameError: "",
             email: this.props.user.email,
             emailError: "",
-            location : null
+            location: null,
+            avatarSource: null
         }
     }
 
@@ -38,6 +51,27 @@ class EditProfile extends Component {
         // console.log(token, "token in dash")
     }
 
+    changeImage = () => {
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else {
+                const source = { uri: response.uri };
+
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+                this.setState({
+                    avatarSource: source,
+                });
+            }
+        });
+    }
+
     render() {
         return (
             <View style={[styles.container]}>
@@ -48,13 +82,13 @@ class EditProfile extends Component {
                             <Avatar
                                 rounded
                                 showEditButton={true}
-                                // editButton={{ containerStyle: { backgroundColor: Colors.appTheme } }}
+                                // editButton={{ containerStyle: { backgroundColor: Colors.appTheme, borderRadius:4 } }}
                                 size="large"
                                 source={{
-                                    uri:
-                                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                                    uri: !this.state.avatarSource ? 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' : this.state.avatarSource.uri,
                                 }}
                                 containerStyle={{ elevation: 10 }}
+                                onEditPress={() => this.changeImage()}
                             />
                         </View>
                     </View>

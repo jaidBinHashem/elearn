@@ -30,6 +30,7 @@ class QuizDashboard extends Component {
     }
 
     render() {
+        console.log(this.props.navigation.state.params.showExplanation)
         let minutes = parseInt(this.props.quiz.time / 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time / 60, 10) : parseInt(this.props.quiz.time / 60, 10);
         let seconds = parseInt(this.props.quiz.time % 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time % 60, 10) : parseInt(this.props.quiz.time % 60, 10);
         let time = String(minutes) + ":" + String(seconds);
@@ -72,7 +73,9 @@ class QuizDashboard extends Component {
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => {
-                        this.props.quiz.questions && this.props.quiz.questions.length > 0 && this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation, lessonId:this.props.navigation.state.params.lessonId })
+                        this.props.quiz.questions
+                            && this.props.quiz.questions.length > 0
+                            && this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation, lessonId: this.props.navigation.state.params.lessonId })
                     }
                     }>
                         <Text style={styles.submitText}>Start Quiz</Text>

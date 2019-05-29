@@ -8,7 +8,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 10,
-    paddingHorizontal :20
+    paddingHorizontal: 20
   },
   name: {
     color: Colors.appTheme,
@@ -24,14 +24,17 @@ export default StyleSheet.create({
     marginTop: 20,
   },
   subject: {
-    flex: 1,
-    backgroundColor: Colors.appTheme,
-    height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 8,
-    borderRadius: 5,
-    marginVertical:20
+    flex: 1, 
+    borderTopWidth: 2, 
+    borderTopColor: Colors.appTheme, 
+    padding: 20, 
+    backgroundColor: '#fff', 
+    height: 120, 
+    marginVertical: 15, 
+    elevation: 5, 
+    borderRadius: 3, 
+    justifyContent: 'center', 
+    alignItems: 'center'
   },
   subjectMarginRight: {
     marginRight: 10
@@ -40,14 +43,14 @@ export default StyleSheet.create({
     marginLeft: 10
   },
   newsAndUpdatesTitle: {
-    fontSize:16,
+    fontSize: 16,
     marginTop: 20,
     color: 'black',
     fontWeight: '500'
   },
   cards: {
     // flex: 1,
-    backgroundColor:'#fff',
+    backgroundColor: '#fff',
     height: 160,
     width: 160,
     elevation: 10,

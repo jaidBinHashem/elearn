@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert } from 'react-native'
+import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState } from 'react-native'
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
+import { NavigationActions } from 'react-navigation';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
@@ -41,6 +42,11 @@ height: 100%;
 class Quiz extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Quiz',
+        headerTitleStyle: {
+            textAlign: "center",
+            flex: 1
+        },
+        headerLeft: null
     });
 
     constructor(props) {
@@ -52,7 +58,9 @@ class Quiz extends Component {
             time: minutes + ":" + seconds,
             answers: [],
             answerdQuestions: [],
-            selectedAnswerIdArray: []
+            selectedAnswerIdArray: [],
+
+            appState: AppState.currentState,
         }
     }
 
@@ -64,8 +72,30 @@ class Quiz extends Component {
     }
 
     componentDidMount() {
+        AppState.addEventListener('change', this._handleAppStateChange);
+        BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
         !this.props.navigation.state.params.showExplanation && this.startTimer((this.props.quiz.time - 1));
     }
+
+    onBackPress = () => {
+        this.handleBack();
+        return true;
+    }
+
+    handleBack = () => {
+        if (!this.props.navigation.state.params.showExplanation) {
+            this.confirmExamSubmit();
+        } else {
+            this.props.navigation.dispatch(NavigationActions.back());
+        }
+    }
+
+    _handleAppStateChange = (nextAppState) => {
+        if (!(this.state.appState.match(/inactive|background/) && nextAppState === 'active')) {
+            this.submitExam();
+        }
+        this.setState({ appState: nextAppState });
+    };
 
     startTimer = async (duration) => {
         let timer = duration, minutes, seconds;
@@ -180,17 +210,15 @@ class Quiz extends Component {
 
 
     componentWillUnmount() {
+        AppState.removeEventListener('change', this._handleAppStateChange);
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
         clearInterval(this.myTimer);
     }
 
     render() {
         let questions = [...this.props.quiz.questions], answers = [...this.props.quiz.answers], selectedAnswersIdArray = [...this.props.quiz.selectedAnswersIdArray], questionViews = [], explanationView = [];
-        const INJECTEDJAVASCRIPT = `const meta = document.createElement('meta'); meta.setAttribute('content', 'width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `
         questions.map((question, index) => {
-            console.log(question, "question")
-
             let questionContent = question.question.split(/<latex>(.*?)<latex>/gi);
-
             let buttonData = question.answers.map((answer) => {
                 return ({
                     value: answer.id,
@@ -222,7 +250,6 @@ class Quiz extends Component {
                                                 errorColor="#f00"
                                                 macros={{}}
                                                 colorIsTextColor={false}
-                                                onLoad={() => console.log('Loaded')}
                                                 onError={() => console.error('Error')}
                                             />
                                         </ScrollView>
@@ -286,7 +313,6 @@ class Quiz extends Component {
                                                 errorColor="#f00"
                                                 macros={{}}
                                                 colorIsTextColor={false}
-                                                onLoad={() => console.log('Loaded')}
                                                 onError={() => console.error('Error')}
                                             />
                                         </ScrollView>
@@ -328,7 +354,7 @@ class Quiz extends Component {
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView>
-                    <View style={{ flex: 1}}>
+                    <View style={{ flex: 1 }}>
                         {!this.props.navigation.state.params.showExplanation && (<View style={styles.quesationNumberAndTimeContainer}>
                             <View style={styles.quationNumberContainer}>
                                 <Icon
