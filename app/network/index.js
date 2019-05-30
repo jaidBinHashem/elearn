@@ -6,7 +6,7 @@ import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 
 const checkStatus = (response) => {
-    // console.log(response, "here");
+    console.log(response, "here");
     if (response.status >= 200 && response.status < 300) {
         return response;
     }

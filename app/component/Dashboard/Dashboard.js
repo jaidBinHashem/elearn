@@ -257,17 +257,17 @@ class Dashboard extends Component {
                                 }
                             </Picker>}
                         </View>
-                        {views.length > 0 && <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
+                        {/* {views.length > 0 && <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
                             <TouchableOpacity onPress={() => this.scroll.scrollBy(-1)}>
                                 <Icon name='chevron-left' type='feather' color='gray' size={30} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => this.scroll.scrollBy(1)}>
                                 <Icon name='chevron-right' type='feather' color='gray' size={30} />
                             </TouchableOpacity>
-                        </View>}
+                        </View>} */}
                     </View>
 
-                    {views.length > 0 && <View style={styles.swiperContainer}>
+                    {/* {views.length > 0 && <View style={styles.swiperContainer}>
                         {
                             views.length === length && (
                                 <Swiper
@@ -283,12 +283,12 @@ class Dashboard extends Component {
                                 </Swiper>
                             )
                         }
-                    </View>}
+                    </View>} */}
 
                     {allSubjectViews.length > 0 && <View>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flex: 1, left: 2 }}>
-                                <Text style={styles.newsAndUpdatesTitle}>All Subjects</Text>
+                                {/* <Text style={styles.newsAndUpdatesTitle}>All Subjects</Text> */}
                             </View>
                             <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
                                 <TouchableOpacity onPress={() => this.allSubjectScroll.scrollBy(-1)}>

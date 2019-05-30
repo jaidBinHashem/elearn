@@ -31,6 +31,20 @@ class SubjectDashboard extends Component {
 
     }
 
+    onLessonClick = (lesson) => {
+        if (this.props.navigation.state.params.subjectDetails.purchased || lesson.preview) {
+            if (lesson.lesson_type === 'video') {
+                this.props.navigation.navigate('Player', { title: lesson.title, slug: lesson.slug, description: lesson.description })
+            } else if (lesson.lesson_type === 'quiz') {
+                this.props.navigation.navigate('QuizDashboard', { showExplanation: false, lessonId: lesson.id })
+            } else {
+                this.props.navigation.navigate('ArticleWebView', { lesson: true, title: lesson.title, slug: lesson.slug, category: 'user/lessons' })
+            }
+        } else {
+            console.log("Vai age kinen");
+        }
+    }
+
     render() {
         let chapters = [...this.props.subject.subjectDetails];
         let chapterLessons = [], chaptersCount = 0, topicsCount = 0;
@@ -46,15 +60,7 @@ class SubjectDashboard extends Component {
                             chapter.lessons.map((lesson, index) => {
                                 ++topicsCount;
                                 return (
-                                    <TouchableOpacity key={index} onPress={() => {
-                                        if (lesson.lesson_type === 'video') {
-                                            this.props.navigation.navigate('Player', { title: lesson.title, slug: lesson.slug, description: lesson.description })
-                                        } else if (lesson.lesson_type === 'quiz') {
-                                            this.props.navigation.navigate('QuizDashboard', { showExplanation: false, lessonId: lesson.id })
-                                        } else {
-                                            this.props.navigation.navigate('ArticleWebView', { lesson: true, title: lesson.title, slug: lesson.slug, category: 'user/lessons' })
-                                        }
-                                    }} style={styles.topic}>
+                                    <TouchableOpacity key={index} onPress={() => this.onLessonClick(lesson)} style={styles.topic}>
                                         {
                                             lesson.lesson_type === 'video' && (<Icon
                                                 name='controller-play'

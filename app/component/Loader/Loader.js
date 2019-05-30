@@ -23,7 +23,7 @@ class Loader extends Component {
         let token = await AsyncStorage.getItem('USER_TOKEN');
         if (token != null) {
             this.props.getCategories();
-            this.props.getSubjects();
+            // this.props.getSubjects();
             this.props.getAllSubjects();
             this.props.getScholarships();
             this.props.getBlogs();
