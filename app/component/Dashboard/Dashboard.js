@@ -222,7 +222,6 @@ class Dashboard extends Component {
                 </TouchableOpacity>
             )
         });
-
         return (
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />

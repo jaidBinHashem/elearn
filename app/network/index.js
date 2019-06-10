@@ -6,7 +6,7 @@ import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 
 const checkStatus = (response) => {
-    console.log(response, "here");
+    // console.log(response, "all res");
     if (response.status >= 200 && response.status < 300) {
         return response;
     }
@@ -28,12 +28,12 @@ const checkStatus = (response) => {
 
 export const getService = async (request) => {
     try {
+        request.showLoader && loaderHandler.showLoader("Loading");
+
         let requestHeaders = {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         };
-
-        request.showLoader && loaderHandler.showLoader("Loading");
 
         if (request.authenticate) {
             let accessToken = await AsyncStorage.getItem("USER_TOKEN");
@@ -57,8 +57,10 @@ export const getService = async (request) => {
 
 export const postService = async (request) => {
     try {
+        request.showLoader && loaderHandler.showLoader("Loading");
+        
         let requestHeaders = {
-            'Content-Type': 'application/json',
+            'Content-Type': request.contentType ? request.contentType : 'application/json',
             'Accept': 'application/json'
         };
         if (request.authenticate) {
@@ -68,9 +70,10 @@ export const postService = async (request) => {
         let response = await fetch(!request.temp ? BASE_URL + request.endPoint : request.baseUrl, {
             method: 'POST',
             headers: requestHeaders,
-            body: JSON.stringify(request.params)
+            body: request.contentType ? request.params : JSON.stringify(request.params)
         });
         response = await checkStatus(response).json();
+        request.showLoader && loaderHandler.hideLoader();
         return { success: true, data: response };
     }
     catch (err) {

@@ -12,7 +12,7 @@ import MyProfile from '../component/MyProfile';
 import EditProfile from '../component/EditProfile';
 import EditStudyLevel from '../component/EditProfile/EditStudyLevel';
 import MySubjects from '../component/MySubjects';
-import Cupon from '../component/Cupon';
+import Coupon from '../component/Coupon';
 import BuyPackage from '../component/BuyPackage';
 import ConfirmBuyPackage from '../component/BuyPackage/ConfirmBuyPackage';
 import Payment from '../component/BuyPackage/Payment';
@@ -165,12 +165,12 @@ const SubjectsStack = createStackNavigator(
     }
 );
 
-const CuponStack = createStackNavigator(
+const CouponStack = createStackNavigator(
     {
-        Cupon: Cupon,
+        Coupon: Coupon,
     },
     {
-        initialRouteName: 'Cupon',
+        initialRouteName: 'Coupon',
         defaultNavigationOptions: {
             headerStyle: {
                 backgroundColor: colors.appTheme,
@@ -278,7 +278,8 @@ const SuperLeagueTab = createMaterialTopTabNavigator(
 const SuperLeagueStack = createStackNavigator(
     {
         SuperLeagueTab: {
-            screen: SuperLeagueTab,
+            screen: Scolarships,
+            // screen: SuperLeagueTab,
             navigationOptions: ({ navigation }) => ({
                 title: 'Super League',
                 headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>
@@ -327,10 +328,10 @@ const AppDrawer = createDrawerNavigator(
                 drawerIcon: ({ tintColor }) => <Icon name='book-outline' type='material-community' color={colors.appTheme} />,
             }
         },
-        Cupon: {
-            screen: CuponStack,
+        Coupon: {
+            screen: CouponStack,
             navigationOptions: {
-                drawerLabel: 'Cupon',
+                drawerLabel: 'Coupon',
                 drawerIcon: ({ tintColor }) => <Icon name='tag-outline' type='material-community' color={colors.appTheme} />,
             }
         },
@@ -355,13 +356,13 @@ const AppDrawer = createDrawerNavigator(
                 drawerIcon: ({ tintColor }) => <Icon name='fountain-pen-tip' type='material-community' color={colors.appTheme} />,
             }
         },
-        Terms: {
-            screen: AppStack,
-            navigationOptions: {
-                drawerLabel: 'Terms & Conditions',
-                drawerIcon: ({ tintColor }) => <Icon name='exclamationcircle' type='antdesign' color={colors.appTheme} />,
-            }
-        },
+        // Terms: {
+        //     screen: AppStack,
+        //     navigationOptions: {
+        //         drawerLabel: 'Terms & Conditions',
+        //         drawerIcon: ({ tintColor }) => <Icon name='exclamationcircle' type='antdesign' color={colors.appTheme} />,
+        //     }
+        // },
         // Share: {
         //     screen: AppStack,
         //     navigationOptions: {

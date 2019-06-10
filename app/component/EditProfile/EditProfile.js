@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import { Keyboard, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
+import BusyIndicator from 'react-native-busy-indicator';
 import { Icon, Avatar, Input } from 'react-native-elements';
-import DatePicker from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker';
+import moment from 'moment';
+import Toast from 'react-native-simple-toast';
 import { connect } from "react-redux";
+import { editUser } from '../../redux/actions/UserActions';
 import { checkAuth } from '../../redux/actions/AuthActions';
 
 import Colors from '../../global/colors';
@@ -31,52 +34,59 @@ class EditProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: this.props.user.name,
+            name: null,
             nameError: "",
-            email: this.props.user.email,
-            emailError: "",
+            gender: null,
             location: null,
-            avatarSource: null
+            birthDate: null,
+            imageData: null,
+            uploadImage: false
         }
     }
 
     componentWillReceiveProps(nextProps) {
+        if (this.props.user != nextProps.user) {
+            Toast.show("Profile update successfull");
+            this.props.navigation.goBack();
+        }
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null
     }
 
-    async componentDidMount() {
-        // let token = await AsyncStorage.getItem('USER_TOKEN')
-        // console.log(token, "token in dash")
-    }
-
     changeImage = () => {
         ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
-
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.error) {
                 console.log('ImagePicker Error: ', response.error);
             } else {
-                const source = { uri: response.uri };
-
-                // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-                this.setState({
-                    avatarSource: source,
-                });
+                let imageData = {
+                    name: response.fileName,
+                    type: response.type,
+                    uri: response.uri
+                };
+                this.setState({ imageData, uploadImage: true })
             }
         });
+    }
+
+    editProfile = () => {
+        Keyboard.dismiss();
+        let profile = new FormData();
+        this.state.name && profile.append("name", this.state.name);
+        this.state.gender && profile.append("gender", this.state.gender);
+        this.state.location && profile.append("location", this.state.location);
+        this.state.birthDate && profile.append("birth_date", this.state.birthDate);
+        this.state.uploadImage && profile.append("image", this.state.imageData);
+        profile._parts.length > 0 && this.props.editUser(profile);
     }
 
     render() {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <View style={{ elevation: 10, marginRight: 20 }}>
                             <Avatar
@@ -85,7 +95,7 @@ class EditProfile extends Component {
                                 // editButton={{ containerStyle: { backgroundColor: Colors.appTheme, borderRadius:4 } }}
                                 size="large"
                                 source={{
-                                    uri: !this.state.avatarSource ? 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' : this.state.avatarSource.uri,
+                                    uri: !this.state.imageData ? this.props.user.avatar : this.state.imageData.uri,
                                 }}
                                 containerStyle={{ elevation: 10 }}
                                 onEditPress={() => this.changeImage()}
@@ -106,7 +116,7 @@ class EditProfile extends Component {
                                 errorStyle={{ color: 'red' }}
                                 errorMessage={this.props.nameError}
                                 onChangeText={(name) => this.setState({ name })}
-                                value={this.state.name}
+                                value={this.state.name ? this.state.name : this.props.user.name}
                                 leftIcon={
                                     <Icon
                                         name='user'
@@ -119,42 +129,20 @@ class EditProfile extends Component {
                                 }
                             />
                         </View>
-
-                        <View style={{ marginBottom: 20 }}>
-                            <Input
-                                label="EMAIL"
-                                labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
-                                inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
-                                placeholder='Your Email'
-                                errorStyle={{ color: 'red' }}
-                                errorMessage={this.props.emailError}
-                                onChangeText={(email) => this.setState({ email })}
-                                value={this.state.email}
-                                keyboardType={'email-address'}
-                                leftIcon={
-                                    <Icon
-                                        name='email'
-                                        size={24}
-                                        type='entypo'
-                                        color={Colors.appTheme}
-                                        containerStyle={{ marginRight: 10 }}
-                                    />
-                                }
-                            />
-                        </View>
                         <View style={{ marginBottom: 20 }}>
                             <View style={{ marginHorizontal: 10 }}>
                                 <Text style={{ fontSize: 16, color: 'black', fontWeight: '500', marginBottom: 10 }}>Gender</Text>
                             </View>
                             <View style={{ padding: 2, marginHorizontal: 10, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
                                 <Picker
-                                    selectedValue={this.state.language}
+                                    selectedValue={this.state.gender ? this.state.gender : this.props.user.gender}
                                     style={{ height: 50 }}
                                     onValueChange={(itemValue, itemIndex) =>
-                                        this.setState({ language: itemValue })
+                                        this.setState({ gender: itemValue })
                                     }>
-                                    <Picker.Item label="Male" value="Male" />
-                                    <Picker.Item label="Female" value="Female" />
+                                    <Picker.Item label="Select" value={null} />
+                                    <Picker.Item label="Male" value="male" />
+                                    <Picker.Item label="Female" value="female" />
                                 </Picker>
                             </View>
                         </View>
@@ -166,8 +154,8 @@ class EditProfile extends Component {
                                 placeholder='Your Location'
                                 errorStyle={{ color: 'red' }}
                                 errorMessage={this.props.emailError}
-                                onChangeText={(email) => this.setState({ location })}
-                                value={this.state.location}
+                                onChangeText={(location) => this.setState({ location })}
+                                value={this.state.location ? this.state.location : this.props.user.location}
                                 keyboardType={'email-address'}
                                 leftIcon={
                                     <Icon
@@ -187,23 +175,15 @@ class EditProfile extends Component {
                             <View style={{ marginHorizontal: 10, marginTop: 5 }}>
                                 <DatePicker
                                     style={{ width: '100%', height: 50 }}
-                                    date={this.state.date}
+                                    date={this.state.birthDate ? this.state.birthDate : this.props.user.birthDate}
                                     mode="date"
                                     placeholder="select date"
                                     format="YYYY-MM-DD"
-                                    minDate="2016-05-01"
-                                    maxDate="2016-06-01"
                                     confirmBtnText="Confirm"
                                     cancelBtnText="Cancel"
                                     showIcon={false}
+                                    maxDate={moment(new Date()).format("YYYY-MM-DD")}
                                     customStyles={{
-                                        // dateIcon: {
-                                        //     position: 'absolute',
-                                        //     left: 10,
-                                        //     right:100,
-                                        //     top: 4,
-                                        //     marginLeft: 0
-                                        // },
                                         dateInput: {
                                             height: 50,
                                             borderColor: 'lightgray',
@@ -212,11 +192,11 @@ class EditProfile extends Component {
                                         }
                                         // ... You can check the source to find the other keys.
                                     }}
-                                    onDateChange={(date) => { this.setState({ date: date }) }}
+                                    onDateChange={(date) => { this.setState({ birthDate: date }) }}
                                 />
                             </View>
                         </View>
-                        <TouchableOpacity style={{ backgroundColor: Colors.appTheme, justifyContent: 'center', height: 60, borderRadius: 5, marginHorizontal: 10, marginVertical: 15 }}>
+                        <TouchableOpacity onPress={() => this.editProfile()} style={{ backgroundColor: Colors.appTheme, justifyContent: 'center', height: 60, borderRadius: 5, marginHorizontal: 10, marginVertical: 15 }}>
                             <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center' }}>
                                 <Icon name='update' type='material-community' color='#fff' containerStyle={{ right: 15 }} />
                                 <Text style={{ fontSize: 18, fontWeight: '600', color: '#fff' }}>Update</Text>
@@ -224,6 +204,7 @@ class EditProfile extends Component {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
+                <BusyIndicator />
             </View>
         )
     }
@@ -239,5 +220,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { checkAuth }
+    { checkAuth, editUser }
 )(EditProfile);

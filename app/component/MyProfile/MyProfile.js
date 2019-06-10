@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Picker, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon, Avatar } from 'react-native-elements';
+import BusyIndicator from 'react-native-busy-indicator';
 import * as Progress from 'react-native-progress';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
+import { getUser } from '../../redux/actions/UserActions';
 
 import { getService } from '../../network';
 
@@ -34,38 +36,21 @@ class MyProfile extends Component {
             : null
     }
 
-    async componentDidMount() {
-        this.getStudyLevel();
-    }
-
     signOut = async () => {
         await AsyncStorage.removeItem('USER');
         await AsyncStorage.removeItem('USER_TOKEN');
         this.props.navigation.navigate('Loader');
     }
 
-    getStudyLevel = async () => {
-        const request = { endPoint: 'study-levels' }
-        let studyLevels = await getService(request);
-        studyLevels.success && this.setState({ studyLevels: studyLevels.data.data });
-        this.selectStudyLevel(studyLevels[0], 0);
-    }
-
-    selectStudyLevel = async (selectedStudyLevelId, selectedStudyIndex) => {
-        let selectedStudyLevel = [...this.state.studyLevels];
-        selectedStudyLevel = selectedStudyLevel[selectedStudyIndex];
-        this.setState({ selectedStudyLevel });
-        const request = {
-            endPoint: 'study-levels/' + this.state.studyLevels[selectedStudyIndex].slug + '/institutions'
-        }
-        let institutions = await getService(request);
-        institutions.success && this.setState({ institutions: institutions.data.data, selectedInstitution: institutions.data.data[0] });
-    }
-
-    selectInstitution = async (selectedInstitutionId, selectedInstitutionIndex) => {
-        let selectedInstitution = [...this.state.institutions];
-        selectedInstitution = selectedInstitution[selectedInstitutionIndex]
-        this.setState({ selectedInstitution });
+    calculateProfileCompletation = () => {
+        let complete = 0;
+        this.props.user.name && ++complete;
+        this.props.user.phone && ++complete;
+        this.props.user.email && ++complete;
+        this.props.user.gender && ++complete;
+        this.props.user.location && ++complete;
+        this.props.user.birthDate && ++complete;
+        return complete / 6;
     }
 
     render() {
@@ -78,24 +63,6 @@ class MyProfile extends Component {
                             <View>
                                 <Text style={styles.name}>{this.props.user.name}</Text>
                             </View>
-                            {/* <View>
-                                {this.state.selectedStudyLevel && (
-                                    <Picker
-                                        mode="dialog"
-                                        selectedValue={this.state.selectedStudyLevel.id}
-                                        style={{ height: 40, width: 120, right: 5 }}
-                                        itemStyle={{ color: '#BC9CFF' }}
-                                        onValueChange={(studyLevel, selectedStudyIndex) => this.selectStudyLevel(studyLevel, selectedStudyIndex)}>
-                                        {
-                                            this.state.selectedStudyLevel && this.state.studyLevels.map((studyLevel) => {
-                                                return (
-                                                    <Picker.Item key={studyLevel.id} label={studyLevel.name} value={studyLevel.id} />
-                                                )
-                                            })
-                                        }
-                                    </Picker>
-                                )}
-                            </View> */}
                         </View>
                         <View style={{ elevation: 10, marginRight: 20 }}>
                             <Avatar
@@ -103,7 +70,7 @@ class MyProfile extends Component {
                                 size="large"
                                 source={{
                                     uri:
-                                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                                        this.props.user.avatar
                                 }}
                                 containerStyle={{ elevation: 10 }}
                             />
@@ -114,10 +81,10 @@ class MyProfile extends Component {
                             <Text style={{ color: 'black', fontSize: 15 }}>Profile Completion</Text>
                         </View>
                         <View style={{ marginTop: 9 }}>
-                            <Progress.Bar color={Colors.appTheme} unfilledColor="lightgray" borderWidth={0} progress={0.3} width={150} />
+                            <Progress.Bar color={Colors.appTheme} unfilledColor="lightgray" borderWidth={0} progress={this.calculateProfileCompletation()} width={150} />
                         </View>
                         <View>
-                            <Text style={{ color: 'black', fontSize: 15 }}>30%</Text>
+                            <Text style={{ color: 'black', fontSize: 15 }}>{this.calculateProfileCompletation() * 100}%</Text>
                         </View>
                     </View>
 
@@ -137,13 +104,13 @@ class MyProfile extends Component {
                         <View>
                             <View style={styles.profileDetailsContainer}>
                                 <Icon name='book' type='antdesign' color={Colors.appTheme} />
-                                <Text style={[styles.profileDetails, { marginLeft: 56 }]}>{this.state.selectedStudyLevel && this.state.selectedStudyLevel.name}</Text>
+                                <Text style={[styles.profileDetails, { marginLeft: 56 }]}>{this.props.user.studyLevel}</Text>
                             </View>
                         </View>
                         <View>
                             <View style={styles.profileDetailsContainer}>
                                 <Icon name='university' type='font-awesome' color={Colors.appTheme} />
-                                <Text style={[styles.profileDetails, { marginLeft: 56 }]}>{this.state.selectedInstitution && this.state.selectedInstitution.name}</Text>
+                                <Text style={[styles.profileDetails, { marginLeft: 56 }]}>{this.props.user.institution}</Text>
                             </View>
                         </View>
                     </View>
@@ -190,6 +157,7 @@ class MyProfile extends Component {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
+                <BusyIndicator />
             </View>
         )
     }
@@ -205,5 +173,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { checkAuth }
+    { checkAuth, getUser }
 )(MyProfile);

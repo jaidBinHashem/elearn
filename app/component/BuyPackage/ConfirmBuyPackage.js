@@ -46,13 +46,14 @@ class ConfirmBuyPackage extends Component {
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {
                             this.props.selectedPackages.length > 0 && this.props.selectedPackages.map((mainPackage, index) => {
+                                console.log(mainPackage, "here");
                                 return (
                                     <View key={index} style={{ flex: 1, borderTopWidth: 2, borderTopColor: Colors.appTheme, padding: 20, backgroundColor: '#fff', height: 80, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                         <View>
                                             <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 200 }}>{mainPackage.title}</Text>
                                         </View>
                                         <View>
-                                            <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{mainPackage.selectedPkg.duration}</Text>
+                                            <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{mainPackage.selectedPkg.name}</Text>
                                             <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{mainPackage.selectedPkg.price} tk</Text>
                                         </View>
                                     </View>

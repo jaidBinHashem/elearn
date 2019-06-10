@@ -34,58 +34,31 @@ class MySubjects extends Component {
 
     render() {
         let subjects = [...this.props.subjects];
-        let subj = [...this.props.subjectsTitleArr];
-        let colors = ['#BC9CFF', '#F6D365', '#F093FB', '#0BA360', '#74DBC9', '#677DCB', '#501A57', '#F07B52'];
-        let colorsArr = [...colors];
-        let views = [], length = Math.ceil(subj.length / 4);
-        for (let i = 0; i < length; i++) {
-            let subjectArr = [];
-            if (subjects.length > 4) {
-                for (let i = 0; i < 4; i++) {
-                    subjectArr.push(subjects.shift());
-                }
-            } else {
-                for (let i = 0; i <= subjects.length; i++) {
-                    subjectArr.push(subjects.shift());
-                }
-            }
-            view = (
-                <View key={i} style={{ flex: 4 }}>
-                    <View style={{ flex: 2, flexDirection: 'row' }}>
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[0] })} style={styles.subject}>
-                                <Text style={{ fontSize: 25, fontWeight: 'bold', textAlign: 'center', marginVertical:5, color:'black' }}>{subj.shift()}</Text>
-                                <Text style={{ textAlign: 'center' }}>Validity : Lifetime</Text>
-                            </TouchableOpacity>
-                        )}
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[1] })} style={styles.subject}>
-                                <Text>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                    <View style={{ flex: 2, flexDirection: 'row' }}>
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[2] })} style={styles.subject}>
-                                <Text>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subjectArr[3] })} style={styles.subject}>
-                                <Text>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                </View>
-            )
-            colorsArr = colorsArr.concat(colors);
-            views.push(view);
-        }
+        let views = [];
+        subjects.map((subject, key) => {
+            views.push(
+                <View key={key} style={{ flex: 2, flexDirection: 'row' }}><TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subject })}
+                    style={styles.subject}
+                >
+                    <Text style={{ color:'black', fontWeight: 'bold', fontSize: 20 }}>{subject.title}</Text>
+                    <Text style={{  fontWeight: 'bold', fontSize: 18, marginTop:5 }}>Validaty : Life Time</Text>
+                </TouchableOpacity>
+                </View>)
+        })
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {views}
+                    {views.length === 0 && (
+                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>You donot have any subjcts</Text>
+                            <TouchableOpacity style={{ marginTop: 20, width: 300, height: 60, backgroundColor: Colors.appTheme, marginVertical: 3, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.props.navigation.navigate('BuyPackage')}>
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20 }}>Buy Packages</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </ScrollView>
             </View>
         )

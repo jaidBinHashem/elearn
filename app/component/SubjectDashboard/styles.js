@@ -6,12 +6,14 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   horizontal: {
-    margin: 10,
-    marginRight: 0
+    // margin: 10,
+    // marginRight: 0
     // paddingHorizontal: 20
   },
   chapterContainer: {
-    marginTop: 30
+    marginLeft: 10,
+    marginTop: 30,
+    marginBottom: 10
   },
   topicContainer: {
     // flexDirection: 'row',
@@ -20,8 +22,8 @@ export default StyleSheet.create({
   topic: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 105,
-    height: 108,
+    width: 145,
+    height: 138,
     backgroundColor: '#fff',
     elevation: 3,
     borderRadius: 3,
@@ -32,14 +34,16 @@ export default StyleSheet.create({
   topicText: {
     top: 5,
     marginHorizontal: 8,
+    textAlign: 'center'
   },
   chaptersCount: {
     fontWeight: 'bold',
     marginTop: 5,
+    marginLeft: 10
   },
   chapterTitle: {
-    color:'black',
-    marginHorizontal:5,
+    color: 'black',
+    marginHorizontal: 5,
     fontWeight: 'bold'
   }
 });

@@ -49,7 +49,8 @@ class Payment extends Component {
                         style={{ flex: 1, }}
                         originWhitelist={['*']}
                         source={{ html: this.state.paymentHTML }}
-                        onLoadEnd={() => console.log("loaded")}
+                        onLoadStart={() => loaderHandler.showLoader("Loading")}
+                        onLoadEnd={() => loaderHandler.hideLoader()}
                         onError={(err) => console.log(err, "here err")}
                         onNavigationStateChange={(state) => {
                             state.title === "Payment Success" && (this.props.resetSelectedPackages(), this.props.getSubjects(), setTimeout(() => { this.props.navigation.goBack(); this.props.navigation.navigate('MySubjects') }, 2000));
@@ -58,6 +59,7 @@ class Payment extends Component {
                         }}
                     />)
                 }
+                <BusyIndicator />
             </View>
         );
     }

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { put, call } from "redux-saga/effects";
-import { SIGN_OUT_COMPLETE, SET_USER, MAKE_LOGIN_REQUEST_FAILED, MAKE_LOGIN_REQUEST_SUCCESS, REGISTRATION_SUCCESS, REGISTRATION_FAILED, CHECK_AUTH_RETURN, SIGN_UP_RETURN, SUBMIT_STUDY_DETAILS_RETURN, SUBMIT_COURSES_RETURN, DUBLICATE_NUMBER_EMAIL } from '../actions/types'
+import {GET_USER, SIGN_OUT_COMPLETE, MAKE_LOGIN_REQUEST_FAILED, MAKE_LOGIN_REQUEST_SUCCESS, REGISTRATION_SUCCESS, REGISTRATION_FAILED, CHECK_AUTH_RETURN, SIGN_UP_RETURN, SUBMIT_STUDY_DETAILS_RETURN, SUBMIT_COURSES_RETURN, DUBLICATE_NUMBER_EMAIL } from '../actions/types'
 import { REGISTRATION_FAILED_MESSAGE, LOGIN_FAILED } from '../../constant/ErrorMessages'
 import { USER_TOKEN, USER } from '../../constant/keys'
 import { postService } from '../../network'
@@ -94,15 +94,14 @@ export const isAuthenticated = function* (action) {
             user: user
         }
     }
-    user && (yield put({ type: SET_USER, payload: response }));
+    user && (yield put({ type: GET_USER }));
 };
 
 export const makeLoginRequest = function* (action) {
     let response = yield call(getToken, action.payload);
-    console.log(response, "jo");
     if (response) {
         !response.success && (yield put({ type: MAKE_LOGIN_REQUEST_FAILED, payload: LOGIN_FAILED }));
-        response.success && (yield call(setToken, response), yield put({ type: SET_USER, payload: response }));
+        response.success && (yield call(setToken, response), yield put({ type: GET_USER }));
         response.success && (yield put({ type: MAKE_LOGIN_REQUEST_SUCCESS, payload: response }));
     } else {
         console.log("failed");
@@ -154,7 +153,7 @@ export const registerUser = function* (action) {
     let response = yield call(registerUserDetails, action.payload);
     !response.success && (yield put({ type: REGISTRATION_FAILED, payload: REGISTRATION_FAILED_MESSAGE }));
     response.success && (yield put({ type: REGISTRATION_SUCCESS, payload: response.data.message }));
-    response.success && (yield call(setToken, response), yield put({ type: SET_USER, payload: response }));
+    response.success && (yield call(setToken, response), yield put({ type: GET_USER }));
 };
 
 export const signOut = function* (action) {

@@ -28,9 +28,10 @@ class Player extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        !nextProps.auth.isLoged
-            ? this.props.navigation.navigate('Auth')
-            : null
+
+        // !nextProps.auth.isLoged
+        //     ? this.props.navigation.navigate('Auth')
+        //     : null
     }
 
     async componentDidMount() {
@@ -40,7 +41,7 @@ class Player extends Component {
         });
 
         setTimeout(() => {
-            this.props.checkAuth();
+            // this.props.checkAuth();
         }, 1000)
     }
 
@@ -86,11 +87,11 @@ class Player extends Component {
 
 function mapStateToProps(state) {
     return {
-        auth: state.AuthReducer
+        // auth: state.AuthReducer
     };
 }
 
 export default connect(
     mapStateToProps,
-    { checkAuth }
+    {  }
 )(Player);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState } from 'react-native'
+import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
@@ -104,7 +104,7 @@ class Quiz extends Component {
             seconds = parseInt(timer % 60, 10);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            // this.setState({ time: minutes + ":" + seconds });
+            this.setState({ time: minutes + ":" + seconds });
             if (--timer < 1) {
                 clearInterval(this.myTimer);
                 loaderHandler.showLoader("Loading");
@@ -384,6 +384,9 @@ class Quiz extends Component {
                                 index={0}
                                 automaticallyAdjustContentInsets={true}
                                 onIndexChanged={(index) => this.setState({ swiperIndex: index })}
+                                loadMinimal={true}
+                                loadMinimalSize={2}
+                                loadMinimalLoader={<ActivityIndicator size="large" color="#0000ff" />}
                             >
                                 {this.props.navigation.state.params.showExplanation ? explanationView : questionViews}
                             </Swiper>

@@ -47,26 +47,35 @@ class Scolarships extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={{ borderRadius: 5, borderTopWidth: 2, borderTopColor: Colors.appTheme, backgroundColor: '#fff', marginVertical: 15, elevation: 5, borderRadius: 3 }}>
-                        <View style={{ borderBottomWidth: 2, borderBottomColor: 'lightgray', padding: 20 }}>
-                            <Text style={{ fontSize: 18, fontWeight: '400', color: 'black' }}>Pran Scholarship 2019</Text>
-                            <Text style={{ fontSize: 18, fontWeight: '300' }}>Lorem Ipsum is simply dummy text of the printing and typese</Text>
-                            <Text style={{ fontSize: 18, fontWeight: '400', color: 'black', marginTop: 15 }}>End Data</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-                                <Icon name='menu' type='feather' color={Colors.appTheme} />
-                                <Text>30 Nov 2019</Text>
-                            </View>
-                        </View>
-                        <View style={{ marginVertical: 20, alignItems: 'center' }}>
-                            <TouchableOpacity style={{ width: 100, backgroundColor: Colors.appTheme, padding: 10, borderRadius: 5 }}>
-                                <Text style={{ color: '#fff', textAlign: 'center', color: 'black' }}>Apply Now</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </ScrollView>
+                <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>Comming Soon</Text>
+                </View>
             </View>
+
         )
+        // return (
+        //     <View style={[styles.container]}>
+        //         <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
+        //         <ScrollView showsVerticalScrollIndicator={false}>
+        //             <View style={{ borderRadius: 5, borderTopWidth: 2, borderTopColor: Colors.appTheme, backgroundColor: '#fff', marginVertical: 15, elevation: 5, borderRadius: 3 }}>
+        //                 <View style={{ borderBottomWidth: 2, borderBottomColor: 'lightgray', padding: 20 }}>
+        //                     <Text style={{ fontSize: 18, fontWeight: '400', color: 'black' }}>Pran Scholarship 2019</Text>
+        //                     <Text style={{ fontSize: 18, fontWeight: '300' }}>Lorem Ipsum is simply dummy text of the printing and typese</Text>
+        //                     <Text style={{ fontSize: 18, fontWeight: '400', color: 'black', marginTop: 15 }}>End Data</Text>
+        //                     <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
+        //                         <Icon name='menu' type='feather' color={Colors.appTheme} />
+        //                         <Text>30 Nov 2019</Text>
+        //                     </View>
+        //                 </View>
+        //                 <View style={{ marginVertical: 20, alignItems: 'center' }}>
+        //                     <TouchableOpacity style={{ width: 100, backgroundColor: Colors.appTheme, padding: 10, borderRadius: 5 }}>
+        //                         <Text style={{ color: '#fff', textAlign: 'center', color: 'black' }}>Apply Now</Text>
+        //                     </TouchableOpacity>
+        //                 </View>
+        //             </View>
+        //         </ScrollView>
+        //     </View>
+        // )
     }
 }
 

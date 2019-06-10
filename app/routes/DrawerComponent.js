@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, Share, TouchableOpacity } from 'react-native'
 import { Avatar, Icon } from 'react-native-elements';
+import { connect } from "react-redux";
 
 import { DrawerItems } from 'react-navigation';
 
@@ -46,17 +47,17 @@ class DrawerComponent extends Component {
                             size="large"
                             source={{
                                 uri:
-                                    'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                                    this.props.user.avatar
                             }}
                             containerStyle={{ elevation: 30 }}
                         />
                     </View>
                     <View style={{ marginLeft: 20, justifyContent: 'center' }}>
                         <Text style={{ fontSize: 25, color: colors.appTheme }}>
-                            Rakib
+                            {this.props.user.name}
                         </Text>
                         <Text style={{ color: 'black' }}>
-                            Class 9-10
+                            {this.props.user.studyLevel}
                         </Text>
                     </View>
                 </View>
@@ -78,4 +79,13 @@ class DrawerComponent extends Component {
     }
 }
 
-export default DrawerComponent;
+function mapStateToProps(state) {
+    return {
+        user: state.UserReducer
+    };
+}
+
+export default connect(
+    mapStateToProps,
+    {}
+)(DrawerComponent);

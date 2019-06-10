@@ -1,4 +1,4 @@
-import { SET_USER } from '../actions/types'
+import { SET_USER, SET_USER_MYPROFILE } from '../actions/types'
 
 const initialState = {
   id: null,
@@ -14,26 +14,28 @@ const initialState = {
   token: null,
   institutionId: null,
   studyLevelId: null,
+  studyLevel: null,
+  institution: null,
+  image: null
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case SET_USER:
+    case SET_USER_MYPROFILE:
       return {
         ...state,
-        id: action.payload.data.user.id,
-        avatar: action.payload.data.user.avatar,
-        bio: action.payload.data.user.bio,
-        birthDate: action.payload.data.user.birthDate,
-        countryPrefix: action.payload.data.user.countryPrefix,
-        phone: action.payload.data.user.phone,
-        email: action.payload.data.user.email,
-        name: action.payload.data.user.name,
-        gender: action.payload.data.user.gender,
-        location: action.payload.data.user.location,
-        token: action.payload.data.token,
-        institutionId: action.payload.data.user.institution_id,
-        studyLevelId: action.payload.data.user.study_level_id,
+        birthDate: action.payload.birth_date,
+        avatar: action.payload.image,
+        email: action.payload.email,
+        gender: action.payload.gender,
+        name: action.payload.name,
+        phone: action.payload.phone,
+        location: action.payload.location,
+        institution: action.payload.institution,
+        studyLevel: action.payload.study_level,
+        institutionId: action.payload.institution_id,
+        studyLevelId: action.payload.study_level_id,
+        image: action.payload.image
       }
     default:
       return state;

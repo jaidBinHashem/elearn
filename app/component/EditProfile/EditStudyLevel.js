@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Picker, StatusBar } from 'react-native';
 import { Icon } from 'react-native-elements';
+import BusyIndicator from 'react-native-busy-indicator';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+import Toast from 'react-native-simple-toast';
+
+import { updateStudyLevel } from '../../redux/actions/UserActions';
 
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
@@ -21,8 +26,17 @@ class EditStudyLevel extends Component {
             studyLevels: [],
             institutions: [],
             selectedStudyLevel: null,
-            selectedInstitution: null
+            selectedInstitution: null,
+            courses: [],
+            selectedCourse: null
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.props.user != nextProps.user && (
+            Toast.show("Study level updated successfull"),
+            this.props.navigation.navigate('Loader')
+        )
     }
 
     componentDidMount() {
@@ -30,27 +44,47 @@ class EditStudyLevel extends Component {
     }
 
     getStudyLevel = async () => {
+        loaderHandler.showLoader("Loading");
         const request = { endPoint: 'study-levels' }
         let studyLevels = await getService(request);
-        studyLevels.success && this.setState({ studyLevels: studyLevels.data.data });
-        this.selectStudyLevel(studyLevels[0], 0);
+        studyLevels.data.data.map((studyLevel => {
+            studyLevel.id === this.props.user.studyLevelId && (this.selectStudyLevel(studyLevel), this.getCourse(studyLevel), this.setState({ studyLevels: studyLevels.data.data, selectedStudyLevel: studyLevel }));
+        }));
     }
 
-    selectStudyLevel = async (selectedStudyLevelId, selectedStudyIndex) => {
-        let selectedStudyLevel = [...this.state.studyLevels];
-        selectedStudyLevel = selectedStudyLevel[selectedStudyIndex];
-        this.setState({ selectedStudyLevel });
+    selectStudyLevel = async (studyLevel, selectedStudyIndex = null) => {
+        loaderHandler.showLoader("Loading");
+        let slugObj = studyLevel || this.state.studyLevels[selectedStudyIndex];
+        this.state.selectedStudyLevel !== slugObj && (this.getCourse(slugObj), this.setState({ selectedStudyLevel: slugObj }));
         const request = {
-            endPoint: 'study-levels/' + this.state.studyLevels[selectedStudyIndex].slug + '/institutions'
+            endPoint: 'study-levels/' + slugObj.slug + '/institutions'
         }
         let institutions = await getService(request);
-        institutions.success && this.setState({ institutions: institutions.data.data, selectedInstitution: institutions.data.data[0] });
+        institutions.data.data.map(institution => {
+            institution.id === this.props.user.institutionId && this.setState({ selectedInstitution: institution });
+        });
+        this.setState({ institutions: institutions.data.data });
+        institutions.data.data.length === 0 && this.setState({ selectedInstitution: null });
+        this.state.selectedInstitution === null && this.state.institutions.length > 0 && this.setState({ selectedInstitution: this.state.institutions[0] })
+        loaderHandler.hideLoader();
     }
 
-    selectInstitution = async (selectedInstitutionId, selectedInstitutionIndex) => {
-        let selectedInstitution = [...this.state.institutions];
-        selectedInstitution = selectedInstitution[selectedInstitutionIndex]
-        this.setState({ selectedInstitution });
+    getCourse = async (studyLevel) => {
+        const request = {
+            endPoint: 'study-levels/' + studyLevel.slug + '/categories'
+        }
+        let courses = await getService(request);
+        courses.data.data.map((course => {
+            course.id === this.props.categoryDetails.selectedCategoryID && this.setState({ selectedCourse: course })
+        }));
+        this.setState({ courses: courses.data.data });
+        courses.data.data.length === 0 && this.setState({ selectedCourse: null });
+        this.state.selectedCourse === null && this.state.courses.length > 0 && this.setState({ selectedCourse: this.state.courses[0] });
+    }
+
+
+    componentWillUnmount() {
+        loaderHandler.hideLoader();
     }
 
 
@@ -62,18 +96,19 @@ class EditStudyLevel extends Component {
                     <View>
                         <Text style={styles.formTitle}>STUDY LEVEL</Text>
                         <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
-                            {this.state.selectedStudyLevel && (<Picker
-                                selectedValue={this.state.selectedStudyLevel.id}
-                                style={{ height: 50 }}
-                                onValueChange={(studyLevel, selectedStudyIndex) => this.selectStudyLevel(studyLevel, selectedStudyIndex)}>
-                                {
-                                    this.state.selectedStudyLevel && this.state.studyLevels.map((studyLevel) => {
-                                        return (
-                                            <Picker.Item key={studyLevel.id} label={studyLevel.name} value={studyLevel.id} />
-                                        )
-                                    })
-                                }
-                            </Picker>)}
+                            {this.state.selectedStudyLevel && (
+                                <Picker
+                                    selectedValue={this.state.selectedStudyLevel.id}
+                                    style={{ height: 50 }}
+                                    onValueChange={(studyLevel, selectedStudyIndex) => this.selectStudyLevel(null, selectedStudyIndex)}>
+                                    {
+                                        this.state.selectedStudyLevel && this.state.studyLevels.map((studyLevel) => {
+                                            return (
+                                                <Picker.Item key={studyLevel.id} label={studyLevel.name} value={studyLevel.id} />
+                                            )
+                                        })
+                                    }
+                                </Picker>)}
                             {
                                 this.state.studyLevels.length === 0 && (
                                     <Picker
@@ -90,9 +125,10 @@ class EditStudyLevel extends Component {
                         <Text style={styles.formTitle}>INSTITUTION NAME</Text>
                         <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
                             {this.state.institutions.length > 0 && (<Picker
-                                selectedValue={this.state.selectedInstitution.id}
+                                selectedValue={this.state.selectedInstitution ? this.state.selectedInstitution.id : this.state.institutions[0].id}
                                 style={{ height: 50 }}
-                                onValueChange={(institution, selectedInstitutionIndex) => this.selectInstitution(institution, selectedInstitutionIndex)}>
+                                onValueChange={(institution, selectedInstitutionIndex) => this.setState({ selectedInstitution: this.state.institutions[selectedInstitutionIndex] })}
+                            >
                                 {
                                     this.state.institutions.length > 0 && this.state.institutions.map((institution) => {
                                         return (
@@ -113,13 +149,48 @@ class EditStudyLevel extends Component {
                             }
                         </View>
                     </View>
+                    <View>
+                        <Text style={styles.formTitle}>COURSE</Text>
+                        <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
+                            {this.state.courses.length > 0 && (<Picker
+                                selectedValue={this.state.selectedCourse ? this.state.selectedCourse.id : this.state.courses[0].id}
+                                style={{ height: 50 }}
+                                onValueChange={(course, selectedCourseIndex) => this.setState({ selectedCourse: this.state.courses[selectedCourseIndex] })}
+                            >
+                                {
+                                    this.state.courses.length > 0 && this.state.courses.map((course) => {
+                                        return (
+                                            <Picker.Item key={course.id} label={course.name} value={course.id} />
+                                        )
+                                    })
+                                }
+                            </Picker>)}
+                            {
+                                this.state.courses.length === 0 && (
+                                    <Picker
+                                        selectedValue={0}
+                                        style={{ height: 50 }}
+                                    >
+                                        <Picker.Item label="---" value={0} />
+                                    </Picker>
+                                )
+                            }
+                        </View>
+                    </View>
                 </View>
-                <TouchableOpacity style={{ backgroundColor: Colors.appTheme, justifyContent: 'center', height: 60, borderRadius: 5, marginHorizontal: 0, marginVertical: 15 }}>
+                <TouchableOpacity
+                    onPress={() => this.props.updateStudyLevel({
+                        "study_level_id": this.state.selectedStudyLevel.id,
+                        "institution_id": this.state.selectedInstitution ? this.state.selectedInstitution.id : null,
+                        "categories": this.state.selectedCourse ? [this.state.selectedCourse.id] : null
+                    })}
+                    style={{ backgroundColor: Colors.appTheme, justifyContent: 'center', height: 60, borderRadius: 5, marginHorizontal: 0, marginVertical: 15 }}>
                     <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center' }}>
                         <Icon name='update' type='material-community' color='#fff' containerStyle={{ right: 15 }} />
                         <Text style={{ fontSize: 18, fontWeight: '600', color: '#fff' }}>Update</Text>
                     </View>
                 </TouchableOpacity>
+                <BusyIndicator />
             </View>
         )
     }
@@ -128,11 +199,12 @@ class EditStudyLevel extends Component {
 function mapStateToProps(state) {
     return {
         auth: state.AuthReducer,
-        user: state.UserReducer
+        user: state.UserReducer,
+        categoryDetails: state.CategoryReducer
     };
 }
 
 export default connect(
     mapStateToProps,
-    { checkAuth }
+    { checkAuth, updateStudyLevel }
 )(EditStudyLevel);

@@ -51,31 +51,40 @@ class Upcoming extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={{ borderRadius: 5, borderTopWidth: 2, borderTopColor: Colors.appTheme, backgroundColor: '#fff', marginVertical: 15, elevation: 5, borderRadius: 3 }}>
-                        <View style={{ borderBottomWidth: 2, borderBottomColor: 'lightgray', padding: 20 }}>
-                            <Text style={{ fontSize: 18, fontWeight: '400', color: 'black' }}>Math Olympiad</Text>
-                            <Text style={{ fontSize: 18, fontWeight: '300', marginVertical: 5 }}>It’s based on math </Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, justifyContent: 'space-between' }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Icon name='clipboard-text' type='material-community' color={Colors.appTheme} />
-                                    <Text>30 Nov 2019</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Icon name='clock-fast' type='material-community' color={Colors.appTheme} />
-                                    <Text>30 Nov 2019</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{ marginVertical: 20, alignItems: 'center' }}>
-                            <TouchableOpacity style={{ width: 150, backgroundColor: Colors.appTheme, padding: 10, borderRadius: 5 }}>
-                                <Text style={{ color: '#fff', textAlign: 'center', color: 'black' }}>Get Reminder</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </ScrollView>
+                <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>Comming Soon</Text>
+                </View>
             </View>
+
         )
+        // return (
+        //     <View style={[styles.container]}>
+        //         <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
+        //         <ScrollView showsVerticalScrollIndicator={false}>
+        //             <View style={{ borderRadius: 5, borderTopWidth: 2, borderTopColor: Colors.appTheme, backgroundColor: '#fff', marginVertical: 15, elevation: 5, borderRadius: 3 }}>
+        //                 <View style={{ borderBottomWidth: 2, borderBottomColor: 'lightgray', padding: 20 }}>
+        //                     <Text style={{ fontSize: 18, fontWeight: '400', color: 'black' }}>Math Olympiad</Text>
+        //                     <Text style={{ fontSize: 18, fontWeight: '300', marginVertical: 5 }}>It’s based on math </Text>
+        //                     <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, justifyContent: 'space-between' }}>
+        //                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+        //                             <Icon name='clipboard-text' type='material-community' color={Colors.appTheme} />
+        //                             <Text>30 Nov 2019</Text>
+        //                         </View>
+        //                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+        //                             <Icon name='clock-fast' type='material-community' color={Colors.appTheme} />
+        //                             <Text>30 Nov 2019</Text>
+        //                         </View>
+        //                     </View>
+        //                 </View>
+        //                 <View style={{ marginVertical: 20, alignItems: 'center' }}>
+        //                     <TouchableOpacity style={{ width: 150, backgroundColor: Colors.appTheme, padding: 10, borderRadius: 5 }}>
+        //                         <Text style={{ color: '#fff', textAlign: 'center', color: 'black' }}>Get Reminder</Text>
+        //                     </TouchableOpacity>
+        //                 </View>
+        //             </View>
+        //         </ScrollView>
+        //     </View>
+        // )
     }
 }
 

@@ -64,7 +64,7 @@ class SubjectDashboard extends Component {
                                         {
                                             lesson.lesson_type === 'video' && (<Icon
                                                 name='controller-play'
-                                                size={55}
+                                                size={75}
                                                 type='entypo'
                                                 color='black'
                                                 containerStyle={styles.scoreIconContainer}
@@ -73,7 +73,7 @@ class SubjectDashboard extends Component {
                                         {
                                             lesson.lesson_type === 'article' && (<Icon
                                                 name='text-document'
-                                                size={55}
+                                                size={75}
                                                 type='entypo'
                                                 color='black'
                                                 containerStyle={styles.scoreIconContainer}
@@ -82,7 +82,7 @@ class SubjectDashboard extends Component {
                                         {
                                             lesson.lesson_type === 'quiz' && (<Icon
                                                 name='format-list-checks'
-                                                size={55}
+                                                size={75}
                                                 type='material-community'
                                                 color='black'
                                                 containerStyle={styles.scoreIconContainer}
@@ -104,9 +104,9 @@ class SubjectDashboard extends Component {
                     <View>
                         <Text style={styles.chaptersCount}>{chaptersCount} Chapters | {topicsCount} Topics</Text>
                     </View>
-                    <View style={styles.chapterContainer}>
+                    <ScrollView style={styles.chapterContainer}>
                         {chapterLessons}
-                    </View>
+                    </ScrollView>
 
                 </View>
                 <BusyIndicator />

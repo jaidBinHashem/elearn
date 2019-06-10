@@ -30,7 +30,6 @@ class QuizDashboard extends Component {
     }
 
     render() {
-        console.log(this.props.navigation.state.params.showExplanation)
         let minutes = parseInt(this.props.quiz.time / 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time / 60, 10) : parseInt(this.props.quiz.time / 60, 10);
         let seconds = parseInt(this.props.quiz.time % 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time % 60, 10) : parseInt(this.props.quiz.time % 60, 10);
         let time = String(minutes) + ":" + String(seconds);

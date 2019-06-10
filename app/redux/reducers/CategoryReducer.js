@@ -18,7 +18,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         categories: action.payload,
-        selectedCategoryID: getSelectedCategory(action.payload)
+        selectedCategoryID: action.payload.length > 0 ? getSelectedCategory(action.payload) : null
       }
     case SET_CATEGORIES_RETURN:
       return {
