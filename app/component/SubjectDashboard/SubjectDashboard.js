@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StatusBar, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, StatusBar, TouchableOpacity, ScrollView, Alert, RefreshControl } from 'react-native';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import { Icon } from 'react-native-elements';
@@ -17,6 +17,13 @@ class SubjectDashboard extends Component {
         })
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            refreshing: false
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
@@ -28,7 +35,7 @@ class SubjectDashboard extends Component {
     }
 
     componentWillUnmount() {
-
+        loaderHandler.hideLoader();
     }
 
     onLessonClick = (lesson) => {
@@ -41,7 +48,18 @@ class SubjectDashboard extends Component {
                 this.props.navigation.navigate('ArticleWebView', { lesson: true, title: lesson.title, slug: lesson.slug, category: 'user/lessons' })
             }
         } else {
-            console.log("Vai age kinen");
+            Alert.alert(
+                '',
+                'Please purchase the subject to view it !',
+                [
+                    {
+                        text: 'Cancel',
+                        style: 'cancel',
+                    },
+                    { text: 'Buy Now', onPress: () => this.props.navigation.navigate('BuyPackage') },
+                ],
+                { cancelable: true },
+            );
         }
     }
 
@@ -104,7 +122,13 @@ class SubjectDashboard extends Component {
                     <View>
                         <Text style={styles.chaptersCount}>{chaptersCount} Chapters | {topicsCount} Topics</Text>
                     </View>
-                    <ScrollView style={styles.chapterContainer}>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={() => this.props.getSubjectDetails(this.props.navigation.state.params.subjectDetails.slug)} />
+                        }
+                        style={styles.chapterContainer}>
                         {chapterLessons}
                     </ScrollView>
 

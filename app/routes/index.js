@@ -103,7 +103,10 @@ const AppStack = createStackNavigator(
         SubjectDashboard: SubjectDashboard,
         ArticleWebView: ArticleWebView,
         QuizDashboard: QuizDashboard,
-        Quiz: Quiz,
+        Quiz: {
+            screen: Quiz,
+            navigationOptions: { drawerLockMode: 'locked-closed' }
+        },
         QuizSolutions: Quiz,
         QuizHighlights: QuizHighlights,
         PreviousAttemps: PreviousAttemps,
@@ -120,6 +123,7 @@ const AppStack = createStackNavigator(
                 // fontWeight: 'bold',
             },
         },
+        drawerLockMode: 'locked-closed',
         transitionConfig
     }
 );
@@ -374,7 +378,8 @@ const AppDrawer = createDrawerNavigator(
     {
         initialRouteName: 'Dashboard',
         contentComponent: props => (<DrawerComponent {...props} />),
-        drawerWidth: 350
+        drawerWidth: 350,
+        drawerLockMode: 'locked-closed'
     }
 );
 

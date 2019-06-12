@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar, ScrollView, TouchableOpacity } from 'react-native'
+import { Text, View, StatusBar, Alert, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements';
 
 import { setQuiz } from '../../redux/actions/QuizActions';
@@ -65,16 +65,28 @@ class QuizDashboard extends Component {
                             </View>
                         </View>
                     </View>
-                    <View style={styles.instructionContainer}>
+                    {/* <View style={styles.instructionContainer}>
                         <Text style={styles.instructionTitle}>Instructions</Text>
                         <Text style={styles.instruction}>There will be a good amount of instruction. There will be a good amount of instruction. There will be a good amount of instruction. There will be a good amount of instruction.</Text>
-                    </View>
+                    </View> */}
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => {
                         this.props.quiz.questions
                             && this.props.quiz.questions.length > 0
-                            && this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation, lessonId: this.props.navigation.state.params.lessonId })
+                            ? this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation, lessonId: this.props.navigation.state.params.lessonId })
+                            :  Alert.alert(
+                                '',
+                                'This quiz is not ready yet, Please try again later !',
+                                [
+                                    {
+                                        text: 'Okay',
+                                        style: 'Okay',
+                                    },
+                                    // { text: 'Buy Now', onPress: () => this.props.navigation.navigate('BuyPackage') },
+                                ],
+                                { cancelable: true },
+                            );
                     }
                     }>
                         <Text style={styles.submitText}>Start Quiz</Text>

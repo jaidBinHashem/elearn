@@ -39,12 +39,15 @@ class BuyPackage extends Component {
                     selectedPkg: {
                         name: pkg.packages.data[0].name,
                         id: pkg.packages.data[0].id,
-                        price: pkg.packages.data[0].price
+                        price: pkg.packages.data[0].price,
+                        duration: pkg.packages.data[0].duration,
+                        unit: pkg.packages.data[0].unit
+
                     }
                 });
                 pkg.packages.data.length > 0 && selectedPackages.push(initialSelectedPkg);
             });
-            this.setState({ selectedPackages, loaded: true })
+            this.setState({ selectedPackages, loaded: true });
         };
     }
 
@@ -106,24 +109,23 @@ class BuyPackage extends Component {
                                     return (
                                         <View key={index} style={{ flex: 1, borderTopWidth: 2, borderTopColor: Colors.appTheme, padding: 20, backgroundColor: '#fff', height: 120, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                             <View>
-                                                <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 120, textAlign: 'center' }}>{mainPackage.title}</Text>
-                                                <Text style={{ fontSize: 18, fontWeight: '300', textAlign: 'center' }}>Duration</Text>
-                                            </View>
-                                            <View>
-                                                <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{this.state.selectedPackages[index].selectedPkg.price}tk</Text>
+                                                <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 120, textAlign: 'center', marginVertical: 5 }}>{mainPackage.title}</Text>
                                                 <Picker
                                                     selectedValue={this.state.selectedPackages[index].selectedPkg.id}
-                                                    style={{ height: 25, width: 130 }}
+                                                    style={{ height: 25, width: 200 }}
                                                     onValueChange={(itemValue, itemIndex) => this.selectedPackage(index, itemIndex)}
                                                 >
                                                     {
                                                         mainPackage.packages.data.length > 0 && mainPackage.packages.data.map((pkg, keyIndex) => {
                                                             return (
-                                                                <Picker.Item key={keyIndex} label={pkg.name} value={pkg.id} />
+                                                                <Picker.Item key={keyIndex} label={pkg.name + ' (' + pkg.duration.split('.')[0] + ' ' + pkg.unit + ')'} value={pkg.id} />
                                                             )
                                                         })
                                                     }
                                                 </Picker>
+                                            </View>
+                                            <View>
+                                                <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{this.state.selectedPackages[index].selectedPkg.price}tk</Text>
                                             </View>
                                             <View>
                                                 <CheckBox

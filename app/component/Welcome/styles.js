@@ -20,27 +20,28 @@ export default StyleSheet.create({
         fontWeight: '500',
         fontSize: 30,
     },
-    loginContainer: {
+    signUpContainer: {
         height: 55,
         backgroundColor: colors.appTheme,
         justifyContent: 'center',
         borderRadius: 50,
-        marginBottom: 20
+        marginBottom: 20,
     },
-    signUpContainer: {
-        height: 55,
-        borderColor: colors.appTheme,
-        borderWidth: 2,
-        justifyContent: 'center',
-        borderRadius: 50
-    },
-    logIn: {
+    // signUpContainer: {
+    //     width: 250,
+    //     height: 55,
+    //     borderColor: colors.appTheme,
+    //     borderWidth: 2,
+    //     justifyContent: 'center',
+    //     borderRadius: 50
+    // },
+    signUp: {
         textAlign: 'center',
         color: '#fff'
     },
-    signUp: {
-        textAlign: 'center',
-        color: colors.appTheme
-    },
+    // signUp: {
+    //     textAlign: 'center',
+    //     color: colors.appTheme
+    // },
 
 });

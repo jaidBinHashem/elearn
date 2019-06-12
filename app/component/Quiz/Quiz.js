@@ -41,6 +41,7 @@ height: 100%;
 
 class Quiz extends Component {
     static navigationOptions = ({ navigation }) => ({
+        drawerLockMode: 'locked-closed',
         title: 'Quiz',
         headerTitleStyle: {
             textAlign: "center",
@@ -126,6 +127,7 @@ class Quiz extends Component {
             selectedAnswerIdArray = [...this.state.selectedAnswerIdArray],
             selectedAnswersObject = null,
             selectedAnswers = question.answers.filter(answer => selectedValues.includes(answer.id));
+
         selectedAnswers.map((selectedAnswer) => {
             selectedAnswersObject = {
                 "id": selectedAnswer.id,
@@ -133,8 +135,11 @@ class Quiz extends Component {
                 "correct": selectedAnswer.correct
             };
         });
+
         if (answerdQuestions.includes(question.id)) {
-            answers[answerdQuestions.indexOf(question.id)] = {
+            let index = answerdQuestions.indexOf(question.id);
+            selectedAnswerIdArray[index] = selectedValues[0];
+            answers[index] = {
                 'question': {
                     'id': question.id,
                     'question': question.question,
@@ -142,6 +147,7 @@ class Quiz extends Component {
                 }
             }
         } else {
+            selectedAnswerIdArray.push(selectedValues[0]);
             answers.push({
                 'question': {
                     'id': question.id,
@@ -151,17 +157,19 @@ class Quiz extends Component {
             });
             answerdQuestions.push(question.id);
         }
-        this.setState({ answers, answerdQuestions });
+        this.setState({ answers, answerdQuestions, selectedAnswerIdArray });
     }
 
     confirmExamSubmit = () => {
-        // this.state.answers.length === 0 && (return);
         if (this.state.answers.length === 0) {
             Alert.alert(
                 'Please answer at least a question !',
                 '', // <- this part is optional, you can pass an empty string
                 [
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                    {
+                        text: 'OK',
+                        // onPress: () => console.log('OK Pressed') 
+                    },
                 ],
                 { cancelable: false },
             );
@@ -173,7 +181,7 @@ class Quiz extends Component {
             [
                 {
                     text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
+                    // onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
                 {
@@ -235,7 +243,7 @@ class Quiz extends Component {
                             {questionContent.map((value, index) => {
                                 if (index % 2 === 0) {
                                     if (value.length > 0) {
-                                        return (<View key={index} ><Text style={{ fontSize: 26 }}>{value}</Text></View>)
+                                        return (<View key={index}><Text style={{ fontSize: 26 }}>{value}</Text></View>)
                                     }
                                 } else {
                                     return (
@@ -258,7 +266,7 @@ class Quiz extends Component {
                             })}
                         </View>
                         <View style={styles.optionsContainer}>
-                            <SelectMultipleGroupButton
+                            {/* <SelectMultipleGroupButton
                                 containerViewStyle={{
                                     justifyContent: 'center',
                                     marginTop: 5
@@ -282,7 +290,78 @@ class Quiz extends Component {
                                 multiple={false}
                                 onSelectedValuesChange={selectedValues => this._groupButtonOnSelectedValuesChange(selectedValues, question)}
                                 group={buttonData}
-                            />
+                            /> */}
+                            {
+                                buttonData.map((data, key) => {
+                                    let optionContent = data.displayValue.split(/<latex>(.*?)<latex>/gi);
+                                    if (optionContent.length === 1) {
+                                        return (
+                                            <TouchableOpacity
+                                                onPress={() => this._groupButtonOnSelectedValuesChange([data.value], question)}
+                                                key={key}
+                                                style={{
+                                                    justifyContent: 'center',
+                                                    backgroundColor: this.state.selectedAnswerIdArray.includes(data.value) ? colors.appTheme : 'white',
+                                                    height: 55,
+                                                    width: deviceWidth - 60,
+                                                    marginVertical: 10,
+                                                    elevation: 5,
+                                                    borderColor: colors.appTheme,
+                                                    borderWidth: 3,
+                                                }}
+                                            >
+                                                <Text style={{ fontSize: 20, textAlign: 'center' }}>{optionContent[0]}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    }
+                                    if (optionContent.length > 1) {
+                                        return (
+                                            <TouchableOpacity
+                                                onPress={() => this._groupButtonOnSelectedValuesChange([data.value], question)}
+                                                key={key}
+                                                style={{
+                                                    justifyContent: 'center',
+                                                }}
+                                                style={{
+                                                    borderColor: colors.appTheme, borderWidth: 3, marginVertical: 10,
+                                                    backgroundColor: this.state.selectedAnswerIdArray.includes(data.value) ? colors.appTheme : 'white',
+                                                    elevation: 5,
+                                                }}>
+                                                {
+                                                    optionContent.map((value, index) => {
+                                                        if (index % 2 === 0) {
+                                                            if (value.length > 0) {
+                                                                return (
+                                                                    <View key={index} style={{ marginVertical: 10 }}>
+                                                                        <Text key={index} style={{ fontSize: 20, textAlign: 'center' }}>{value}</Text>
+                                                                    </View>
+                                                                )
+                                                            }
+                                                        } else {
+                                                            return (
+                                                                <ScrollView key={index}>
+                                                                    <Katex
+                                                                        style={{ height: 120, backgroundColor: this.state.selectedAnswerIdArray.includes(data.value) ? colors.appTheme : 'white', }}
+                                                                        scalesPageToFit={false}
+                                                                        expression={value}
+                                                                        scrollEnabled={false}
+                                                                        displayMode={false}
+                                                                        throwOnError={false}
+                                                                        errorColor="#f00"
+                                                                        macros={{}}
+                                                                        colorIsTextColor={false}
+                                                                        onError={() => console.error('Error')}
+                                                                    />
+                                                                </ScrollView>
+                                                            )
+                                                        }
+                                                    })
+                                                }
+                                            </TouchableOpacity>
+                                        )
+                                    }
+                                })
+                            }
                         </View>
                     </View>
                 </ScrollView>
@@ -330,17 +409,69 @@ class Quiz extends Component {
                                             borderWidth: 3
                                         })
                                     }
-                                    return (
-                                        <TouchableOpacity key={answer.id} style={[styles.option, answer.correct && styles.explanation, wrongStyle]}>
-                                            <Text style={styles.optionText}>{answer.answer}</Text>
-                                            {
-                                                answer.correct && answer.explanation != null && (<Text style={styles.explanationText}>
-                                                    <Text style={{ color: colors.appTheme }}>
-                                                        Explanation:
-                                                        </Text> {answer.explanation}</Text>)
-                                            }
-                                        </TouchableOpacity>
-                                    )
+                                    let answerContent = answer.answer.split(/<latex>(.*?)<latex>/gi);
+
+                                    if (answerContent.length === 1) {
+                                        return (
+                                            <TouchableOpacity
+                                                key={answer.id}
+                                                style={[styles.option, answer.correct && styles.explanation, wrongStyle]}>
+                                                <Text style={styles.optionText}>{answer.answer}</Text>
+                                                {
+                                                    answer.correct && answer.explanation != null && (<Text style={styles.explanationText}>
+                                                        <Text style={{ color: colors.appTheme }}>
+                                                            Explanation:
+                                                            </Text> {answer.explanation}</Text>)
+                                                }
+                                            </TouchableOpacity>
+                                        )
+                                    }
+
+                                    if (answerContent.length > 1) {
+                                        return (
+                                            <TouchableOpacity
+                                                key={answer.id}
+                                                style={[styles.option, answer.correct && styles.explanation, wrongStyle]}>
+                                                {
+                                                    answerContent.map((value, index) => {
+                                                        if (index % 2 === 0) {
+                                                            if (value.length > 0) {
+                                                                return (
+                                                                    <View key={index} style={{ marginVertical: 10 }}>
+                                                                        <Text key={index} style={{ fontSize: 20, textAlign: 'center' }}>{value}</Text>
+                                                                    </View>
+                                                                )
+                                                            }
+                                                        } else {
+                                                            return (
+                                                                <ScrollView key={index}>
+                                                                    <Katex
+                                                                        style={{ height: 120 }}
+                                                                        scalesPageToFit={false}
+                                                                        expression={value}
+                                                                        scrollEnabled={false}
+                                                                        displayMode={false}
+                                                                        throwOnError={false}
+                                                                        errorColor="#f00"
+                                                                        macros={{}}
+                                                                        colorIsTextColor={false}
+                                                                        onError={() => console.error('Error')}
+                                                                    />
+                                                                </ScrollView>
+                                                            )
+                                                        }
+                                                    })
+                                                }
+                                                {
+                                                    answer.correct && answer.explanation != null && (<Text style={styles.explanationText}>
+                                                        <Text style={{ color: colors.appTheme }}>
+                                                            Explanation:
+                                                            </Text> {answer.explanation}</Text>)
+                                                }
+                                            </TouchableOpacity>
+                                        )
+                                    }
+
                                 })
                             }
                         </View>
@@ -354,7 +485,7 @@ class Quiz extends Component {
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: .9 }}>
                         {!this.props.navigation.state.params.showExplanation && (<View style={styles.quesationNumberAndTimeContainer}>
                             <View style={styles.quationNumberContainer}>
                                 <Icon
@@ -374,7 +505,7 @@ class Quiz extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>)}
-                        <View style={{ height: deviceHeight - 180 }}>
+                        <View style={{ height: deviceHeight - 170 }}>
                             <Swiper style={styles.wrapper}
                                 ref={node => (this.scroll = node)}
                                 showsButtons={false}

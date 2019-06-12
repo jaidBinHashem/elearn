@@ -1,10 +1,14 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../global/colors';
+import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator } from 'react-native';
+
+const deviceWidth = Dimensions.get("window").width;
+
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },  
+  },
   horizontal: {
     justifyContent: 'space-around',
     padding: 10,
@@ -96,6 +100,7 @@ export default StyleSheet.create({
   },
   optionsContainer: {
     marginVertical: 20,
+    width: deviceWidth - 60,
   },
   option: {
     backgroundColor: '#fff',
@@ -117,6 +122,7 @@ export default StyleSheet.create({
     color: 'black'
   },
   questionNavigationContainer: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 10,
@@ -181,14 +187,14 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     elevation: 5,
-    marginTop:10
+    marginTop: 10
   },
   attempsHeaderText: {
     color: 'black',
     fontWeight: '600'
   },
   katex: {
-    height:90
+    height: 90
     // flex: 1,
   }
 });

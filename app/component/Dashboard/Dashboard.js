@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
+import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl, Image, Linking } from 'react-native';
 import moment from 'moment';
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { setCategories } from '../../redux/actions/CategoryActions';
+import ActionButton from 'react-native-action-button';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
@@ -341,6 +342,14 @@ class Dashboard extends Component {
                         </ScrollView>
                     </View>)} */}
                 </ScrollView>
+                <ActionButton
+                    buttonColor='#1E88E5'
+                    shadowStyle={{ elevation: 10 }}
+                    fixNativeFeedbackRadius={true}
+                    useNativeFeedback={true}
+                    renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/a6tMdBA.png' }} />}
+                    onPress={() => Linking.openURL("http://m.me/eshosikhi.bd")}
+                />
                 <BusyIndicator />
             </View>
         )

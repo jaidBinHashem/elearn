@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon, Avatar } from 'react-native-elements';
 import * as Progress from 'react-native-progress';
@@ -23,7 +23,7 @@ class MySubjects extends Component {
     }
 
     async componentDidMount() {
-        let token = await AsyncStorage.getItem('USER_TOKEN')
+        // let token = await AsyncStorage.getItem('USER_TOKEN')
         // console.log(token, "token in dash")
     }
 
@@ -42,7 +42,7 @@ class MySubjects extends Component {
                     style={styles.subject}
                 >
                     <Text style={{ color:'black', fontWeight: 'bold', fontSize: 20 }}>{subject.title}</Text>
-                    <Text style={{  fontWeight: 'bold', fontSize: 18, marginTop:5 }}>Validaty : Life Time</Text>
+                    <Text style={{  fontSize: 18, marginTop:5 }}>Validaty : {subject.duration && subject.duration}</Text>
                 </TouchableOpacity>
                 </View>)
         })
