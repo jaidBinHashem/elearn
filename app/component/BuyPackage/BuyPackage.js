@@ -40,8 +40,8 @@ class BuyPackage extends Component {
                         name: pkg.packages.data[0].name,
                         id: pkg.packages.data[0].id,
                         price: pkg.packages.data[0].price,
-                        duration: pkg.packages.data[0].duration,
-                        unit: pkg.packages.data[0].unit
+                        duration: pkg.packages.data[0].duration ? pkg.packages.data[0].duration : null,
+                        unit: pkg.packages.data[0].unit ? pkg.packages.data[0].unit : null
 
                     }
                 });
@@ -107,27 +107,27 @@ class BuyPackage extends Component {
                             this.state.selectedPackages.length > 0 && this.props.packages.map((mainPackage, index) => {
                                 if (mainPackage.packages.data.length > 0) {
                                     return (
-                                        <View key={index} style={{ flex: 1, borderTopWidth: 2, borderTopColor: Colors.appTheme, padding: 20, backgroundColor: '#fff', height: 120, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                                            <View>
-                                                <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 120, textAlign: 'center', marginVertical: 5 }}>{mainPackage.title}</Text>
+                                        <View key={index} style={styles.pkgContainer}>
+                                            <View style={{ flex: 1 }}>
+                                                <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 110, marginLeft: 8 }}>{mainPackage.title}</Text>
                                                 <Picker
                                                     selectedValue={this.state.selectedPackages[index].selectedPkg.id}
-                                                    style={{ height: 25, width: 200 }}
+                                                    style={{ height: 25, maxWidth: 180 }}
                                                     onValueChange={(itemValue, itemIndex) => this.selectedPackage(index, itemIndex)}
                                                 >
                                                     {
                                                         mainPackage.packages.data.length > 0 && mainPackage.packages.data.map((pkg, keyIndex) => {
                                                             return (
-                                                                <Picker.Item key={keyIndex} label={pkg.name + ' (' + pkg.duration.split('.')[0] + ' ' + pkg.unit + ')'} value={pkg.id} />
+                                                                <Picker.Item key={keyIndex} label={pkg.duration ? pkg.name + ' (' + pkg.duration.split('.')[0] + ' ' + pkg.unit + ')' : pkg.name} value={pkg.id} />
                                                             )
                                                         })
                                                     }
                                                 </Picker>
                                             </View>
-                                            <View>
-                                                <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{this.state.selectedPackages[index].selectedPkg.price}tk</Text>
+                                            <View style={{ flex: .5 }}>
+                                                <Text style={{ fontSize: 18, fontWeight: '700' }}>{this.state.selectedPackages[index].selectedPkg.price}tk</Text>
                                             </View>
-                                            <View>
+                                            <View style={{ flex: .3 }}>
                                                 <CheckBox
                                                     checked={this.state.selectedSubjects.includes(mainPackage.slug) ? true : false}
                                                     onPress={() => this.selectSubject(mainPackage.slug)}
