@@ -99,7 +99,7 @@ class CourseDetails extends Component {
                             label="REFERRAL CODE (OPTIONAL)"
                             labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10, marginTop:30 }}
                             inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
-                            placeholder='Enter If You Have'
+                            placeholder='Enter If You Have Any'
                             errorStyle={{ color: 'red' }}
                             errorMessage={this.props.emailError}
                             onChangeText={(referralCode) => this.setState({ referralCode })}

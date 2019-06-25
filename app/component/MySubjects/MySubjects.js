@@ -53,7 +53,7 @@ class MySubjects extends Component {
                     {views}
                     {views.length === 0 && (
                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                            <Text>You donot have any subjcts</Text>
+                            <Text>You do not have any subjects</Text>
                             <TouchableOpacity style={{ marginTop: 20, width: 300, height: 60, backgroundColor: Colors.appTheme, marginVertical: 3, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.props.navigation.navigate('BuyPackage')}>
                                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20 }}>Buy Packages</Text>
                             </TouchableOpacity>

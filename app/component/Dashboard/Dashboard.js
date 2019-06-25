@@ -244,7 +244,7 @@ class Dashboard extends Component {
                         <View style={{ flex: 1, left: 2 }}>
                             {this.props.categories.length > 0 && <Picker
                                 selectedValue={this.props.selectedCategoryID}
-                                style={{ height: 40, width: 200 }}
+                                style={{ height: 40, width: 250 }}
                                 itemStyle={{ color: '#BC9CFF' }}
                                 onValueChange={(itemValue) => this.props.setCategories(itemValue)}
                             >

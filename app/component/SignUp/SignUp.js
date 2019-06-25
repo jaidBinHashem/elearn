@@ -114,7 +114,7 @@ class SignUp extends Component {
                                 showsButtons={false}
                                 showsPagination={false}
                                 loop={false}
-                                scrollEnabled={true}
+                                scrollEnabled={false}
                             >
                                 <PersonalDetails
                                     nameError={this.state.nameError}
