@@ -17,7 +17,7 @@ class PersonalDetails extends Component {
             nameError: "",
             email: "",
             emailError: "",
-            number: "",
+            number: this.props.phone ? this.props.phone : "",
             numberError: "",
             studyLevels: [],
             institutions: [],
@@ -33,7 +33,7 @@ class PersonalDetails extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <View style={{ flex: .2, marginBottom:30 }}>
+                <View style={{ flex: .2, marginBottom: 30 }}>
                     <CounterView pageNumber={0} />
                 </View>
                 <View style={styles.formContainer}>
@@ -105,7 +105,7 @@ class PersonalDetails extends Component {
                     </View>
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
-                    <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.submitAccount(this.state.name, this.state.email, this.state.number)}>
+                    <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.submitAccount(this.state.name, this.state.email.toLowerCase(), this.state.number)}>
                         <Text style={styles.submitText}>Next Step</Text>
                         <Icon
                             name='arrowright'

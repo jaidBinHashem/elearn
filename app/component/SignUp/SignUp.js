@@ -121,6 +121,7 @@ class SignUp extends Component {
                                     emailError={this.state.emailError}
                                     numberError={this.state.numberError}
                                     submitAccount={this.submitAccount.bind(this)}
+                                    phone = {this.props.navigation.state.params && this.props.navigation.state.params.phone ? this.props.navigation.state.params.phone : null}
                                 />
                                 <StudyDetails
                                     submitStudyDetails={this.submitStudyDetails.bind(this)} />

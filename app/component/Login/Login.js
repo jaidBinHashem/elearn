@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { View, StatusBar, Text, TouchableOpacity, Keyboard } from 'react-native';
+import { View, StatusBar, Text, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
 import RNAccountKit from 'react-native-facebook-account-kit';
 import Toast from 'react-native-simple-toast';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+import md5 from 'js-md5';
 
 import { connect } from "react-redux";
 import { makeLoginRequest } from '../../redux/actions/AuthActions';
+
+import { postService } from '../../network';
 
 import globalStyles from '../../global/styles';
 import styles from './styles';
@@ -29,7 +32,7 @@ class Login extends Component {
         }
     }
 
-    componentDidMount() {
+    async componentWillMount() {
 
     }
 
@@ -49,26 +52,50 @@ class Login extends Component {
         !err && (this.createSignIn(number), this.setState({ numberError }));
     }
 
-    createSignIn = (number) => {
-        RNAccountKit.configure({
-            responseType: 'code', // 'token' by default,
-            titleType: 'login',
-            initialPhoneCountryPrefix: '+880', // autodetected if none is provided
-            initialPhoneNumber: number[0] == 0 ? number.substring(1) : number,
-            // initialPhoneNumber: '1316100093',
-            readPhoneStateEnabled: true, // true by default,
-            receiveSMS: true, // true by default,
-            defaultCountry: 'BD',
-            getACallEnabled: true
-        });
-        RNAccountKit.loginWithPhone()
-            .then((response) => {
-                response.code && this.props.makeLoginRequest(response.code, number[0] == 0 ? number.substring(1) : number)
-            })
-            .catch(err => {
-                loaderHandler.hideLoader();
-                console.log(err);
+    createSignIn = async (number) => {
+        let request = {
+            endPoint: 'login/validate',
+            showLoader: true,
+            params: {
+                phone: number[0] == 0 ? number.substring(1) : number,
+                token: md5(btoa(number[0] == 0 ? number.substring(1) : number))
+            }
+        }
+        let response = await postService(request);
+
+        if (response.success) {
+            RNAccountKit.configure({
+                responseType: 'code',
+                titleType: 'login',
+                initialPhoneCountryPrefix: '+880',
+                initialPhoneNumber: number[0] == 0 ? number.substring(1) : number,
+                readPhoneStateEnabled: true,
+                receiveSMS: true,
+                defaultCountry: 'BD',
+                getACallEnabled: true
             });
+            RNAccountKit.loginWithPhone()
+                .then((response) => {
+                    response.code && this.props.makeLoginRequest(response.code, number[0] == 0 ? number.substring(1) : number)
+                })
+                .catch(err => {
+                    loaderHandler.hideLoader();
+                    console.log(err);
+                });
+        } else {
+            Alert.alert(
+                '',
+                'You are not registered !',
+                [
+                    {
+                        text: 'Cancel',
+                        style: 'cancel',
+                    },
+                    { text: 'Sign Up Now', onPress: () => this.props.navigation.navigate('SignUp', { 'phone': number }) },
+                ],
+                { cancelable: true },
+            );
+        }
     }
 
 

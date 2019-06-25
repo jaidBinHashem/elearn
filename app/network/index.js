@@ -44,7 +44,7 @@ export const getService = async (request) => {
             headers: requestHeaders,
         });
         response = await checkStatus(response).json();
-        console.log(response, "get success response");
+        // console.log(response, "get success response");
         request.showLoader && loaderHandler.hideLoader();
         return { success: true, data: response };
     }
@@ -75,7 +75,7 @@ export const postService = async (request) => {
             body: request.contentType ? request.params : JSON.stringify(request.params)
         });
         response = await checkStatus(response).json();
-        console.log(response, "post success response");
+        // console.log(response, "post success response");
         request.showLoader && loaderHandler.hideLoader();
         return { success: true, data: response };
     }
