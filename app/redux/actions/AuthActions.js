@@ -46,12 +46,13 @@ export const submitCourses = (courses) => {
   }
 }
 
-export const registerUser = (authData, courses) => {
+export const registerUser = (authData, courses, referralCode) => {
   return {
     type: REGISTER_USER,
     payload: {
       authData: authData,
       courses: courses,
+      referralCode : referralCode
     }
   }
 }

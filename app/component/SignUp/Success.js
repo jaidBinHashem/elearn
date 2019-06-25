@@ -41,16 +41,10 @@ class CourseDetails extends Component {
                         <Text style={{ marginBottom: 120 }}>Lets go to dashboard</Text>
                     </View>
                 </View>
+                <View>
+                    
+                </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
-                    {/* <TouchableOpacity style={styles.submitButtom} onPress={() => this.props
-                        .navigation
-                        .dispatch(StackActions.reset(
-                            {
-                                index: 0,
-                                actions: [
-                                    NavigationActions.navigate('AuthStack' )
-                                ]
-                            }))}> */}
                     <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.navigation.navigate('Loader')}>
                         <Text style={[styles.submitText, { marginLeft: 40 }]}>GO TO DASHBOARD</Text>
                         <Icon

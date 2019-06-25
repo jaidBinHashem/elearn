@@ -14,6 +14,7 @@ const initialState = {
   errorMessage: null,
   registrationSuccess: false,
   registrationSuccessMessage: null,
+  registrationFailedMessage: null,
   loginFailed: false,
   loginFailedMessage: null,
   code: null
@@ -59,11 +60,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         registrationSuccess: true,
-        registrationSuccessMessage: action.payload
+        registrationFailed: false,
+        registrationSuccessMessage: action.payload ? action.payload : 'Registration Successful',
+        registrationFailedMessage : null
       }
     case REGISTRATION_FAILED:
       return {
         ...state,
+        registrationSuccess: false,
         registrationFailed: true,
         registrationFailedMessage: action.payload
       }

@@ -6,7 +6,7 @@ import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 
 const checkStatus = (response) => {
-    console.log(response, "all res");
+    // console.log(response, "all res");
     if (response.status >= 200 && response.status < 300) {
         return response;
     }
@@ -57,6 +57,7 @@ export const getService = async (request) => {
 
 
 export const postService = async (request) => {
+    // console.log(request, "request");
     try {
         request.showLoader && loaderHandler.showLoader("Loading");
         
@@ -79,7 +80,6 @@ export const postService = async (request) => {
         return { success: true, data: response };
     }
     catch (err) {
-        console.log(err, "Erron in post")
         response = await err.ERROR_BODY.json();
         console.log(response, "JSON Error in post service")
         request.showLoader && loaderHandler.hideLoader();

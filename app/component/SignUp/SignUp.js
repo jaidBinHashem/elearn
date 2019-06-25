@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { View, StatusBar, TouchableOpacity, Text, ScrollView, Dimensions, Keyboard, Picker } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Dimensions, Keyboard, Picker } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux";
 import { signUp, submitStudyDetails, submitCourses, registerUser } from '../../redux/actions/AuthActions';
 import RNAccountKit from 'react-native-facebook-account-kit'
 import Swiper from 'react-native-swiper';
 import Toast from 'react-native-simple-toast';
+
+import BusyIndicator from 'react-native-busy-indicator';
 
 import PersonalDetails from './PersonalDetails';
 import StudyDetails from './StudyDetails';
@@ -41,15 +43,14 @@ class SignUp extends Component {
 
     componentWillReceiveProps(nextProps) {
         nextProps.auth.error && Toast.show(nextProps.auth.errorMessage);
+        nextProps.auth.registrationFailed != this.props.auth.registrationFailed && nextProps.auth.registrationFailed && Toast.show(nextProps.auth.registrationFailedMessage);
         nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage));
-        nextProps.auth.numberVerified && this.scrollToNext(1);
-        nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
+        this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
+        this.props.auth.studyLevel != nextProps.auth.studyLevel && nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
     }
 
 
     submitAccount = (name, email, number) => {
-        // this.scrollToNext(1)
-        // this.createSignUpRequest();
         Keyboard.dismiss();
         let nameError = "", emailError = "", numberError = "", err = false;
         (name.length < 1 || name.length > 191) && (nameError = "Please insert a Full Name", err = true);
@@ -91,8 +92,9 @@ class SignUp extends Component {
         this.scroll.scrollBy(1);
     };
 
-    registerUser = (courses) => {
-        this.props.registerUser(this.props.auth, courses);
+    registerUser = (courses, referralCode) => {
+        Keyboard.dismiss();
+        this.props.registerUser(this.props.auth, courses, referralCode);
         this.props.submitCourses(courses);
     }
 
@@ -112,7 +114,7 @@ class SignUp extends Component {
                                 showsButtons={false}
                                 showsPagination={false}
                                 loop={false}
-                                scrollEnabled={false}
+                                scrollEnabled={true}
                             >
                                 <PersonalDetails
                                     nameError={this.state.nameError}
@@ -132,6 +134,7 @@ class SignUp extends Component {
                         </View>
                     </View>
                 </KeyboardAwareScrollView>
+                <BusyIndicator />
             </View>
         )
     }
