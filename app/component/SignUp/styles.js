@@ -61,6 +61,6 @@ export default StyleSheet.create({
     fontFamily: 'sans-serif',
     fontWeight: '500',
     marginBottom: 10,
-    marginLeft:10
+    // marginLeft:10
   }
 });

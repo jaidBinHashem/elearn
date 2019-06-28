@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl, Image, Linking } from 'react-native';
+import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl, Image, Linking, Alert, } from 'react-native';
 import moment from 'moment';
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
@@ -9,9 +9,13 @@ import { setCategories } from '../../redux/actions/CategoryActions';
 import ActionButton from 'react-native-action-button';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+import RNExitApp from 'react-native-exit-app';
+
+import { getService } from '../../network';
 
 import styles from './styles';
 
+const APP_VERSION = '0.0.2';
 class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Dashboard',
@@ -37,11 +41,57 @@ class Dashboard extends Component {
         loaderHandler.showLoader("Loading");
         setTimeout(() => {
             loaderHandler.hideLoader();
-        }, 1500)
+        }, 1500);
+        this.getAppVersion();
     }
 
     _onRefresh = () => {
         this.props.navigation.navigate('Loader')
+    }
+
+    getAppVersion = async () => {
+        const request = {
+            endPoint: 'app-version',
+            authenticate: true
+        }
+        let appVersion = await getService(request);
+        if (appVersion.success && APP_VERSION != appVersion.data.data.android.version) {
+            if (appVersion.data.data.android.forced) {
+                Alert.alert(
+                    '',
+                    'An update version is available, Please update !',
+                    [
+                        {
+                            text: 'Exit App',
+                            style: 'cancel',
+                            onPress: () => RNExitApp.exitApp()
+                        },
+                        {
+                            text: 'Update',
+                            onPress: () => { Linking.openURL('https://play.google.com/store/apps/details?id=com.eshosikhi&hl=en_US'); RNExitApp.exitApp() }
+                        },
+                    ],
+                    { cancelable: false },
+                );
+            } else {
+                Alert.alert(
+                    '',
+                    'An update version is available, Please update !',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                            // onPress: () => RNExitApp.exitApp()
+                        },
+                        {
+                            text: 'Update',
+                            onPress: () => { Linking.openURL('https://play.google.com/store/apps/details?id=com.eshosikhi&hl=en_US') }
+                        },
+                    ],
+                    { cancelable: true },
+                );
+            }
+        }
     }
 
     getGreetingTime = (currentTime) => {

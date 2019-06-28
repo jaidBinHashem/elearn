@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Dimensions, Keyboard, Picker } from 'react-native'
+import { View, StatusBar, Text, Dimensions, Keyboard, Alert } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux";
-import { signUp, submitStudyDetails, submitCourses, registerUser } from '../../redux/actions/AuthActions';
+import { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors } from '../../redux/actions/AuthActions';
 import RNAccountKit from 'react-native-facebook-account-kit'
 import Swiper from 'react-native-swiper';
 import Toast from 'react-native-simple-toast';
@@ -42,8 +42,40 @@ class SignUp extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        nextProps.auth.error && Toast.show(nextProps.auth.errorMessage);
-        nextProps.auth.registrationFailed != this.props.auth.registrationFailed && nextProps.auth.registrationFailed && Toast.show(nextProps.auth.registrationFailedMessage);
+        nextProps.auth.error && (
+            // Toast.show(nextProps.auth.errorMessage)
+            Alert.alert(
+                '',
+                nextProps.auth.errorMessage,
+                [
+                    {},
+                    {
+                        text: 'Okay',
+                        // onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {},
+                ],
+                { cancelable: false },
+            )
+        );
+        nextProps.auth.registrationFailed && nextProps.auth.registrationFailedMessage && (
+            // Toast.show(nextProps.auth.errorMessage)
+            Alert.alert(
+                '',
+                nextProps.auth.registrationFailedMessage,
+                [
+                    {},
+                    {
+                        text: 'Okay',
+                        // onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {},
+                ],
+                { cancelable: false },
+            )
+        );
         nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage));
         this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
         this.props.auth.studyLevel != nextProps.auth.studyLevel && nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
@@ -121,7 +153,7 @@ class SignUp extends Component {
                                     emailError={this.state.emailError}
                                     numberError={this.state.numberError}
                                     submitAccount={this.submitAccount.bind(this)}
-                                    phone = {this.props.navigation.state.params && this.props.navigation.state.params.phone ? this.props.navigation.state.params.phone : null}
+                                    phone={this.props.navigation.state.params && this.props.navigation.state.params.phone ? this.props.navigation.state.params.phone : null}
                                 />
                                 <StudyDetails
                                     submitStudyDetails={this.submitStudyDetails.bind(this)} />
@@ -150,5 +182,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { signUp, submitStudyDetails, submitCourses, registerUser }
+    { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors }
 )(SignUp);

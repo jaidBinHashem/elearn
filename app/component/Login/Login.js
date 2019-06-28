@@ -5,6 +5,7 @@ import RNAccountKit from 'react-native-facebook-account-kit';
 import Toast from 'react-native-simple-toast';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+import { encode as btoa } from 'base-64';
 import md5 from 'js-md5';
 
 import { connect } from "react-redux";

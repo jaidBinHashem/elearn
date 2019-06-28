@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Picker, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, Picker, StatusBar, Dimensions } from 'react-native';
 import { Icon } from 'react-native-elements';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import Toast from 'react-native-simple-toast';
+import AutoComplete from 'react-native-autocomplete-input';
 
 import { updateStudyLevel } from '../../redux/actions/UserActions';
 
@@ -14,6 +15,8 @@ import { getService } from '../../network'
 import Colors from '../../global/colors';
 
 import styles from './styles';
+
+const deviceWidth = Dimensions.get("window").width;
 
 class EditStudyLevel extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -28,7 +31,9 @@ class EditStudyLevel extends Component {
             selectedStudyLevel: null,
             selectedInstitution: null,
             courses: [],
-            selectedCourse: null
+            selectedCourse: null,
+            query: this.props.user.institution,
+            hideList: true
         }
     }
 
@@ -40,6 +45,12 @@ class EditStudyLevel extends Component {
     }
 
     componentDidMount() {
+        this.setState({
+            selectedInstitution: {
+                'id': this.props.user.institutionId,
+                'name': this.props.user.institution
+            }
+        })
         this.getStudyLevel();
     }
 
@@ -55,18 +66,28 @@ class EditStudyLevel extends Component {
     selectStudyLevel = async (studyLevel, selectedStudyIndex = null) => {
         loaderHandler.showLoader("Loading");
         let slugObj = studyLevel || this.state.studyLevels[selectedStudyIndex];
+        this.getInstitutions('A', slugObj.slug);
         this.state.selectedStudyLevel !== slugObj && (this.getCourse(slugObj), this.setState({ selectedStudyLevel: slugObj }));
         const request = {
-            endPoint: 'study-levels/' + slugObj.slug + '/institutions'
+            endPoint: 'study-levels/' + slugObj.slug + '/institutions?q=a'
+        }
+        // let institutions = await getService(request);
+        // institutions.data.data.map(institution => {
+        //     institution.id === this.props.user.institutionId && this.setState({ selectedInstitution: institution });
+        // });
+        // this.setState({ institutions: institutions.data.data });
+        // institutions.data.data.length === 0 && this.setState({ selectedInstitution: null });
+        // this.state.selectedInstitution === null && this.state.institutions.length > 0 && this.setState({ selectedInstitution: this.state.institutions[0] })
+        loaderHandler.hideLoader();
+    }
+
+    getInstitutions = async (query, slug = null) => {
+        let studySlug = slug === null ? this.state.selectedStudyLevel.slug : slug;
+        const request = {
+            endPoint: 'study-levels/' + studySlug + '/institutions?q=' + query
         }
         let institutions = await getService(request);
-        institutions.data.data.map(institution => {
-            institution.id === this.props.user.institutionId && this.setState({ selectedInstitution: institution });
-        });
         this.setState({ institutions: institutions.data.data });
-        institutions.data.data.length === 0 && this.setState({ selectedInstitution: null });
-        this.state.selectedInstitution === null && this.state.institutions.length > 0 && this.setState({ selectedInstitution: this.state.institutions[0] })
-        loaderHandler.hideLoader();
     }
 
     getCourse = async (studyLevel) => {
@@ -89,6 +110,7 @@ class EditStudyLevel extends Component {
 
 
     render() {
+        console.log(this.state, "here");
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
@@ -121,7 +143,7 @@ class EditStudyLevel extends Component {
                             }
                         </View>
                     </View>
-                    <View>
+                    {/* <View>
                         <Text style={styles.formTitle}>INSTITUTION NAME</Text>
                         <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
                             {this.state.institutions.length > 0 && (<Picker
@@ -148,8 +170,8 @@ class EditStudyLevel extends Component {
                                 )
                             }
                         </View>
-                    </View>
-                    <View>
+                    </View> */}
+                    <View style={{ marginTop: 90 }}>
                         <Text style={styles.formTitle}>COURSE</Text>
                         <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
                             {this.state.courses.length > 0 && (<Picker
@@ -177,6 +199,37 @@ class EditStudyLevel extends Component {
                             }
                         </View>
                     </View>
+                    {true && (
+                        <View style={{
+                            position: 'absolute',
+                            top: 100,
+                            zIndex: 1
+                        }}>
+                            <Text>INSTITUTIONS</Text>
+                            <AutoComplete
+                                data={this.state.institutions}
+                                defaultValue={this.state.query}
+                                keyExtractor={(item, index) => 'key' + index}
+                                onChangeText={query => {
+                                    query.length > 2 && this.getInstitutions(query);
+                                    this.setState({
+                                        query,
+                                        hideList: query.length > 2 ? false : true
+                                    })
+                                }
+                                }
+                                hideResults={this.state.hideList}
+                                inputContainerStyle={{ width: deviceWidth - 40, height: 50, borderRadius: 5 }}
+                                listStyle={{ marginTop: 2, maxHeight: 200, width: deviceWidth - 40, right: 10 }}
+                                renderItem={({ item, i }) => (
+                                    <TouchableOpacity style={{ height: 45, padding: 10 }}
+                                        onPress={() => this.setState({ query: item.name, selectedInstitution: item, hideList: true })}>
+                                        <Text>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        </View>
+                    )}
                 </View>
                 <TouchableOpacity
                     onPress={() => this.props.updateStudyLevel({

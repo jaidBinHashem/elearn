@@ -1,8 +1,14 @@
-import {MAKE_LOGIN_REQUEST, CHECK_AUTH, SIGN_UP, SUBMIT_STUDY_DETAILS, SUBMIT_COURSES, REGISTER_USER } from "./types";
+import {RESET_AUTH_ERROR, MAKE_LOGIN_REQUEST, CHECK_AUTH, SIGN_UP, SUBMIT_STUDY_DETAILS, SUBMIT_COURSES, REGISTER_USER } from "./types";
 
 export const checkAuth = () => {
   return {
     type: CHECK_AUTH,
+  };
+};
+
+export const resetErrors = () => {
+  return {
+    type: RESET_AUTH_ERROR,
   };
 };
 
