@@ -1,4 +1,4 @@
-import {RESET_AUTH_ERROR, MAKE_LOGIN_REQUEST, CHECK_AUTH, SIGN_UP, SUBMIT_STUDY_DETAILS, SUBMIT_COURSES, REGISTER_USER } from "./types";
+import { RESET_AUTH_REDUCER, RESET_AUTH_ERROR, MAKE_LOGIN_REQUEST, CHECK_AUTH, SIGN_UP, SUBMIT_STUDY_DETAILS, SUBMIT_COURSES, REGISTER_USER } from "./types";
 
 export const checkAuth = () => {
   return {
@@ -15,9 +15,9 @@ export const resetErrors = () => {
 export const makeLoginRequest = (code, number) => {
   return {
     type: MAKE_LOGIN_REQUEST,
-    payload : {
-      code : code,
-      number : number
+    payload: {
+      code: code,
+      number: number
     }
   };
 };
@@ -58,7 +58,13 @@ export const registerUser = (authData, courses, referralCode) => {
     payload: {
       authData: authData,
       courses: courses,
-      referralCode : referralCode
+      referralCode: referralCode
     }
+  }
+}
+
+export const resetAuthReducer = () => {
+  return {
+    type: RESET_AUTH_REDUCER,
   }
 }

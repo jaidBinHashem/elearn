@@ -110,7 +110,6 @@ class EditStudyLevel extends Component {
 
 
     render() {
-        console.log(this.state, "here");
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />

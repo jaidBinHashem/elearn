@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, StatusBar, Text, Dimensions, Keyboard, Alert } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux";
-import { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors } from '../../redux/actions/AuthActions';
+import { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer } from '../../redux/actions/AuthActions';
 import RNAccountKit from 'react-native-facebook-account-kit'
 import Swiper from 'react-native-swiper';
 import Toast from 'react-native-simple-toast';
@@ -79,6 +79,10 @@ class SignUp extends Component {
         nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage));
         this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
         this.props.auth.studyLevel != nextProps.auth.studyLevel && nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
+    }
+
+    componentWillUnmount() {
+        this.props.resetAuthReducer();
     }
 
 
@@ -182,5 +186,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors }
+    { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer }
 )(SignUp);
