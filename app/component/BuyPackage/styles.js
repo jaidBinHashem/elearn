@@ -8,7 +8,6 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 10,
-    paddingHorizontal: 20
   },
   pkgContainer: {
     height: 120,
@@ -22,5 +21,34 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+
+  pkgCard: {
+    flex: 1,
+    borderTopWidth: 2,
+    borderTopColor: Colors.appTheme,
+    padding: 20,
+    backgroundColor: '#fff',
+    height: 80,
+    elevation: 5,
+    borderRadius: 3,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15
+  },
+
+  couponCard: {
+    flex: 1,
+    borderTopWidth: 2,
+    borderTopColor: Colors.appTheme,
+    backgroundColor:'#f1ebff',
+    padding: 10,
+    height: 85,
+    elevation: 5,
+    borderRadius: 3,
+    justifyContent: 'space-between',
+    marginRight: 20,
+    width: 250
+  }
 
 });

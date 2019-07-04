@@ -23,7 +23,8 @@ const submitPackages = async (payload) => {
             endPoint: 'initialize-payment',
             authenticate: true,
             params: {
-                'subjects': selectedPkgs
+                'subjects': selectedPkgs,
+                'voucher': payload.coupon
             }
         }
         return (await postService(request));

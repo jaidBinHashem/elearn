@@ -75,7 +75,7 @@ export const postService = async (request) => {
             body: request.contentType ? request.params : JSON.stringify(request.params)
         });
         response = await checkStatus(response).json();
-        // console.log(response, "post success response");
+        console.log(response, "post success response");
         request.showLoader && loaderHandler.hideLoader();
         return { success: true, data: response };
     }
