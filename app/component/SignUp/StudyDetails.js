@@ -110,6 +110,7 @@ class StudyDetails extends Component {
                             <AutoComplete
                                 data={this.state.institutions}
                                 defaultValue={this.state.query}
+                                placeholder="Please search & select your institution"
                                 keyExtractor={(item, index) => 'key' + index}
                                 onChangeText={query => {
                                     query.length > 2 && this.getInstitutions(query);

@@ -57,7 +57,7 @@ export const getService = async (request) => {
 
 
 export const postService = async (request) => {
-    // console.log(request, "request");
+    console.log(request, "request");
     try {
         request.showLoader && loaderHandler.showLoader("Loading");
         

@@ -17,14 +17,26 @@ const retrievePackages = async () => {
 };
 
 const submitPackages = async (payload) => {
+    console.log(payload, "pay");
     let selectedPkgs = [...payload.selectedPackages];
     try {
-        let request = {
-            endPoint: 'initialize-payment',
-            authenticate: true,
-            params: {
-                'subjects': selectedPkgs,
-                'voucher': payload.coupon
+        let request = null;
+        if (payload.coupon) {
+            request = {
+                endPoint: 'initialize-payment',
+                authenticate: true,
+                params: {
+                    'subjects': selectedPkgs,
+                    'voucher': payload.coupon
+                }
+            }
+        } else {
+            request = {
+                endPoint: 'initialize-payment',
+                authenticate: true,
+                params: {
+                    'subjects': selectedPkgs,
+                }
             }
         }
         return (await postService(request));

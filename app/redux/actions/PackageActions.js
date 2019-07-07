@@ -21,7 +21,7 @@ export const submitPackages = (selectedPackages, coupon) => {
         type: SUBMIT_BUY_PKG,
         payload: {
             'selectedPackages': selectedPackages,
-            'counpon' : coupon
+            'coupon' : coupon
         }
     };
 };
