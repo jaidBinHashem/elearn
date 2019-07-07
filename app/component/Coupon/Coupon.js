@@ -29,14 +29,14 @@ class Coupon extends Component {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null
-        nextProps.couponAdded != this.props.couponAdded && nextProps.couponAdded && this._toggleModal();
+        // nextProps.couponAdded != this.props.couponAdded && nextProps.couponAdded && this._toggleModal();
     }
 
     async componentWillMount() {
-        const { navigation } = this.props;
-        this.focusListener = navigation.addListener("didFocus", () => {
-            this.props.getCoupons();
-        });
+        // const { navigation } = this.props;
+        // this.focusListener = navigation.addListener("didFocus", () => {
+        //     this.props.getCoupons();
+        // });
     }
 
 
@@ -53,7 +53,10 @@ class Coupon extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
+                <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>Coming Soon</Text>
+                </View>
+                {/* <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
                     <Modal
                         isVisible={this.state.isModalVisible}
                         animationInTiming={500}
@@ -105,7 +108,7 @@ class Coupon extends Component {
                     <Text style={{ fontSize: 18, fontWeight: '600', color: 'black' }}>Add Cupon</Text>
                     <Icon name='arrowright' type='antdesign' color='black' containerStyle={{ left: 20, marginTop: 5 }} />
                 </TouchableOpacity>
-                <BusyIndicator />
+                <BusyIndicator /> */}
             </View>
         )
     }

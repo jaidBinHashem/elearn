@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl, Image, Linking, Alert, } from 'react-native';
+import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl, Image, Linking, Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
@@ -15,7 +16,7 @@ import { getService } from '../../network';
 
 import styles from './styles';
 
-const APP_VERSION = '0.6.1';
+const APP_VERSION = '0.6.3';
 class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Dashboard',
@@ -74,22 +75,26 @@ class Dashboard extends Component {
                     { cancelable: false },
                 );
             } else {
-                Alert.alert(
-                    '',
-                    'An update version is available, Please update !',
-                    [
-                        {
-                            text: 'Cancel',
-                            style: 'cancel',
-                            // onPress: () => RNExitApp.exitApp()
-                        },
-                        {
-                            text: 'Update',
-                            onPress: () => { Linking.openURL('https://play.google.com/store/apps/details?id=com.eshosikhi&hl=en_US') }
-                        },
-                    ],
-                    { cancelable: true },
-                );
+                let date = await AsyncStorage.getItem('Date');
+                let todayDate = new Date().getDate();
+                if (date === null || date != todayDate) {
+                    Alert.alert(
+                        '',
+                        'An update version is available, Please update !',
+                        [
+                            {
+                                text: 'Cancel',
+                                style: 'cancel',
+                            },
+                            {
+                                text: 'Update',
+                                onPress: () => { Linking.openURL('https://play.google.com/store/apps/details?id=com.eshosikhi&hl=en_US') }
+                            },
+                        ],
+                        { cancelable: true },
+                    );
+                    await AsyncStorage.setItem('Date', todayDate.toString());
+                }
             }
         }
     }

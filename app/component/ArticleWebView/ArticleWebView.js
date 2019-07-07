@@ -36,6 +36,10 @@ class ArticleWebView extends Component {
         this.setState({ content: content.data.data });
     }
 
+    componentWillUnmount() {
+        loaderHandler.hideLoader();
+    }
+
 
 
     render() {

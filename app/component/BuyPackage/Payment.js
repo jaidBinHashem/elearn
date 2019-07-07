@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import { View, WebView, Text, } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import VideoView from 'react-native-android-fullscreen-webview-video';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 

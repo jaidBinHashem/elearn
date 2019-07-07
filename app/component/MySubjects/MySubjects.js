@@ -42,7 +42,7 @@ class MySubjects extends Component {
                     style={styles.subject}
                 >
                     <Text style={{ color:'black', fontWeight: 'bold', fontSize: 20 }}>{subject.title}</Text>
-                    <Text style={{  fontSize: 18, marginTop:5 }}>Validaty : {subject.duration && subject.duration}</Text>
+                    <Text style={{  fontSize: 18, marginTop:5 }}>Validity : {subject.duration && subject.duration}</Text>
                 </TouchableOpacity>
                 </View>)
         })
