@@ -48,7 +48,7 @@ class Scolarships extends Component {
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>Comming Soon</Text>
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>Coming Soon</Text>
                 </View>
             </View>
 

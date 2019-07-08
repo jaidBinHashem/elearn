@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Picker } from 'react-native';
+import { View, Text, TouchableOpacity, Picker, Dimensions } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
+import AutoComplete from 'react-native-autocomplete-input';
 
 import CounterView from './CounterView';
 import { getService } from '../../network'
+const deviceWidth = Dimensions.get("window").width;
 
 import styles from './styles';
 
@@ -18,7 +20,9 @@ class StudyDetails extends Component {
             studyLevels: [],
             institutions: [],
             selectedStudyLevel: null,
-            selectedInstitution: null
+            selectedInstitution: null,
+            query: '',
+            hideList: true
         }
     }
 
@@ -37,11 +41,21 @@ class StudyDetails extends Component {
         let selectedStudyLevel = [...this.state.studyLevels];
         selectedStudyLevel = selectedStudyLevel[selectedStudyIndex];
         this.setState({ selectedStudyLevel });
+        this.getInstitutions('A', this.state.studyLevels[selectedStudyIndex].slug);
+        // const request = {
+        //     endPoint: 'study-levels/' + this.state.studyLevels[selectedStudyIndex].slug + '/institutions'
+        // }
+        // let institutions = await getService(request);
+        // institutions.success && this.setState({ institutions: institutions.data.data, selectedInstitution: institutions.data.data[0] });
+    }
+
+    getInstitutions = async (query, slug = null) => {
+        let studySlug = slug === null ? this.state.selectedStudyLevel.slug : slug;
         const request = {
-            endPoint: 'study-levels/' + this.state.studyLevels[selectedStudyIndex].slug + '/institutions'
+            endPoint: 'study-levels/' + studySlug + '/institutions?q=' + query
         }
         let institutions = await getService(request);
-        institutions.success && this.setState({ institutions: institutions.data.data, selectedInstitution: institutions.data.data[0] });
+        this.setState({ institutions: institutions.data.data });
     }
 
     selectInstitution = async (selectedInstitutionId, selectedInstitutionIndex) => {
@@ -85,7 +99,40 @@ class StudyDetails extends Component {
                             }
                         </View>
                     </View>
-                    <View>
+                    {true && (
+                        <View style={{
+                            position: 'absolute',
+                            top: 100,
+                            zIndex: 1,
+                            marginLeft: 30
+                        }}>
+                            <Text style={styles.formTitle}>INSTITUTIONS</Text>
+                            <AutoComplete
+                                data={this.state.institutions}
+                                defaultValue={this.state.query}
+                                placeholder="Please search & select your institution"
+                                keyExtractor={(item, index) => 'key' + index}
+                                onChangeText={query => {
+                                    query.length > 2 && this.getInstitutions(query);
+                                    this.setState({
+                                        query,
+                                        hideList: query.length > 2 ? false : true
+                                    })
+                                }
+                                }
+                                hideResults={this.state.hideList}
+                                inputContainerStyle={{ width: deviceWidth - 60, height: 50, borderRadius: 5 }}
+                                listStyle={{ marginTop: 2, maxHeight: 200, width: deviceWidth - 40, right: 10 }}
+                                renderItem={({ item, i }) => (
+                                    <TouchableOpacity style={{ height: 45, padding: 10 }}
+                                        onPress={() => this.setState({ query: item.name, selectedInstitution: item, hideList: true })}>
+                                        <Text>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        </View>
+                    )}
+                    {/* <View>
                         <Text style={styles.formTitle}>INSTITUTION NAME</Text>
                         <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
                             {this.state.institutions.length > 0 && (<Picker
@@ -111,7 +158,7 @@ class StudyDetails extends Component {
                                 )
                             }
                         </View>
-                    </View>
+                    </View> */}
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.submitStudyDetails(this.state.selectedStudyLevel, this.state.selectedInstitution)}>

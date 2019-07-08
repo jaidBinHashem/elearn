@@ -8,51 +8,47 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 10,
-    paddingHorizontal :20
   },
-  name: {
-    color: Colors.appTheme,
-    fontSize: 30,
-    fontWeight: '500',
+  pkgContainer: {
+    height: 120,
+    borderTopWidth: 2,
+    borderTopColor: Colors.appTheme,
+    paddingLeft: 5,
+    backgroundColor: '#fff',
+    marginVertical: 15,
+    elevation: 5,
+    borderRadius: 3,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  grettings: {
-    color: 'black',
-    fontSize: 12
-  },
-  swiperContainer: {
+
+  pkgCard: {
     flex: 1,
-    marginTop: 20,
-  },
-  subject: {
-    flex: 1,
-    backgroundColor: Colors.appTheme,
+    borderTopWidth: 2,
+    borderTopColor: Colors.appTheme,
+    padding: 20,
+    backgroundColor: '#fff',
     height: 80,
-    justifyContent: 'center',
+    elevation: 5,
+    borderRadius: 3,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     alignItems: 'center',
-    elevation: 8,
-    borderRadius: 5,
-    marginVertical:20
+    marginVertical: 15
   },
-  subjectMarginRight: {
-    marginRight: 10
-  },
-  subjectMarginLeft: {
-    marginLeft: 10
-  },
-  newsAndUpdatesTitle: {
-    fontSize:16,
-    marginTop: 20,
-    color: 'black',
-    fontWeight: '500'
-  },
-  cards: {
-    // flex: 1,
-    backgroundColor:'#fff',
-    height: 160,
-    width: 160,
-    elevation: 10,
+
+  couponCard: {
+    flex: 1,
+    borderTopWidth: 2,
+    borderTopColor: Colors.appTheme,
+    backgroundColor:'#f1ebff',
+    padding: 10,
+    height: 85,
+    elevation: 5,
+    borderRadius: 3,
+    justifyContent: 'space-between',
     marginRight: 20,
-    marginVertical: 20,
-    borderRadius: 5
+    width: 250
   }
+
 });

@@ -8,6 +8,7 @@ import QuizReducer from "./QuizReducer";
 import UserReducer from "./UserReducer";
 import SubjectsReducer from "./SubjectsReducer";
 import PackageReducer from "./PackageReducer";
+import CouponReducer from "./CouponReducer";
 
 export default combineReducers({
     AuthReducer,
@@ -17,6 +18,7 @@ export default combineReducers({
     QuizReducer,
     SubjectsReducer,
     PackageReducer,
-    CategoryReducer
+    CategoryReducer,
+    CouponReducer
 });
 

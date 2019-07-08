@@ -3,6 +3,8 @@ package com.eshosikhi;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.github.wumke.RNExitApp.RNExitAppPackage;
+// import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.imagepicker.ImagePickerPackage;
 import com.airship.customwebview.CustomWebViewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
@@ -32,9 +34,11 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
+            new MainReactPackage(),
             new RNFirebasePackage(),
             new RNFirebaseCrashlyticsPackage(),
+            new RNExitAppPackage(),
+            // new RNDeviceInfo(),
             new ImagePickerPackage(),
             new CustomWebViewPackage(),
             new RNCWebViewPackage(),

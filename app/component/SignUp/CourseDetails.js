@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Picker, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { Input, Icon } from 'react-native-elements';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
@@ -26,7 +26,8 @@ class CourseDetails extends Component {
         this.state = {
             courses: [],
             buttonData: [],
-            selectedValues: []
+            selectedValues: [],
+            referralCode: null
         }
     }
 
@@ -56,9 +57,9 @@ class CourseDetails extends Component {
     sendCourse = () => {
         this.state.courses.length > 0
             ? this.state.selectedValues.length > 0
-                ? this.props.registerUser(this.state.selectedValues)
+                ? this.props.registerUser(this.state.selectedValues, this.state.referralCode)
                 : Toast.show('Please select a course')
-            : this.props.registerUser([])
+            : this.props.registerUser([], this.state.referralCode)
     }
 
 
@@ -68,10 +69,10 @@ class CourseDetails extends Component {
                 <View style={{ flex: .2, marginBottom: 30 }}>
                     <CounterView pageNumber={2} />
                 </View>
-                <View style={[styles.formContainer, { width: deviceWidth, bottom: 0 }]}>
-                    <View>
+                <ScrollView style={[styles.formContainer, { width: deviceWidth, bottom: 0 }]}>
+                    {this.state.buttonData.length > 0 && (<View>
                         <Text style={styles.formTitle}>COURSE SELECTION</Text>
-                    </View>
+                    </View>)}
                     <View>
                         <SelectMultipleGroupButton
                             containerViewStyle={{
@@ -93,7 +94,19 @@ class CourseDetails extends Component {
                             group={this.state.buttonData}
                         />
                     </View>
-                </View>
+                    <View >
+                        <Input
+                            label="REFERRAL CODE (OPTIONAL)"
+                            labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10, marginTop:30 }}
+                            inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                            placeholder='Enter If You Have Any'
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={this.props.emailError}
+                            onChangeText={(referralCode) => this.setState({ referralCode })}
+                            value={this.state.referralCode}
+                        />
+                    </View>
+                </ScrollView>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => this.sendCourse()}>
                         <Text style={styles.submitText}>Next Step</Text>

@@ -16,11 +16,12 @@ export const proceedPackages = (selectedPackages, totalPrice) => {
     };
 };
 
-export const submitPackages = (selectedPackages) => {
+export const submitPackages = (selectedPackages, coupon) => {
     return {
         type: SUBMIT_BUY_PKG,
         payload: {
             'selectedPackages': selectedPackages,
+            'coupon' : coupon
         }
     };
 };

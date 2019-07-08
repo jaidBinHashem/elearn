@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { View, StatusBar, TouchableOpacity, Text, ScrollView, Dimensions, Keyboard, Picker } from 'react-native'
+import { View, StatusBar, Text, Dimensions, Keyboard, Alert } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux";
-import { signUp, submitStudyDetails, submitCourses, registerUser } from '../../redux/actions/AuthActions';
+import { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer } from '../../redux/actions/AuthActions';
 import RNAccountKit from 'react-native-facebook-account-kit'
 import Swiper from 'react-native-swiper';
 import Toast from 'react-native-simple-toast';
+
+import BusyIndicator from 'react-native-busy-indicator';
 
 import PersonalDetails from './PersonalDetails';
 import StudyDetails from './StudyDetails';
@@ -40,16 +42,52 @@ class SignUp extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        nextProps.auth.error && Toast.show(nextProps.auth.errorMessage);
+        nextProps.auth.error && (
+            // Toast.show(nextProps.auth.errorMessage)
+            Alert.alert(
+                '',
+                nextProps.auth.errorMessage,
+                [
+                    {},
+                    {
+                        text: 'Okay',
+                        // onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {},
+                ],
+                { cancelable: false },
+            )
+        );
+        nextProps.auth.registrationFailed && nextProps.auth.registrationFailedMessage && (
+            // Toast.show(nextProps.auth.errorMessage)
+            Alert.alert(
+                '',
+                nextProps.auth.registrationFailedMessage,
+                [
+                    {},
+                    {
+                        text: 'Okay',
+                        // onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {},
+                ],
+                { cancelable: false },
+            )
+        );
         nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage));
-        nextProps.auth.numberVerified && this.scrollToNext(1);
+        this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
         nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
+        nextProps.auth.studyLevel === null || nextProps.auth.institution === null && Toast.show("Please select your study details");
+    }
+
+    componentWillUnmount() {
+        this.props.resetAuthReducer();
     }
 
 
     submitAccount = (name, email, number) => {
-        // this.scrollToNext(1)
-        // this.createSignUpRequest();
         Keyboard.dismiss();
         let nameError = "", emailError = "", numberError = "", err = false;
         (name.length < 1 || name.length > 191) && (nameError = "Please insert a Full Name", err = true);
@@ -84,6 +122,7 @@ class SignUp extends Component {
     }
 
     submitStudyDetails = (studyLevel, institution) => {
+        Keyboard.dismiss();
         this.props.submitStudyDetails(studyLevel, institution);
     }
 
@@ -91,8 +130,9 @@ class SignUp extends Component {
         this.scroll.scrollBy(1);
     };
 
-    registerUser = (courses) => {
-        this.props.registerUser(this.props.auth, courses);
+    registerUser = (courses, referralCode) => {
+        Keyboard.dismiss();
+        this.props.registerUser(this.props.auth, courses, referralCode);
         this.props.submitCourses(courses);
     }
 
@@ -119,6 +159,7 @@ class SignUp extends Component {
                                     emailError={this.state.emailError}
                                     numberError={this.state.numberError}
                                     submitAccount={this.submitAccount.bind(this)}
+                                    phone={this.props.navigation.state.params && this.props.navigation.state.params.phone ? this.props.navigation.state.params.phone : null}
                                 />
                                 <StudyDetails
                                     submitStudyDetails={this.submitStudyDetails.bind(this)} />
@@ -132,6 +173,7 @@ class SignUp extends Component {
                         </View>
                     </View>
                 </KeyboardAwareScrollView>
+                <BusyIndicator />
             </View>
         )
     }
@@ -146,5 +188,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { signUp, submitStudyDetails, submitCourses, registerUser }
+    { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer }
 )(SignUp);

@@ -17,7 +17,8 @@ export default StyleSheet.create({
   },
   profileDetailsContainer : {
     flexDirection: 'row', 
-    marginVertical: 10
+    marginVertical: 10,
+    padding:1
   },
   profileDetails: {
     fontSize: 18,

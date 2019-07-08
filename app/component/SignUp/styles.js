@@ -60,6 +60,7 @@ export default StyleSheet.create({
     fontSize: 16,
     fontFamily: 'sans-serif',
     fontWeight: '500',
-    marginBottom: 10
+    marginBottom: 10,
+    // marginLeft:10
   }
 });

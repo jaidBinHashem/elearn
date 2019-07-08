@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { View, StatusBar, Text, TouchableOpacity, Image, Linking } from 'react-native'
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
-
 import globalStyles from '../../global/styles';
 import styles from './styles';
 
@@ -22,7 +21,7 @@ class Loader extends Component {
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <Image
                             resizeMode='cover'
-                            source={{uri: 'https://i.imgur.com/jOUp65k.png'}}
+                            source={{ uri: 'https://i.imgur.com/jOUp65k.png' }}
                             style={{ height: 200, width: 200, marginBottom: 120 }}
                         />
                     </View>

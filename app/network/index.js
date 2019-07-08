@@ -44,6 +44,7 @@ export const getService = async (request) => {
             headers: requestHeaders,
         });
         response = await checkStatus(response).json();
+        // console.log(response, "get success response");
         request.showLoader && loaderHandler.hideLoader();
         return { success: true, data: response };
     }
@@ -56,6 +57,7 @@ export const getService = async (request) => {
 
 
 export const postService = async (request) => {
+    // console.log(request, "request");
     try {
         request.showLoader && loaderHandler.showLoader("Loading");
         
@@ -73,12 +75,13 @@ export const postService = async (request) => {
             body: request.contentType ? request.params : JSON.stringify(request.params)
         });
         response = await checkStatus(response).json();
+        // console.log(response, "post success response");
         request.showLoader && loaderHandler.hideLoader();
         return { success: true, data: response };
     }
     catch (err) {
-        console.log(err, "Error in post service")
         response = await err.ERROR_BODY.json();
+        // console.log(response, "JSON Error in post service")
         request.showLoader && loaderHandler.hideLoader();
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }

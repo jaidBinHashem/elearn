@@ -1,4 +1,4 @@
-import { SIGN_OUT_COMPLETE, MAKE_LOGIN_REQUEST_SUCCESS, MAKE_LOGIN_REQUEST_FAILED, REGISTRATION_SUCCESS, REGISTRATION_FAILED, CHECK_AUTH_RETURN, SIGN_UP_RETURN, SUBMIT_STUDY_DETAILS_RETURN, SUBMIT_COURSES_RETURN, DUBLICATE_NUMBER_EMAIL } from '../actions/types'
+import {RESET_AUTH_REDUCER, RESET_AUTH_ERROR, SIGN_OUT_COMPLETE, MAKE_LOGIN_REQUEST_SUCCESS, MAKE_LOGIN_REQUEST_FAILED, REGISTRATION_SUCCESS, REGISTRATION_FAILED, CHECK_AUTH_RETURN, SIGN_UP_RETURN, SUBMIT_STUDY_DETAILS_RETURN, SUBMIT_COURSES_RETURN, DUBLICATE_NUMBER_EMAIL } from '../actions/types'
 
 const initialState = {
   isLoged: false,
@@ -14,6 +14,8 @@ const initialState = {
   errorMessage: null,
   registrationSuccess: false,
   registrationSuccessMessage: null,
+  registrationFailedMessage: null,
+  registrationFailed: false,
   loginFailed: false,
   loginFailedMessage: null,
   code: null
@@ -25,6 +27,18 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isLoged: action.payload
+      }
+    case RESET_AUTH_ERROR:
+      return {
+        ...state,
+        error: false,
+        errorMessage: null,
+        registrationSuccess: false,
+        registrationSuccessMessage: null,
+        registrationFailedMessage: null,
+        registrationFailed: true,
+        loginFailed: false,
+        loginFailedMessage: null,
       }
     case SIGN_UP_RETURN:
       return {
@@ -59,11 +73,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         registrationSuccess: true,
-        registrationSuccessMessage: action.payload
+        registrationFailed: false,
+        registrationSuccessMessage: action.payload ? action.payload : 'Registration Successful',
+        registrationFailedMessage: null
       }
     case REGISTRATION_FAILED:
       return {
         ...state,
+        registrationSuccess: false,
         registrationFailed: true,
         registrationFailedMessage: action.payload
       }
@@ -100,6 +117,9 @@ export default function (state = initialState, action) {
         loginFailedMessage: null,
         code: null
       }
+    case RESET_AUTH_REDUCER: {
+      return initialState
+    }
     default:
       return state;
   }

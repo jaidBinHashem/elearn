@@ -17,7 +17,6 @@ class MyProfile extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'My Profile',
         headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
-        // headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => console.log("here")}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
     });
 
     constructor(props) {
@@ -50,7 +49,7 @@ class MyProfile extends Component {
         this.props.user.gender && ++complete;
         this.props.user.location && ++complete;
         this.props.user.birthDate && ++complete;
-        return complete / 6;
+        return Number((complete / 6).toString().substring(0, 4));
     }
 
     render() {
@@ -59,10 +58,8 @@ class MyProfile extends Component {
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View style={{ justifyContent: 'center' }}>
-                            <View>
-                                <Text style={styles.name}>{this.props.user.name}</Text>
-                            </View>
+                        <View style={{ justifyContent: 'center', maxWidth: 250 }}>
+                            <Text style={styles.name} numberOfLines={2}>{this.props.user.name}</Text>
                         </View>
                         <View style={{ elevation: 10, marginRight: 20 }}>
                             <Avatar
@@ -110,7 +107,7 @@ class MyProfile extends Component {
                         <View>
                             <View style={styles.profileDetailsContainer}>
                                 <Icon name='university' type='font-awesome' color={Colors.appTheme} />
-                                <Text style={[styles.profileDetails, { marginLeft: 56 }]}>{this.props.user.institution}</Text>
+                                <Text style={[styles.profileDetails, { marginLeft: 50, }]}>{this.props.user.institution}</Text>
                             </View>
                         </View>
                     </View>

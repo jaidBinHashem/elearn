@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { put, call } from "redux-saga/effects";
-import {GET_USER, SIGN_OUT_COMPLETE, MAKE_LOGIN_REQUEST_FAILED, MAKE_LOGIN_REQUEST_SUCCESS, REGISTRATION_SUCCESS, REGISTRATION_FAILED, CHECK_AUTH_RETURN, SIGN_UP_RETURN, SUBMIT_STUDY_DETAILS_RETURN, SUBMIT_COURSES_RETURN, DUBLICATE_NUMBER_EMAIL } from '../actions/types'
+import {RESET_AUTH_ERROR, GET_USER, SIGN_OUT_COMPLETE, MAKE_LOGIN_REQUEST_FAILED, MAKE_LOGIN_REQUEST_SUCCESS, REGISTRATION_SUCCESS, REGISTRATION_FAILED, CHECK_AUTH_RETURN, SIGN_UP_RETURN, SUBMIT_STUDY_DETAILS_RETURN, SUBMIT_COURSES_RETURN, DUBLICATE_NUMBER_EMAIL } from '../actions/types'
 import { REGISTRATION_FAILED_MESSAGE, LOGIN_FAILED } from '../../constant/ErrorMessages'
 import { USER_TOKEN, USER } from '../../constant/keys'
 import { postService } from '../../network'
@@ -26,6 +26,7 @@ const signUpUser = async (payload) => {
     try {
         let request = {
             endPoint: 'register/validate-user',
+            showLoader : true,
             params: {
                 code: payload.code,
                 email: payload.email
@@ -42,6 +43,7 @@ const registerUserDetails = async (payload) => {
     try {
         let request = {
             endPoint: 'register',
+            showLoader : true,
             params: {
                 name: payload.authData.name,
                 email: payload.authData.email,
@@ -50,6 +52,7 @@ const registerUserDetails = async (payload) => {
                 institution_id: payload.authData.institution.id,
                 code: payload.authData.code,
                 categories: payload.courses,
+                referral_code : payload.referralCode
             }
         }
         return (await postService(request));
@@ -100,11 +103,12 @@ export const isAuthenticated = function* (action) {
 export const makeLoginRequest = function* (action) {
     let response = yield call(getToken, action.payload);
     if (response) {
+        // yield put({ type: MAKE_LOGIN_REQUEST_SUCCESS, payload: response })
         !response.success && (yield put({ type: MAKE_LOGIN_REQUEST_FAILED, payload: LOGIN_FAILED }));
         response.success && (yield call(setToken, response), yield put({ type: GET_USER }));
         response.success && (yield put({ type: MAKE_LOGIN_REQUEST_SUCCESS, payload: response }));
     } else {
-        console.log("failed");
+        console.log("login failed");
     }
 };
 
@@ -129,6 +133,7 @@ export const makeSignUpRequest = function* (action) {
                     errorMessage: response.data.message,
                 }
             });
+            yield put({type : RESET_AUTH_ERROR});
         }
     } else {
         yield put({
@@ -138,6 +143,7 @@ export const makeSignUpRequest = function* (action) {
                 errorMessage: 'Some thing went wrong, please try again later',
             }
         });
+        yield put({type : RESET_AUTH_ERROR});
     }
 }
 
@@ -151,7 +157,8 @@ export const saveCourses = function* (action) {
 
 export const registerUser = function* (action) {
     let response = yield call(registerUserDetails, action.payload);
-    !response.success && (yield put({ type: REGISTRATION_FAILED, payload: REGISTRATION_FAILED_MESSAGE }));
+    !response.success && (yield put({ type: REGISTRATION_FAILED, payload: response.data.referral_code ? 'Referral Code is not valid' : REGISTRATION_FAILED_MESSAGE }));
+    !response.success && (yield put({type : RESET_AUTH_ERROR}));
     response.success && (yield put({ type: REGISTRATION_SUCCESS, payload: response.data.message }));
     response.success && (yield call(setToken, response), yield put({ type: GET_USER }));
 };

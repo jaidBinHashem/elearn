@@ -53,7 +53,7 @@ class DrawerComponent extends Component {
                         />
                     </View>
                     <View style={{ marginLeft: 20, justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 25, color: colors.appTheme }}>
+                        <Text style={{ fontSize: 25, color: colors.appTheme, maxWidth:200 }}>
                             {this.props.user.name}
                         </Text>
                         <Text style={{ color: 'black' }}>
