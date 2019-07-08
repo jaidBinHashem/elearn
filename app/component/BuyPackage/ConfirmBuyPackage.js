@@ -108,12 +108,14 @@ class ConfirmBuyPackage extends Component {
                             })
                         }
                     </ScrollView>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ color: Colors.appTheme, fontSize: 18, marginVertical: 20 }}>Coupons</Text>
-                        <TouchableOpacity onPress={this._toggleModal}>
-                            <Text style={{ color: Colors.appTheme, fontSize: 18, marginVertical: 20, fontWeight: '500', marginRight: 10 }}>Add</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {this.props.coupons.length > 0 && (
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ color: Colors.appTheme, fontSize: 18, marginVertical: 20 }}>Coupons</Text>
+                            <TouchableOpacity onPress={this._toggleModal}>
+                                <Text style={{ color: Colors.appTheme, fontSize: 18, marginVertical: 20, fontWeight: '500', marginRight: 10 }}>Add</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                         {
                             this.props.coupons.length > 0 && this.props.coupons.map((coupon, index) => {
@@ -137,6 +139,11 @@ class ConfirmBuyPackage extends Component {
                         }
                     </ScrollView>
                 </View>
+                {this.props.coupons.length === 0 && (
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 18, marginBottom: 15 }}>If you have any coupon <Text style={{ fontWeight: 'bold', color: Colors.appTheme }} onPress={() => this._toggleModal()}>please add</Text></Text>
+                    </View>
+                )}
                 <TouchableOpacity onPress={() => {
                     this.props.submitPackages(this.state.pkgArr, this.state.selectedCoupon ? this.state.selectedCoupon.code : null);
                     this.props.navigation.replace('Payment');

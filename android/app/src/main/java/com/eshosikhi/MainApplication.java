@@ -19,6 +19,8 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +39,8 @@ public class MainApplication extends Application implements ReactApplication {
             new MainReactPackage(),
             new RNFirebasePackage(),
             new RNFirebaseCrashlyticsPackage(),
+            new RNFirebaseMessagingPackage(),
+            new RNFirebaseNotificationsPackage(),
             new RNExitAppPackage(),
             // new RNDeviceInfo(),
             new ImagePickerPackage(),

@@ -105,15 +105,15 @@ class Coupon extends Component {
                     }
                     {
                         this.props.coupons.length === 0 && (
-                            <View style={{ justifyContent: 'center', alignContent: 'center', marginTop:5 }}>
-                                <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>If you have any coupon please add here.</Text>
+                            <View style={{ justifyContent: 'center', alignContent: 'center', marginTop: 5 }}>
+                                <Text style={{ textAlign: 'center', fontSize: 18 }}>If you have any coupon please add here.</Text>
                             </View>
                         )
                     }
                 </ScrollView>
                 <TouchableOpacity onPress={this._toggleModal} style={{ padding: 20, backgroundColor: Colors.appTheme, height: 80, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 18, fontWeight: '600', color: 'black' }}>Add Cupon</Text>
-                    <Icon name='arrowright' type='antdesign' color='black' containerStyle={{ left: 20, marginTop: 5 }} />
+                    <Text style={{ fontSize: 22, fontWeight: '600', color: 'black' }}>Add Coupon</Text>
+                    <Icon size={30} name='arrowright' type='antdesign' color='black' containerStyle={{ left: 20, marginTop: 5 }} />
                 </TouchableOpacity>
                 <BusyIndicator />
             </View>
