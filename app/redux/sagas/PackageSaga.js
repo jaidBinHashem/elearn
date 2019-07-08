@@ -17,7 +17,6 @@ const retrievePackages = async () => {
 };
 
 const submitPackages = async (payload) => {
-    console.log(payload, "pay");
     let selectedPkgs = [...payload.selectedPackages];
     try {
         let request = null;

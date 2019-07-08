@@ -38,12 +38,11 @@ const addUserCoupon = async (coupon) => {
 
 export const getCoupons = function* (action) {
     let coupons = yield call(retrieveCoupons);
-    coupons.success && coupons.data.data.length > 0 && (yield put({ type: GET_COUPONS_RETURN, payload: coupons.data.data }));
+    coupons.success && (yield put({ type: GET_COUPONS_RETURN, payload: coupons.data.data }));
 };
 
 export const addCoupon = function* (action) {
     let response = yield call(addUserCoupon, action.payload);
-    console.log(response, "here is the response");
     response.success && (yield put({ type: ADD_COUPON_RETURN }), Toast.show('Coupon added successfully'));
     response.success && (yield put({ type: GET_COUPONS }));
     response.success && (yield put({ type: RESET_ADD_COUPON }));

@@ -81,7 +81,7 @@ export const postService = async (request) => {
     }
     catch (err) {
         response = await err.ERROR_BODY.json();
-        console.log(response, "JSON Error in post service")
+        // console.log(response, "JSON Error in post service")
         request.showLoader && loaderHandler.hideLoader();
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }

@@ -18,7 +18,6 @@ class BuyPackage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loaded: false,
             selectedPackages: [],
             selectedSubjects: [],
             totalPrice: 0
@@ -30,7 +29,7 @@ class BuyPackage extends Component {
             ? this.props.navigation.navigate('Auth')
             : null
 
-        if (nextProps.packages.length > 0 && !this.state.loaded) {
+        if (nextProps.packages.length > 0) {
             let selectedPackages = [];
             nextProps.packages.map((pkg) => {
                 pkg.packages.data.length > 0 && (initialSelectedPkg = {
@@ -47,7 +46,7 @@ class BuyPackage extends Component {
                 });
                 pkg.packages.data.length > 0 && selectedPackages.push(initialSelectedPkg);
             });
-            this.setState({ selectedPackages, loaded: true });
+            this.setState({ selectedPackages });
         };
     }
 

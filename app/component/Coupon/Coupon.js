@@ -29,14 +29,14 @@ class Coupon extends Component {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null
-        // nextProps.couponAdded != this.props.couponAdded && nextProps.couponAdded && this._toggleModal();
+        nextProps.couponAdded != this.props.couponAdded && nextProps.couponAdded && this.setState({ isModalVisible: false });
     }
 
     async componentWillMount() {
-        // const { navigation } = this.props;
-        // this.focusListener = navigation.addListener("didFocus", () => {
-        //     this.props.getCoupons();
-        // });
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener("didFocus", () => {
+            this.props.getCoupons();
+        });
     }
 
 
@@ -46,17 +46,17 @@ class Coupon extends Component {
     }
 
     _toggleModal = () => {
-        this.setState({ isModalVisible: !this.state.isModalVisible })
+        this.setState({ isModalVisible: !this.state.isModalVisible });
     }
 
     render() {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                {/* <View style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>Coming Soon</Text>
-                </View>
-                {/* <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
+                </View> */}
+                <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
                     <Modal
                         isVisible={this.state.isModalVisible}
                         animationInTiming={500}
@@ -103,12 +103,19 @@ class Coupon extends Component {
                             )
                         })
                     }
+                    {
+                        this.props.coupons.length === 0 && (
+                            <View style={{ justifyContent: 'center', alignContent: 'center', marginTop:5 }}>
+                                <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>If you have any coupon please add here.</Text>
+                            </View>
+                        )
+                    }
                 </ScrollView>
                 <TouchableOpacity onPress={this._toggleModal} style={{ padding: 20, backgroundColor: Colors.appTheme, height: 80, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={{ fontSize: 18, fontWeight: '600', color: 'black' }}>Add Cupon</Text>
                     <Icon name='arrowright' type='antdesign' color='black' containerStyle={{ left: 20, marginTop: 5 }} />
                 </TouchableOpacity>
-                <BusyIndicator /> */}
+                <BusyIndicator />
             </View>
         )
     }

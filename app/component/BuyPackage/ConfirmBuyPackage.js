@@ -27,7 +27,7 @@ class ConfirmBuyPackage extends Component {
     }
 
     componentWillMount() {
-        // this.props.getCoupons();
+        this.props.getCoupons();
     }
 
     componentDidMount() {
@@ -46,7 +46,7 @@ class ConfirmBuyPackage extends Component {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null
-        // nextProps.couponAdded != this.props.couponAdded && nextProps.couponAdded && this._toggleModal();
+        nextProps.couponAdded != this.props.couponAdded && nextProps.couponAdded && this.setState({ isModalVisible: false });
     }
 
     _toggleModal = () => {
@@ -108,13 +108,13 @@ class ConfirmBuyPackage extends Component {
                             })
                         }
                     </ScrollView>
-                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ color: Colors.appTheme, fontSize: 18, marginVertical: 20 }}>Coupons</Text>
                         <TouchableOpacity onPress={this._toggleModal}>
                             <Text style={{ color: Colors.appTheme, fontSize: 18, marginVertical: 20, fontWeight: '500', marginRight: 10 }}>Add</Text>
                         </TouchableOpacity>
-                    </View> */}
-                    {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+                    </View>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                         {
                             this.props.coupons.length > 0 && this.props.coupons.map((coupon, index) => {
                                 return (
@@ -135,7 +135,7 @@ class ConfirmBuyPackage extends Component {
                                 )
                             })
                         }
-                    </ScrollView> */}
+                    </ScrollView>
                 </View>
                 <TouchableOpacity onPress={() => {
                     this.props.submitPackages(this.state.pkgArr, this.state.selectedCoupon ? this.state.selectedCoupon.code : null);

@@ -80,7 +80,6 @@ class SignUp extends Component {
         this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
         nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
         nextProps.auth.studyLevel === null || nextProps.auth.institution === null && Toast.show("Please select your study details");
-        console.log(nextProps, "next props");
     }
 
     componentWillUnmount() {
@@ -153,7 +152,7 @@ class SignUp extends Component {
                                 showsButtons={false}
                                 showsPagination={false}
                                 loop={false}
-                                scrollEnabled={true}
+                                scrollEnabled={false}
                             >
                                 <PersonalDetails
                                     nameError={this.state.nameError}
