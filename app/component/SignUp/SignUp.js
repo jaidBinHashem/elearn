@@ -37,7 +37,8 @@ class SignUp extends Component {
             numberError: "",
             studyLevels: [],
             institutions: [],
-            selectedStudyLevel: null
+            selectedStudyLevel: null,
+            regSuccess: false
         }
     }
 
@@ -76,14 +77,14 @@ class SignUp extends Component {
                 { cancelable: false },
             )
         );
-        nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage));
+        nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage), this.setState({ regSuccess: true }));
         this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
         nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
         nextProps.auth.studyLevel === null || nextProps.auth.institution === null && Toast.show("Please select your study details");
     }
 
     componentWillUnmount() {
-        this.props.resetAuthReducer();
+        !this.state.regSuccess && this.props.resetAuthReducer();
     }
 
 
@@ -152,7 +153,7 @@ class SignUp extends Component {
                                 showsButtons={false}
                                 showsPagination={false}
                                 loop={false}
-                                scrollEnabled={false}
+                                scrollEnabled={true}
                             >
                                 <PersonalDetails
                                     nameError={this.state.nameError}

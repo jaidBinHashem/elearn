@@ -9,7 +9,7 @@ import { getCategories } from '../../redux/actions/CategoryActions';
 import { getBlogs } from '../../redux/actions/BlogActions';
 import { getSubjects, getAllSubjects } from '../../redux/actions/SubjectActions';
 
-import colors from '../../global/../global/colors'
+import colors from '../../global/../global/colors';
 import styles from './styles';
 
 class Loader extends Component {

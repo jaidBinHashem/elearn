@@ -31,11 +31,13 @@ export default function (state = initialState, action) {
         name: action.payload.name,
         phone: action.payload.phone,
         location: action.payload.location,
-        institution: action.payload.institution,
         studyLevel: action.payload.study_level,
-        institutionId: action.payload.institution_id,
         studyLevelId: action.payload.study_level_id,
-        image: action.payload.image
+        studySlug: action.payload.study_level_slug,
+        institution: action.payload.institution,
+        institutionId: action.payload.institution_id,
+        institutionSlug: action.payload.institution_slug,
+        image: action.payload.image,
       }
     default:
       return state;

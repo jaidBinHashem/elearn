@@ -37,7 +37,8 @@ class CourseDetails extends Component {
 
     getCourse = async (studyLevel) => {
         const request = {
-            endPoint: 'study-levels/' + studyLevel.slug + '/categories'
+            endPoint: 'study-levels/' + studyLevel.slug + '/categories',
+            showLoader: true
         }
         let courses = await getService(request);
         let buttonData = courses.data.data.map((course) => {

@@ -10,7 +10,8 @@ import { updateStudyLevel } from '../../redux/actions/UserActions';
 
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
-import { getService } from '../../network'
+import { getService } from '../../network';
+import { unsubscribeFromTopic } from '../../Firebase';
 
 import Colors from '../../global/colors';
 
@@ -71,13 +72,6 @@ class EditStudyLevel extends Component {
         const request = {
             endPoint: 'study-levels/' + slugObj.slug + '/institutions?q=a'
         }
-        // let institutions = await getService(request);
-        // institutions.data.data.map(institution => {
-        //     institution.id === this.props.user.institutionId && this.setState({ selectedInstitution: institution });
-        // });
-        // this.setState({ institutions: institutions.data.data });
-        // institutions.data.data.length === 0 && this.setState({ selectedInstitution: null });
-        // this.state.selectedInstitution === null && this.state.institutions.length > 0 && this.setState({ selectedInstitution: this.state.institutions[0] })
         loaderHandler.hideLoader();
     }
 
@@ -231,11 +225,15 @@ class EditStudyLevel extends Component {
                     )}
                 </View>
                 <TouchableOpacity
-                    onPress={() => this.props.updateStudyLevel({
-                        "study_level_id": this.state.selectedStudyLevel.id,
-                        "institution_id": this.state.selectedInstitution ? this.state.selectedInstitution.id : null,
-                        "categories": this.state.selectedCourse ? [this.state.selectedCourse.id] : null
-                    })}
+                    onPress={() => {
+                        unsubscribeFromTopic([this.props.user.institutionSlug, this.props.user.studySlug]);
+                        this.props.updateStudyLevel({
+                            "study_level_id": this.state.selectedStudyLevel.id,
+                            "institution_id": this.state.selectedInstitution ? this.state.selectedInstitution.id : null,
+                            "categories": this.state.selectedCourse ? [this.state.selectedCourse.id] : null
+                        }
+                        )
+                    }}
                     style={{ backgroundColor: Colors.appTheme, justifyContent: 'center', height: 60, borderRadius: 5, marginHorizontal: 0, marginVertical: 15 }}>
                     <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center' }}>
                         <Icon name='update' type='material-community' color='#fff' containerStyle={{ right: 15 }} />
