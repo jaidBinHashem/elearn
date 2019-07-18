@@ -11,14 +11,14 @@ import ActionButton from 'react-native-action-button';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import RNExitApp from 'react-native-exit-app';
-// import { setToken, subscribeToToic } from '../../Firebase';
-// import firebase from 'react-native-firebase';
+import { setToken, subscribeToToic } from '../../Firebase';
+import firebase from 'react-native-firebase';
 
 import { getService } from '../../network';
 
 import styles from './styles';
 
-const APP_VERSION = '0.6.5';
+const APP_VERSION = '0.6.6';
 class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Dashboard',
@@ -42,15 +42,15 @@ class Dashboard extends Component {
 
     componentDidMount() {
         loaderHandler.showLoader("Loading");
-        // this.messageListener = firebase.notifications().onNotification(async notification => {
-        //     notification.android.setChannelId("Esho_Sikhi");
-        //     await firebase.notifications().displayNotification(notification);
-        // });
+        this.messageListener = firebase.notifications().onNotification(async notification => {
+            notification.android.setChannelId("Esho_Sikhi");
+            await firebase.notifications().displayNotification(notification);
+        });
 
 
         setTimeout(() => {
-            // setToken();
-            // this.props.user.institutionSlug && this.props.user.studySlug && subscribeToToic(['all', this.props.user.institutionSlug, this.props.user.studySlug]);
+            setToken();
+            this.props.user.institutionSlug && this.props.user.studySlug && subscribeToToic(['all', this.props.user.institutionSlug, this.props.user.studySlug]);
             loaderHandler.hideLoader();
         }, 1500);
         this.getAppVersion();
