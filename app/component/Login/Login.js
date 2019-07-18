@@ -92,7 +92,7 @@ class Login extends Component {
                         text: 'Cancel',
                         style: 'cancel',
                     },
-                    { text: 'Sign Up Now', onPress: () => this.props.navigation.navigate('SignUp', { 'phone': number }) },
+                    { text: 'Sign Up Now', onPress: () => this.props.navigation.replace('SignUp', { 'phone': number }) },
                 ],
                 { cancelable: true },
             );
