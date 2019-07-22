@@ -97,10 +97,10 @@ class CourseDetails extends Component {
                     </View>
                     <View >
                         <Input
-                            label="REFERRAL CODE (OPTIONAL)"
+                            label="Referral Code (Optional)"
                             labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10, marginTop:30 }}
                             inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
-                            placeholder='Enter If You Have Any'
+                            placeholder='না থাকলে ঘরটি খালি রাখুন'
                             errorStyle={{ color: 'red' }}
                             errorMessage={this.props.emailError}
                             onChangeText={(referralCode) => this.setState({ referralCode })}

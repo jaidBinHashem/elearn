@@ -37,7 +37,8 @@ export default StyleSheet.create({
     // },
     signUp: {
         textAlign: 'center',
-        color: '#fff'
+        color: '#fff',
+        fontSize: 20
     },
     // signUp: {
     //     textAlign: 'center',

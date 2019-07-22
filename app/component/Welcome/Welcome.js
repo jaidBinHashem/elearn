@@ -29,10 +29,10 @@ class Loader extends Component {
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('SignUp')}
                             style={styles.signUpContainer}>
-                            <Text style={styles.signUp}>SIGN UP</Text>
+                            <Text style={styles.signUp}>Register</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={{ textAlign: 'center', marginBottom: 50 }}>If you are already an user please{<Text onPress={() => this.props.navigation.navigate('Login')} style={{ fontWeight: 'bold', color: '#BC9CFF' }}> Sign in</Text>}</Text>
+                    <Text style={{ textAlign: 'center', marginBottom: 50, fontSize:15 }}>If you are already an user please {<Text onPress={() => this.props.navigation.navigate('Login')} style={{ fontWeight: 'bold', color: '#BC9CFF' }}> Log in</Text>}</Text>
                 </View>
             </View>
         )

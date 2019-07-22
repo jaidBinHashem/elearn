@@ -37,12 +37,12 @@ class CourseDetails extends Component {
                 </View>
                 <View style={[styles.formContainer, { width: deviceWidth, bottom: 0, justifyContent: 'center' }]}>
                     <View style={{ alignItems: 'center' }}>
-                        <Text>Welcome you have successfully registered</Text>
-                        <Text style={{ marginBottom: 120 }}>Lets go to dashboard</Text>
+                        <Text style={{ fontSize: 18 }}>Welcome you have successfully registered</Text>
+                        <Text style={{ marginBottom: 120, fontSize: 18 }}>Lets go to dashboard</Text>
                     </View>
                 </View>
                 <View>
-                    
+
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.navigation.navigate('Loader')}>

@@ -38,13 +38,13 @@ class SignUp extends Component {
             studyLevels: [],
             institutions: [],
             selectedStudyLevel: null,
-            regSuccess: false
+            regSuccess: false,
+            index: 0
         }
     }
 
     componentWillReceiveProps(nextProps) {
         nextProps.auth.error && (
-            // Toast.show(nextProps.auth.errorMessage)
             Alert.alert(
                 '',
                 nextProps.auth.errorMessage,
@@ -77,10 +77,10 @@ class SignUp extends Component {
                 { cancelable: false },
             )
         );
-        nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage), this.setState({ regSuccess: true }));
-        this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
-        nextProps.auth.studyLevel && this.props.auth.studyLevel != nextProps.auth.studyLevel && nextProps.auth.institution && this.props.auth.institution != nextProps.auth.institution && (this.scrollToNext(2));
+        this.state.index === 0 && this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
+        this.state.index === 1 && nextProps.auth.studyLevel && nextProps.auth.institution && (this.scrollToNext(2));
         nextProps.auth.studyLevel === null || nextProps.auth.institution === null && Toast.show("Please select your study details");
+        this.state.index === 2 && nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage), this.setState({ regSuccess: true }));
     }
 
     componentWillUnmount() {
@@ -154,6 +154,7 @@ class SignUp extends Component {
                                 showsPagination={false}
                                 loop={false}
                                 scrollEnabled={false}
+                                onIndexChanged={(index) => this.setState({ index })}
                             >
                                 <PersonalDetails
                                     nameError={this.state.nameError}
