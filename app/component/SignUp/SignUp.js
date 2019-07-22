@@ -79,7 +79,7 @@ class SignUp extends Component {
         );
         nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage), this.setState({ regSuccess: true }));
         this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
-        nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
+        nextProps.auth.studyLevel && this.props.auth.studyLevel != nextProps.auth.studyLevel && nextProps.auth.institution && this.props.auth.institution != nextProps.auth.institution && (this.scrollToNext(2));
         nextProps.auth.studyLevel === null || nextProps.auth.institution === null && Toast.show("Please select your study details");
     }
 
@@ -153,7 +153,7 @@ class SignUp extends Component {
                                 showsButtons={false}
                                 showsPagination={false}
                                 loop={false}
-                                scrollEnabled={true}
+                                scrollEnabled={false}
                             >
                                 <PersonalDetails
                                     nameError={this.state.nameError}

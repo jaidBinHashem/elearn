@@ -106,8 +106,8 @@ android {
         applicationId "com.eshosikhi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-    versionName "0.6.7"
+        versionCode 10
+        versionName "0.6.9"
     }
     signingConfigs {
         release {
