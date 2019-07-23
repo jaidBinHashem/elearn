@@ -228,7 +228,7 @@ class Dashboard extends Component {
         scholarships.length > 0 && scholarships.map((scholarship) => {
             scholarshipsView.push(
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('ArticleWebView', { scholarship: true, title: scholarship.title, slug: scholarship.slug, category: 'scholarships' })} T
+                    onPress={() => this.props.navigation.navigate('ArticleWebView', { scholarship: true, title: scholarship.title, slug: scholarship.slug, category: 'scholarships' })}
                     key={scholarship.id} style={styles.cards}>
                     <ImageBackground
                         style={{ width: '100%', height: '100%', borderRadius: 20 }}
@@ -384,7 +384,7 @@ class Dashboard extends Component {
                     </View>}
                     {scholarshipsView.length > 0 && (<View>
                         <View>
-                            <Text style={styles.newsAndUpdatesTitle}>News & Info</Text>
+                            <Text style={styles.newsAndUpdatesTitle}>Scholarships</Text>
                         </View>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                             {scholarshipsView}

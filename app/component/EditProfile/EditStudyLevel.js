@@ -40,7 +40,7 @@ class EditStudyLevel extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.props.user != nextProps.user && (
-            Toast.show("Study level updated successfull"),
+            Toast.show("Study level updated successfully"),
             this.props.navigation.navigate('Loader')
         )
     }
@@ -69,9 +69,6 @@ class EditStudyLevel extends Component {
         let slugObj = studyLevel || this.state.studyLevels[selectedStudyIndex];
         this.getInstitutions('A', slugObj.slug);
         this.state.selectedStudyLevel !== slugObj && (this.getCourse(slugObj), this.setState({ selectedStudyLevel: slugObj }));
-        const request = {
-            endPoint: 'study-levels/' + slugObj.slug + '/institutions?q=a'
-        }
         loaderHandler.hideLoader();
     }
 
@@ -196,7 +193,7 @@ class EditStudyLevel extends Component {
                         <View style={{
                             position: 'absolute',
                             top: 100,
-                            zIndex: 1
+                            zIndex: 0
                         }}>
                             <Text>INSTITUTIONS</Text>
                             <AutoComplete

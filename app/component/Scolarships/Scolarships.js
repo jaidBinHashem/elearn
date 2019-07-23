@@ -5,13 +5,15 @@ import { Icon, Input } from 'react-native-elements';
 import Modal from "react-native-modal";
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
+import colors from '../../global/colors';
+import moment from 'moment';
 
 import Colors from '../../global/colors';
 import styles from './styles';
 
 class Scolarships extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: 'Scolarships',
+        title: 'Scholarships',
         headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
         // headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => console.log("here")}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
     });
@@ -44,45 +46,54 @@ class Scolarships extends Component {
     }
 
     render() {
+        let { scholarships } = this.props;
+        let scholarshipCards = [];
+        scholarships.length > 0 && scholarships.map(scholarship => {
+            scholarshipCards.push(
+                <View key={scholarship.id} style={{ borderRadius: 5, borderTopWidth: 2, borderTopColor: Colors.appTheme, backgroundColor: '#fff', marginVertical: 15, elevation: 5, borderRadius: 3 }}>
+                    <View style={{ borderBottomWidth: 2, borderBottomColor: 'lightgray', padding: 10 }}>
+                        <Text style={{ fontSize: 18, fontWeight: '600', color: 'black' }} numberOfLines={1}>{scholarship.title}</Text>
+                        <Text style={{ fontSize: 18, fontWeight: '300' }}>{scholarship.short_description}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: 18, fontWeight: '400', color: 'black' }}>End Date</Text>
+                            <View style={{ flexDirection: 'row', marginTop: 2 }}>
+                                <Icon
+                                    name='calendar'
+                                    type='entypo'
+                                    color={colors.appTheme}
+                                    size={26}
+                                    containerStyle={styles.numberIconContainer}
+                                />
+                                <Text style={{ marginLeft: 15, marginTop: 2 }}>{moment(scholarship.end_date.date).format("DD-MMM-YYYY")}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={{ marginVertical: 10, alignItems: 'center' }}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('ArticleWebView', { scholarship: true, title: scholarship.title, slug: scholarship.slug, category: 'scholarships' })}
+                            style={{ width: 100, backgroundColor: Colors.appTheme, padding: 10, borderRadius: 5 }}>
+                            <Text style={{ color: '#fff', textAlign: 'center', color: 'black' }}>Apply Now</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        });
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>Coming Soon</Text>
-                </View>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    {scholarshipCards}
+                </ScrollView>
             </View>
-
         )
-        // return (
-        //     <View style={[styles.container]}>
-        //         <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-        //         <ScrollView showsVerticalScrollIndicator={false}>
-        //             <View style={{ borderRadius: 5, borderTopWidth: 2, borderTopColor: Colors.appTheme, backgroundColor: '#fff', marginVertical: 15, elevation: 5, borderRadius: 3 }}>
-        //                 <View style={{ borderBottomWidth: 2, borderBottomColor: 'lightgray', padding: 20 }}>
-        //                     <Text style={{ fontSize: 18, fontWeight: '400', color: 'black' }}>Pran Scholarship 2019</Text>
-        //                     <Text style={{ fontSize: 18, fontWeight: '300' }}>Lorem Ipsum is simply dummy text of the printing and typese</Text>
-        //                     <Text style={{ fontSize: 18, fontWeight: '400', color: 'black', marginTop: 15 }}>End Data</Text>
-        //                     <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-        //                         <Icon name='menu' type='feather' color={Colors.appTheme} />
-        //                         <Text>30 Nov 2019</Text>
-        //                     </View>
-        //                 </View>
-        //                 <View style={{ marginVertical: 20, alignItems: 'center' }}>
-        //                     <TouchableOpacity style={{ width: 100, backgroundColor: Colors.appTheme, padding: 10, borderRadius: 5 }}>
-        //                         <Text style={{ color: '#fff', textAlign: 'center', color: 'black' }}>Apply Now</Text>
-        //                     </TouchableOpacity>
-        //                 </View>
-        //             </View>
-        //         </ScrollView>
-        //     </View>
-        // )
     }
 }
 
 
 function mapStateToProps(state) {
     return {
-        auth: state.AuthReducer
+        auth: state.AuthReducer,
+        scholarships: state.ScholarshipsReducer.scholarships,
     };
 }
 

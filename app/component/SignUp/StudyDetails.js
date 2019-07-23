@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Picker, Dimensions } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
 import AutoComplete from 'react-native-autocomplete-input';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 import CounterView from './CounterView';
 import { getService } from '../../network'
@@ -38,15 +39,13 @@ class StudyDetails extends Component {
     }
 
     selectStudyLevel = async (selectedStudyLevelId, selectedStudyIndex) => {
+        loaderHandler.showLoader("Loading");
+        this.setState({ query: '', selectedInstitution: null })
         let selectedStudyLevel = [...this.state.studyLevels];
         selectedStudyLevel = selectedStudyLevel[selectedStudyIndex];
         this.setState({ selectedStudyLevel });
         this.getInstitutions('A', this.state.studyLevels[selectedStudyIndex].slug);
-        // const request = {
-        //     endPoint: 'study-levels/' + this.state.studyLevels[selectedStudyIndex].slug + '/institutions'
-        // }
-        // let institutions = await getService(request);
-        // institutions.success && this.setState({ institutions: institutions.data.data, selectedInstitution: institutions.data.data[0] });
+        loaderHandler.hideLoader();
     }
 
     getInstitutions = async (query, slug = null) => {

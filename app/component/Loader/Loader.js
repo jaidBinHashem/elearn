@@ -26,7 +26,7 @@ class Loader extends Component {
             this.props.getSubjects();
             this.props.getAllSubjects();
             this.props.getScholarships();
-            this.props.getBlogs();
+            // this.props.getBlogs();
         }
         setTimeout(() => {
             this.props.checkAuth();

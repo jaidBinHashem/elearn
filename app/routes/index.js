@@ -211,10 +211,11 @@ const BuyPackageStack = createStackNavigator(
 
 const ScolarshipsStack = createStackNavigator(
     {
-        Scolarships: Scolarships,
+        Scholarships: Scolarships,
+        ArticleWebView: ArticleWebView
     },
     {
-        initialRouteName: 'Scolarships',
+        initialRouteName: 'Scholarships',
         defaultNavigationOptions: {
             headerStyle: {
                 backgroundColor: colors.appTheme,
@@ -349,7 +350,7 @@ const AppDrawer = createDrawerNavigator(
         Scolarships: {
             screen: ScolarshipsStack,
             navigationOptions: {
-                drawerLabel: 'Scolarships',
+                drawerLabel: 'Scholarships',
                 drawerIcon: ({ tintColor }) => <Icon name='price-ribbon' type='entypo' color={colors.appTheme} />,
             }
         },
