@@ -9,8 +9,8 @@ export default function (state = initialState, action) {
     case GET_BLOGS_RETURN:
       return {
         ...state,
-        newsAndUpdates: action.payload.news_and_updates,
-        tipsAndTricks: action.payload.tips_and_tricks,
+        newsAndUpdates: action.payload
+        // tipsAndTricks: action.payload.tips_and_tricks,
       }
     default:
       return state;

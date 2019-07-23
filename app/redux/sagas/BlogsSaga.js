@@ -6,7 +6,8 @@ import { getService } from '../../network'
 const retrieveBlogs = async () => {
     try {
         let request = {
-            endPoint: 'articles',
+            endPoint: 'news-and-infos',
+            authenticate: true
         }
         return (await getService(request));
     } catch (error) {

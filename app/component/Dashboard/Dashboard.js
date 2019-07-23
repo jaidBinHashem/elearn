@@ -246,33 +246,33 @@ class Dashboard extends Component {
         });
 
 
-        let tipsAndTricks = [...this.props.tipsAndTricks], tipsAndTricksView = [];
-        tipsAndTricks.length > 0 && tipsAndTricks.map((tipsAndTrick) => {
-            tipsAndTricksView.push(
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('ArticleWebView', { tipsAndTrick: true, title: tipsAndTrick.title, slug: tipsAndTrick.slug, category: 'articles' })} T
-                    key={tipsAndTrick.id} style={styles.cards}>
-                    <ImageBackground
-                        style={{ width: '100%', height: '100%', borderRadius: 20 }}
-                        imageStyle={{ borderRadius: 5 }}
-                        source={{ uri: tipsAndTrick.image }}
-                    >
-                        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 5, justifyContent: 'flex-end' }}>
-                            <View style={{}}>
-                                <Text numberOfLines={2} style={{ color: 'white', margin: 10, fontWeight: '600' }}>{tipsAndTrick.title}</Text>
-                            </View>
-                        </View>
-                    </ImageBackground>
-                </TouchableOpacity>
-            )
-        });
+        // let tipsAndTricks = [...this.props.tipsAndTricks], tipsAndTricksView = [];
+        // tipsAndTricks.length > 0 && tipsAndTricks.map((tipsAndTrick) => {
+        //     tipsAndTricksView.push(
+        //         <TouchableOpacity
+        //             onPress={() => this.props.navigation.navigate('ArticleWebView', { tipsAndTrick: true, title: tipsAndTrick.title, slug: tipsAndTrick.slug, category: 'articles' })} T
+        //             key={tipsAndTrick.id} style={styles.cards}>
+        //             <ImageBackground
+        //                 style={{ width: '100%', height: '100%', borderRadius: 20 }}
+        //                 imageStyle={{ borderRadius: 5 }}
+        //                 source={{ uri: tipsAndTrick.image }}
+        //             >
+        //                 <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 5, justifyContent: 'flex-end' }}>
+        //                     <View style={{}}>
+        //                         <Text numberOfLines={2} style={{ color: 'white', margin: 10, fontWeight: '600' }}>{tipsAndTrick.title}</Text>
+        //                     </View>
+        //                 </View>
+        //             </ImageBackground>
+        //         </TouchableOpacity>
+        //     )
+        // });
 
 
         let newsAndUpdates = [...this.props.newsAndUpdates], newsAndUpdatesView = [];
         newsAndUpdates.length > 0 && newsAndUpdates.map((newsAndUpdate) => {
             newsAndUpdatesView.push(
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('ArticleWebView', { newsAndUpdate: true, title: newsAndUpdate.title, slug: newsAndUpdate.slug, category: 'articles' })} T
+                    onPress={() => this.props.navigation.navigate('ArticleWebView', { newsAndUpdate: true, title: newsAndUpdate.title, slug: newsAndUpdate.slug, category: 'news-and-infos' })} T
                     key={newsAndUpdate.id} style={styles.cards}>
                     <ImageBackground
                         style={{ width: '100%', height: '100%', borderRadius: 20 }}
@@ -382,6 +382,14 @@ class Dashboard extends Component {
                             }
                         </View>
                     </View>}
+                    {newsAndUpdatesView.length > 0 && (<View>
+                        <View>
+                            <Text style={styles.newsAndUpdatesTitle}>News & Info</Text>
+                        </View>
+                        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
+                            {newsAndUpdatesView}
+                        </ScrollView>
+                    </View>)}
                     {scholarshipsView.length > 0 && (<View>
                         <View>
                             <Text style={styles.newsAndUpdatesTitle}>Scholarships</Text>
@@ -390,15 +398,7 @@ class Dashboard extends Component {
                             {scholarshipsView}
                         </ScrollView>
                     </View>)}
-                    {/* {newsAndUpdatesView.length > 0 && (<View>
-                        <View>
-                            <Text style={styles.newsAndUpdatesTitle}>News & Updates</Text>
-                        </View>
-                        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-                            {newsAndUpdatesView}
-                        </ScrollView>
-                    </View>)}
-                    {tipsAndTricksView.length > 0 && (<View>
+                    {/* {tipsAndTricksView.length > 0 && (<View>
                         <View>
                             <Text style={styles.newsAndUpdatesTitle}>Tips & Tricks</Text>
                         </View>
@@ -428,7 +428,7 @@ function mapStateToProps(state) {
         user: state.UserReducer,
         scholarships: state.ScholarshipsReducer,
         newsAndUpdates: state.BlogReducer.newsAndUpdates,
-        tipsAndTricks: state.BlogReducer.tipsAndTricks,
+        // tipsAndTricks: state.BlogReducer.tipsAndTricks,
         subjects: state.SubjectsReducer.subjects,
         subjectsTitleArr: state.SubjectsReducer.subjectsTitleArr,
         allSubjects: state.SubjectsReducer.allSubjects,
