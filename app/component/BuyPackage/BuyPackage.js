@@ -108,7 +108,7 @@ class BuyPackage extends Component {
                                     return (
                                         <View key={index} style={styles.pkgContainer}>
                                             <View style={{ flex: 1 }}>
-                                                <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 110, marginLeft: 8 }}>{mainPackage.title}</Text>
+                                                <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '700', maxWidth: 110, marginLeft: 8 }}>{mainPackage.title}</Text>
                                                 <Picker
                                                     selectedValue={this.state.selectedPackages[index].selectedPkg.id}
                                                     style={{ height: 25, maxWidth: 180 }}

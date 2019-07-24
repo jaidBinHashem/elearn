@@ -39,7 +39,7 @@ class SubjectDashboard extends Component {
     }
 
     onLessonClick = (lesson) => {
-        if (this.props.navigation.state.params.subjectDetails.purchased || lesson.preview) {
+        if (this.props.navigation.state.params.subjectDetails.purchased || lesson.preview || this.props.navigation.state.params.mySubject) {
             if (lesson.lesson_type === 'video') {
                 this.props.navigation.navigate('Player', { title: lesson.title, slug: lesson.slug, description: lesson.description })
             } else if (lesson.lesson_type === 'quiz') {

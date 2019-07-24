@@ -44,7 +44,7 @@ class MySubjects extends Component {
         subjects.map((subject, key) => {
             views.push(
                 <View key={key} style={{ flex: 2, flexDirection: 'row' }}><TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subject })}
+                    onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: subject, mySubject: true })}
                     style={styles.subject}
                 >
                     <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>{subject.title}</Text>

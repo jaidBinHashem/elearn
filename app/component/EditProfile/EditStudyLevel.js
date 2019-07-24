@@ -196,7 +196,7 @@ class EditStudyLevel extends Component {
                         <View style={{
                             position: 'absolute',
                             top: 100,
-                            zIndex: 1
+                            zIndex: 0
                         }}>
                             <Text>INSTITUTIONS</Text>
                             <AutoComplete

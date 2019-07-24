@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Text, View, StatusBar, Alert, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements';
 
+import BusyIndicator from 'react-native-busy-indicator';
+
 import { setQuiz } from '../../redux/actions/QuizActions';
 import { connect } from "react-redux";
 
@@ -75,7 +77,7 @@ class QuizDashboard extends Component {
                         this.props.quiz.questions
                             && this.props.quiz.questions.length > 0
                             ? this.props.navigation.navigate('Quiz', { showExplanation: this.props.navigation.state.params && this.props.navigation.state.params.showExplanation, lessonId: this.props.navigation.state.params.lessonId })
-                            :  Alert.alert(
+                            : Alert.alert(
                                 '',
                                 'This quiz is not ready yet, Please try again later !',
                                 [
@@ -99,6 +101,7 @@ class QuizDashboard extends Component {
                         />
                     </TouchableOpacity>
                 </View>
+                <BusyIndicator />
             </View>
         )
     }

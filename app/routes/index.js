@@ -161,9 +161,6 @@ const SubjectsStack = createStackNavigator(
                 backgroundColor: colors.appTheme,
             },
             headerTintColor: '#fff',
-            headerTitleStyle: {
-                // fontWeight: 'bold',
-            },
         },
         transitionConfig
     }
