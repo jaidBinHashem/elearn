@@ -19,7 +19,6 @@ import Payment from '../component/BuyPackage/Payment';
 import Scolarships from '../component/Scolarships';
 import Upcoming from '../component/SuperLeague/Upcoming';
 import Completed from '../component/SuperLeague/Completed';
-
 import SubjectDashboard from '../component/SubjectDashboard'
 
 import QuizDashboard from '../component/Quiz';
@@ -27,7 +26,9 @@ import QuizHighlights from '../component/Quiz/QuizHighlights';
 import PreviousAttemps from '../component/Quiz/PreviousAttemps';
 import Quiz from '../component/Quiz/Quiz';
 
-import Player from '../component/Player'
+import Player from '../component/Player';
+
+import Notifications from '../component/Notifications';
 
 import DrawerComponent from './DrawerComponent';
 
@@ -110,7 +111,8 @@ const AppStack = createStackNavigator(
         QuizSolutions: Quiz,
         QuizHighlights: QuizHighlights,
         PreviousAttemps: PreviousAttemps,
-        Player: Player
+        Player: Player,
+        Notifications: Notifications
     },
     {
         initialRouteName: 'Dashboard',

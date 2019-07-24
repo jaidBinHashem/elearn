@@ -23,7 +23,7 @@ class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Dashboard',
         headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
-        headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => console.log("here")}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
+        headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => navigation.navigate('Notifications')}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
     });
 
     constructor(props) {
