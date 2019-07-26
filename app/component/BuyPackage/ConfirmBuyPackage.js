@@ -27,7 +27,7 @@ class ConfirmBuyPackage extends Component {
     }
 
     componentWillMount() {
-        // this.props.getCoupons();
+        this.props.getCoupons();
     }
 
     componentDidMount() {
@@ -100,7 +100,7 @@ class ConfirmBuyPackage extends Component {
                                             <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 200 }}>{mainPackage.title}</Text>
                                         </View>
                                         <View>
-                                            <Text numberOfLines={2} style={{ fontSize: 18, marginLeft: 20, maxWidth:150 }}>{mainPackage.selectedPkg.name} ({mainPackage.selectedPkg.duration && mainPackage.selectedPkg.duration.split('.')[0]} {mainPackage.selectedPkg.unit && mainPackage.selectedPkg.unit})</Text>
+                                            <Text numberOfLines={2} style={{ fontSize: 18, marginLeft: 20, maxWidth: 150 }}>{mainPackage.selectedPkg.name} ({mainPackage.selectedPkg.duration && mainPackage.selectedPkg.duration.split('.')[0]} {mainPackage.selectedPkg.unit && mainPackage.selectedPkg.unit})</Text>
                                             <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{mainPackage.selectedPkg.price} tk</Text>
                                         </View>
                                     </View>
@@ -116,7 +116,7 @@ class ConfirmBuyPackage extends Component {
                             </TouchableOpacity>
                         </View>
                     )}
-                    {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                         {
                             this.props.coupons.length > 0 && this.props.coupons.map((coupon, index) => {
                                 return (
@@ -137,13 +137,13 @@ class ConfirmBuyPackage extends Component {
                                 )
                             })
                         }
-                    </ScrollView> */}
+                    </ScrollView>
                 </View>
-                {/* {this.props.coupons.length === 0 && (
+                {this.props.coupons.length === 0 && (
                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 18, marginBottom: 15 }}>If you have any coupon <Text style={{ fontWeight: 'bold', color: Colors.appTheme }} onPress={() => this._toggleModal()}>please add</Text></Text>
                     </View>
-                )} */}
+                )}
                 <TouchableOpacity onPress={() => {
                     this.props.submitPackages(this.state.pkgArr, this.state.selectedCoupon ? this.state.selectedCoupon.code : null);
                     this.props.navigation.replace('Payment');

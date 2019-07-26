@@ -11,7 +11,7 @@ import { updateStudyLevel } from '../../redux/actions/UserActions';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { getService } from '../../network';
-// import { unsubscribeFromTopic } from '../../Firebase';
+import { unsubscribeFromTopic } from '../../Firebase';
 
 import Colors from '../../global/colors';
 
@@ -69,9 +69,6 @@ class EditStudyLevel extends Component {
         let slugObj = studyLevel || this.state.studyLevels[selectedStudyIndex];
         this.getInstitutions('A', slugObj.slug);
         this.state.selectedStudyLevel !== slugObj && (this.getCourse(slugObj), this.setState({ selectedStudyLevel: slugObj }));
-        const request = {
-            endPoint: 'study-levels/' + slugObj.slug + '/institutions?q=a'
-        }
         loaderHandler.hideLoader();
     }
 
@@ -226,7 +223,7 @@ class EditStudyLevel extends Component {
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        // unsubscribeFromTopic([this.props.user.institutionSlug, this.props.user.studySlug]);
+                        unsubscribeFromTopic([this.props.user.institutionSlug, this.props.user.studySlug]);
                         this.props.updateStudyLevel({
                             "study_level_id": this.state.selectedStudyLevel.id,
                             "institution_id": this.state.selectedInstitution ? this.state.selectedInstitution.id : null,

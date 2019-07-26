@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Keyboard, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import { Keyboard, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
 import BusyIndicator from 'react-native-busy-indicator';
 import { Icon, Input } from 'react-native-elements';
 import Modal from "react-native-modal";
@@ -33,10 +32,10 @@ class Coupon extends Component {
     }
 
     async componentWillMount() {
-        // const { navigation } = this.props;
-        // this.focusListener = navigation.addListener("didFocus", () => {
-        //     this.props.getCoupons();
-        // });
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener("didFocus", () => {
+            this.props.getCoupons();
+        });
     }
 
     _toggleModal = () => {
@@ -47,10 +46,10 @@ class Coupon extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                {/* <View style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>Coming Soon</Text>
-                </View>
-                {/* <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
+                </View> */}
+                <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
                     <Modal
                         isVisible={this.state.isModalVisible}
                         animationInTiming={500}
@@ -108,7 +107,7 @@ class Coupon extends Component {
                 <TouchableOpacity onPress={this._toggleModal} style={{ padding: 20, backgroundColor: Colors.appTheme, height: 80, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={{ fontSize: 22, fontWeight: '600', color: 'black' }}>Add Coupon</Text>
                     <Icon size={30} name='arrowright' type='antdesign' color='black' containerStyle={{ left: 20, marginTop: 5 }} />
-                </TouchableOpacity> */}
+                </TouchableOpacity>
                 <BusyIndicator />
             </View>
         )
