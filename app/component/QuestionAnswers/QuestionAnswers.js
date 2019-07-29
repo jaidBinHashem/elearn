@@ -50,17 +50,18 @@ class QuestionAnswers extends Component {
 
     render() {
         let { questions } = this.state;
-        console.log(questions, "here");
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView showsHorizontalScrollIndicator={false}>
                     {
                         questions.map(question =>
-                            <TouchableOpacity key={question.created_at} style={styles.questionCardContainer}>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('QuestionDetails', { 'question': question })}
+                                key={question.created_at}
+                                style={styles.questionCardContainer}>
                                 <View style={styles.avatarContainer}>
                                     <Avatar
-                                        rounded={true}
                                         size="medium"
                                         source={{
                                             uri:
@@ -76,12 +77,33 @@ class QuestionAnswers extends Component {
                                     <View>
                                         <Text style={styles.question}>{question.question}</Text>
                                     </View>
-                                    {/* <View style={styles.imageContainer}>
-                                        <Image
-                                            style={{ width: 100, height: 100, marginTop: 20 }}
-                                            source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
-                                        />
-                                    </View> */}
+                                    {
+                                        question.file_one &&
+                                        <View style={styles.imageContainer}>
+                                            <Image
+                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                source={{ uri: question.file_one }}
+                                            />
+                                        </View>
+                                    }
+                                    {
+                                        question.file_two &&
+                                        <View style={styles.imageContainer}>
+                                            <Image
+                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                source={{ uri: question.file_two }}
+                                            />
+                                        </View>
+                                    }
+                                    {
+                                        question.file_three &&
+                                        <View style={styles.imageContainer}>
+                                            <Image
+                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                source={{ uri: question.file_three }}
+                                            />
+                                        </View>
+                                    }
                                 </View>
                                 <Text style={styles.responseCount}>{question.global_answers_count} RESPONSES</Text>
                             </TouchableOpacity>
@@ -94,7 +116,7 @@ class QuestionAnswers extends Component {
                     fixNativeFeedbackRadius={true}
                     useNativeFeedback={true}
                     // renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/a6tMdBA.png' }} />}
-                    onPress={() => this.props.navigation.navigate('AddQuestion')}
+                    onPress={() => this.props.navigation.navigate('AddQuestion', { 'question_id': false })}
                 />
                 <BusyIndicator />
             </View>

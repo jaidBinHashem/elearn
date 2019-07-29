@@ -19,7 +19,7 @@ class QuestionDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            notifications: [],
+            responses: [],
         }
     }
 
@@ -30,87 +30,145 @@ class QuestionDetails extends Component {
     }
 
     async componentWillMount() {
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener("didFocus", () => {
+            this.getResponses();
+        });
+    }
+
+    getResponses = async () => {
         const request = {
-            endPoint: 'questions',
+            endPoint: 'questions/' + this.props.navigation.state.params.question.id + '/answers',
             showLoader: true,
             authenticate: true
         }
-        let notifications = await getService(request);
-        this.setState({ notifications: notifications.data });
+        let response = await getService(request);
+        this.setState({ responses: response.data.data });
     }
 
     componentWillUnmount() {
+        this.focusListener.remove();
         loaderHandler.hideLoader();
     }
 
     render() {
-        let { notifications } = this.state;
-        console.log(notifications);
+        let { question } = this.props.navigation.state.params;
+        let responses = [...this.state.responses];
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <TouchableOpacity style={styles.questionCardContainer}>
+                    <View
+                        key={question.created_at}
+                        style={styles.questionCardContainer}>
                         <View style={styles.avatarContainer}>
                             <Avatar
-                                rounded
+                                rounded={true}
                                 size="medium"
                                 source={{
                                     uri:
-                                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                                        question.user.full_url_avatar,
                                 }}
                             />
                             <View style={styles.nameDateContainer}>
-                                <Text style={styles.userName}>User name</Text>
-                                <Text>10th July, 2019</Text>
+                                <Text style={styles.userName}>{question.user.full_name}</Text>
+                                <Text>{moment(question.created_at).format("Do MMM")}</Text>
                             </View>
                         </View>
                         <View>
                             <View>
-                                <Text style={styles.question}>Long text, long long text, Long text, long long text, Long text, long long text</Text>
+                                <Text style={styles.question}>{question.question}</Text>
                             </View>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    style={{ width: 100, height: 100, marginTop: 20 }}
-                                    source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
-                                />
-                            </View>
+                            {
+                                question.file_one &&
+                                <View style={styles.imageContainer}>
+                                    <Image
+                                        style={{ width: 100, height: 100, marginTop: 20 }}
+                                        source={{ uri: question.file_one }}
+                                    />
+                                </View>
+                            }
+                            {
+                                question.file_two &&
+                                <View style={styles.imageContainer}>
+                                    <Image
+                                        style={{ width: 100, height: 100, marginTop: 20 }}
+                                        source={{ uri: question.file_two }}
+                                    />
+                                </View>
+                            }
+                            {
+                                question.file_three &&
+                                <View style={styles.imageContainer}>
+                                    <Image
+                                        style={{ width: 100, height: 100, marginTop: 20 }}
+                                        source={{ uri: question.file_three }}
+                                    />
+                                </View>
+                            }
                         </View>
-                        <Text style={styles.responseCount}>5 RESPONSES</Text>
-                    </TouchableOpacity>
+                        <Text style={styles.responseCount}>{question.global_answers_count} RESPONSES</Text>
+                    </View>
 
-                    <TouchableOpacity style={styles.questionCardContainer}>
-                        <View style={styles.avatarContainer}>
-                            <Avatar
-                                rounded
-                                size="medium"
-                                source={{
-                                    uri:
-                                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                                }}
-                            />
-                            <View style={styles.nameDateContainer}>
-                                <Text style={styles.userName}>User name</Text>
-                                <Text>10th July, 2019</Text>
+                    {
+                        responses.map(response =>
+                            <View
+                                key={response.created_at}
+                                style={[styles.questionCardContainer, { borderTopColor: '#fff' }]}>
+                                <View style={styles.avatarContainer}>
+                                    <Avatar
+                                        rounded={true}
+                                        size="medium"
+                                        source={{
+                                            uri:
+                                                response.user.full_url_avatar,
+                                        }}
+                                    />
+                                    <View style={styles.nameDateContainer}>
+                                        <Text style={styles.userName}>{response.user.full_name}</Text>
+                                        <Text>{moment(response.created_at).format("Do MMM")}</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                    <View>
+                                        <Text style={styles.question}>{response.reply}</Text>
+                                    </View>
+                                    {
+                                        response.file_one &&
+                                        <View style={styles.imageContainer}>
+                                            <Image
+                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                source={{ uri: response.file_one }}
+                                            />
+                                        </View>
+                                    }
+                                    {
+                                        response.file_two &&
+                                        <View style={styles.imageContainer}>
+                                            <Image
+                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                source={{ uri: response.file_two }}
+                                            />
+                                        </View>
+                                    }
+                                    {
+                                        response.file_three &&
+                                        <View style={styles.imageContainer}>
+                                            <Image
+                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                source={{ uri: response.file_three }}
+                                            />
+                                        </View>
+                                    }
+                                </View>
                             </View>
-                        </View>
-                        <View>
-                            <View>
-                                <Text style={styles.question}>Long text, long long text, Long text, long long text, Long text, long long text</Text>
-                            </View>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    style={{ width: 100, height: 100, marginTop: 20 }}
-                                    source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
-                                />
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                        )
+                    }
 
                 </ScrollView>
                 <View>
                     <Button
-                        onPress={() => this.props.navigation.navigate('AddQuestion')}
+                        onPress={() => this.props.navigation.navigate('AddQuestion', { 'question_id': question.id })}
                         buttonStyle={{ backgroundColor: colors.appTheme, height: 50 }}
                         title="Add Answer"
                     />

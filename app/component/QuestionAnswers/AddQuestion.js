@@ -23,7 +23,7 @@ const options = {
 
 class AddQuestion extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: 'Questions & Answers',
+        title: navigation.state.params.question_id ? 'Response' : 'Questions & Answers',
     });
 
     constructor(props) {
@@ -70,24 +70,35 @@ class AddQuestion extends Component {
 
     submitQuestion = async () => {
         Keyboard.dismiss();
+        let { question_id } = this.props.navigation.state.params;
         let question = new FormData();
-        this.state.question && question.append("question", this.state.question);
+        !question_id && this.state.question && question.append("question", this.state.question);
+        question_id && this.state.question && question.append("reply", this.state.question);
         this.state.uploadImage && this.state.images.length > 0 && question.append("file_one", this.state.images[0]);
         this.state.uploadImage && this.state.images.length > 1 && question.append("file_two", this.state.images[1]);
         this.state.uploadImage && this.state.images.length > 2 && question.append("file_three", this.state.images[2]);
         if (question._parts.length > 0) {
+            let url = question_id ? 'questions/' + question_id + '/answers' : 'questions';
             let request = {
-                endPoint: 'questions',
+                endPoint: url,
                 authenticate: true,
                 showLoader: true,
                 contentType: "multipart/form-data",
                 params: question,
             }
             let response = await postService(request);
-            console.log(response, "response");
-            response.success
-                ? (Toast.show("Your question has been submited successfully"), this.props.navigation.goBack())
-                : (Toast.show("Something went wrong, Please try again"))
+
+            if (question_id) {
+                response.success
+                    ? (Toast.show("Your response has been submited successfully"), this.props.navigation.goBack())
+                    : (Toast.show("Something went wrong, Please try again"))
+            } else {
+                response.success
+                    ? (Toast.show("Your question has been submited successfully"), this.props.navigation.goBack())
+                    : (Toast.show("Something went wrong, Please try again"))
+            }
+
+
         }
     }
 
