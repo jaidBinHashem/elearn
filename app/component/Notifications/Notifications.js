@@ -5,8 +5,6 @@ import { connect } from "react-redux";
 import BusyIndicator from 'react-native-busy-indicator';
 import moment from 'moment';
 import { getService } from '../../network';
-
-import colors from '../../global/../global/colors';
 import styles from './styles';
 
 class Notifications extends Component {
@@ -39,7 +37,6 @@ class Notifications extends Component {
 
     render() {
         let { notifications } = this.state;
-        console.log(notifications);
         return (
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
