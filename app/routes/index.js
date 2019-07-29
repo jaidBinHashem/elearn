@@ -32,6 +32,7 @@ import Notifications from '../component/Notifications';
 
 import QuestionAnswers from '../component/QuestionAnswers';
 import AddQuestion from '../component/QuestionAnswers/AddQuestion';
+import QuestionDetails from '../component/QuestionAnswers/QuestionDetails';
 
 import DrawerComponent from './DrawerComponent';
 
@@ -117,7 +118,8 @@ const AppStack = createStackNavigator(
         Player: Player,
         Notifications: Notifications,
         QuestionAnswers: QuestionAnswers,
-        AddQuestion : AddQuestion
+        AddQuestion: AddQuestion,
+        QuestionDetails: QuestionDetails
     },
     {
         initialRouteName: 'Dashboard',

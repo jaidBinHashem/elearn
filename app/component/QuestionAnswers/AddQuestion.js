@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, Keyboard } from 'react-native'
 import { connect } from "react-redux";
 
 import ImagePicker from 'react-native-image-picker';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
-import moment from 'moment';
+import Toast from 'react-native-simple-toast';
 import { Input, Button, Icon } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 
-import { getService } from '../../network';
+import { postService } from '../../network';
 import colors from '../../global/../global/colors';
 import styles from './styles';
 
@@ -29,7 +29,8 @@ class AddQuestion extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            notifications: [],
+            question: null,
+            uploadImage: false,
             images: []
         }
     }
@@ -41,13 +42,7 @@ class AddQuestion extends Component {
     }
 
     async componentWillMount() {
-        const request = {
-            endPoint: 'questions',
-            showLoader: true,
-            authenticate: true
-        }
-        let notifications = await getService(request);
-        this.setState({ notifications: notifications.data });
+
     }
 
     componentWillUnmount() {
@@ -68,21 +63,43 @@ class AddQuestion extends Component {
                     uri: response.uri
                 };
                 images.push(imageData);
-                this.setState({ images });
+                this.setState({ images, uploadImage: true });
             }
         });
     }
 
+    submitQuestion = async () => {
+        Keyboard.dismiss();
+        let question = new FormData();
+        this.state.question && question.append("question", this.state.question);
+        this.state.uploadImage && this.state.images.length > 0 && question.append("file_one", this.state.images[0]);
+        this.state.uploadImage && this.state.images.length > 1 && question.append("file_two", this.state.images[1]);
+        this.state.uploadImage && this.state.images.length > 2 && question.append("file_three", this.state.images[2]);
+        if (question._parts.length > 0) {
+            let request = {
+                endPoint: 'questions',
+                authenticate: true,
+                showLoader: true,
+                contentType: "multipart/form-data",
+                params: question,
+            }
+            let response = await postService(request);
+            console.log(response, "response");
+            response.success
+                ? (Toast.show("Your question has been submited successfully"), this.props.navigation.goBack())
+                : (Toast.show("Something went wrong, Please try again"))
+        }
+    }
+
     render() {
         let { images } = this.state;
-        console.log(images);
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
                     <Input
                         label='Enter your question'
-                        // inputContainerStyle={{height:300}}
+                        onChangeText={(question) => this.setState({ question })}
                         multiline={true}
                         shake={true} />
 
@@ -102,7 +119,7 @@ class AddQuestion extends Component {
                     </View>
                     <View style={{ marginTop: 30, marginHorizontal: 10 }}>
                         <Button
-                            onPress={() => this.uploadImage()}
+                            onPress={() => this.state.images.length < 3 && this.uploadImage()}
                             icon={
                                 <Icon
                                     name="camera"
@@ -116,19 +133,19 @@ class AddQuestion extends Component {
                             title="Add Image"
                         />
                         <Button
-                            onPress={() => this.uploadImage()}
-                            buttonStyle={{backgroundColor: colors.appTheme}}
+                            onPress={() => this.submitQuestion()}
+                            buttonStyle={{ backgroundColor: colors.appTheme }}
                             containerStyle={{ marginTop: 20 }}
-                            icon={
-                                <Icon
-                                    name="camera"
-                                    type="entypo"
-                                    size={20}
-                                    color="white"
-                                    containerStyle={{ marginLeft: 15 }}
-                                />
-                            }
-                            iconRight
+                            // icon={
+                            //     <Icon
+                            //         name="camera"
+                            //         type="entypo"
+                            //         size={20}
+                            //         color="white"
+                            //         containerStyle={{ marginLeft: 15 }}
+                            //     />
+                            // }
+                            // iconRight
                             title="Submit Question"
                         />
                     </View>

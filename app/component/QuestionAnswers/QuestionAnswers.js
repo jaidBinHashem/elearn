@@ -20,7 +20,7 @@ class QuestionAnswers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            notifications: [],
+            questions: [],
         }
     }
 
@@ -31,13 +31,17 @@ class QuestionAnswers extends Component {
     }
 
     async componentWillMount() {
+        this.getQuestions();
+    }
+
+    getQuestions = async () => {
         const request = {
             endPoint: 'questions',
             showLoader: true,
             authenticate: true
         }
-        let notifications = await getService(request);
-        this.setState({ notifications: notifications.data });
+        let questions = await getService(request);
+        this.setState({ questions: questions.data.data });
     }
 
     componentWillUnmount() {
@@ -45,108 +49,44 @@ class QuestionAnswers extends Component {
     }
 
     render() {
-        let { notifications } = this.state;
-        console.log(notifications);
+        let { questions } = this.state;
+        console.log(questions, "here");
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView showsHorizontalScrollIndicator={false}>
-                    <TouchableOpacity style={styles.questionCardContainer}>
-                        <View style={styles.avatarContainer}>
-                            <Avatar
-                                rounded
-                                size="medium"
-                                source={{
-                                    uri:
-                                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                                }}
-                            />
-                            <View style={styles.nameDateContainer}>
-                                <Text style={styles.userName}>User name</Text>
-                                <Text>10th July, 2019</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <View>
-                                <Text style={styles.question}>Long text, long long text, Long text, long long text, Long text, long long text</Text>
-                            </View>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    style={{ width: 100, height: 100, marginTop: 20 }}
-                                    source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
-                                />
-                            </View>
-                        </View>
-                        <Text style={styles.responseCount}>5 RESPONSES</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.questionCardContainer}>
-                        <View style={styles.avatarContainer}>
-                            <Avatar
-                                rounded
-                                size="medium"
-                                source={{
-                                    uri:
-                                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                                }}
-                            />
-                            <View style={styles.nameDateContainer}>
-                                <Text style={styles.userName}>User name</Text>
-                                <Text>10th July, 2019</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <View>
-                                <Text style={styles.question}>Long text, long long text, Long text, long long text, Long text, long long text</Text>
-                            </View>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    style={{ width: 100, height: 100, marginTop: 20 }}
-                                    source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
-                                />
-                                <Image
-                                    style={{ width: 100, height: 100, marginTop: 20 }}
-                                    source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
-                                />
-                                <Image
-                                    style={{ width: 100, height: 100, marginTop: 20 }}
-                                    source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
-                                />
-                            </View>
-                        </View>
-                        <Text style={styles.responseCount}>5 RESPONSES</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.questionCardContainer}>
-                        <View>
-                            <View style={styles.avatarContainer}>
-                                <Avatar
-                                    rounded
-                                    size="medium"
-                                    source={{
-                                        uri:
-                                            'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                                    }}
-                                />
-                                <View style={styles.nameDateContainer}>
-                                    <Text style={styles.userName}>User name</Text>
-                                    <Text>10th July, 2019</Text>
-                                </View>
-                            </View>
-                            <View>
-                                <View>
-                                    <Text style={styles.question}>Long text, long long text, Long text, long long text, Long text, long long text</Text>
-                                </View>
-                                <View style={styles.imageContainer}>
-                                    <Image
-                                        style={{ width: 100, height: 100, marginTop: 20 }}
-                                        source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
+                    {
+                        questions.map(question =>
+                            <TouchableOpacity key={question.created_at} style={styles.questionCardContainer}>
+                                <View style={styles.avatarContainer}>
+                                    <Avatar
+                                        rounded={true}
+                                        size="medium"
+                                        source={{
+                                            uri:
+                                                question.user.full_url_avatar,
+                                        }}
                                     />
+                                    <View style={styles.nameDateContainer}>
+                                        <Text style={styles.userName}>{question.user.full_name}</Text>
+                                        <Text>{moment(question.created_at).format("Do MMM")}</Text>
+                                    </View>
                                 </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
+                                <View>
+                                    <View>
+                                        <Text style={styles.question}>{question.question}</Text>
+                                    </View>
+                                    {/* <View style={styles.imageContainer}>
+                                        <Image
+                                            style={{ width: 100, height: 100, marginTop: 20 }}
+                                            source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
+                                        />
+                                    </View> */}
+                                </View>
+                                <Text style={styles.responseCount}>{question.global_answers_count} RESPONSES</Text>
+                            </TouchableOpacity>
+                        )
+                    }
                 </ScrollView>
                 <ActionButton
                     buttonColor='#1E88E5'
