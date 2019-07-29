@@ -7,7 +7,7 @@ const retriveQuizDetails = async (lessonId) => {
     try {
         let request = {
             endPoint: 'quiz/' + lessonId + '/questions',
-            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
+            showLoader: true,
             authenticate: true,
             temp: false
         }

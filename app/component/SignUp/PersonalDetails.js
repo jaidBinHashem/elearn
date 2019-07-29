@@ -86,7 +86,7 @@ class PersonalDetails extends Component {
                             label="PHONE NUMBER"
                             labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
                             inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
-                            placeholder='Your Mobile Number'
+                            placeholder='01XXXXXXXXX'
                             errorStyle={{ color: 'red' }}
                             errorMessage={this.props.numberError}
                             onChangeText={(number) => this.setState({ number })}

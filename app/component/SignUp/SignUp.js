@@ -22,7 +22,7 @@ import styles from './styles';
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
 const EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const NUMBER = /^(01)[3456789][0-9]{8}/;
+const NUMBER = /^(01)[3456789][0-9]{8}$/;
 
 class SignUp extends Component {
     static navigationOptions = {
@@ -38,13 +38,13 @@ class SignUp extends Component {
             studyLevels: [],
             institutions: [],
             selectedStudyLevel: null,
-            regSuccess: false
+            regSuccess: false,
+            index: 0
         }
     }
 
     componentWillReceiveProps(nextProps) {
         nextProps.auth.error && (
-            // Toast.show(nextProps.auth.errorMessage)
             Alert.alert(
                 '',
                 nextProps.auth.errorMessage,
@@ -77,10 +77,10 @@ class SignUp extends Component {
                 { cancelable: false },
             )
         );
-        nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage), this.setState({ regSuccess: true }));
-        this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
-        nextProps.auth.studyLevel && nextProps.auth.institution && this.scrollToNext(2);
+        this.state.index === 0 && this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
+        this.state.index === 1 && nextProps.auth.studyLevel && nextProps.auth.institution && (this.scrollToNext(2));
         nextProps.auth.studyLevel === null || nextProps.auth.institution === null && Toast.show("Please select your study details");
+        this.state.index === 2 && nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage), this.setState({ regSuccess: true }));
     }
 
     componentWillUnmount() {
@@ -91,9 +91,9 @@ class SignUp extends Component {
     submitAccount = (name, email, number) => {
         Keyboard.dismiss();
         let nameError = "", emailError = "", numberError = "", err = false;
-        (name.length < 1 || name.length > 191) && (nameError = "Please insert a Full Name", err = true);
+        (name.length < 1 || name.length > 191) && (nameError = "Please insert name", err = true);
         !EMAIL.test(String(email).toLowerCase()) && (emailError = "Please insert a valid Email", err = true);
-        !NUMBER.test(String(number)) && (numberError = "Please intert a valid mobile number", err = true);
+        !NUMBER.test(String(number)) && (numberError = "Please intert a valid phone number", err = true);
 
         err && this.setState({
             nameError,
@@ -154,6 +154,7 @@ class SignUp extends Component {
                                 showsPagination={false}
                                 loop={false}
                                 scrollEnabled={false}
+                                onIndexChanged={(index) => this.setState({ index })}
                             >
                                 <PersonalDetails
                                     nameError={this.state.nameError}

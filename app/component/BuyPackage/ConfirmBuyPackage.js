@@ -100,7 +100,7 @@ class ConfirmBuyPackage extends Component {
                                             <Text style={{ fontSize: 18, fontWeight: '700', maxWidth: 200 }}>{mainPackage.title}</Text>
                                         </View>
                                         <View>
-                                            <Text style={{ fontSize: 18, marginLeft: 20 }}>{mainPackage.selectedPkg.name} ({mainPackage.selectedPkg.duration && mainPackage.selectedPkg.duration.split('.')[0]} {mainPackage.selectedPkg.unit && mainPackage.selectedPkg.unit})</Text>
+                                            <Text numberOfLines={2} style={{ fontSize: 18, marginLeft: 20, maxWidth: 150 }}>{mainPackage.selectedPkg.name} ({mainPackage.selectedPkg.duration && mainPackage.selectedPkg.duration.split('.')[0]} {mainPackage.selectedPkg.unit && mainPackage.selectedPkg.unit})</Text>
                                             <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 20 }}>{mainPackage.selectedPkg.price} tk</Text>
                                         </View>
                                     </View>

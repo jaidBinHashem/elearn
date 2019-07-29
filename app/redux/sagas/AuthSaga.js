@@ -124,7 +124,7 @@ export const makeSignUpRequest = function* (action) {
                 type: DUBLICATE_NUMBER_EMAIL,
                 payload: {
                     error: true,
-                    errorMessage: response.data.message,
+                    errorMessage: Array.isArray(response.data.message) ? response.data.message[0] : response.data.message
                 }
             });
             yield put({ type: RESET_AUTH_ERROR });
@@ -151,7 +151,7 @@ export const saveCourses = function* (action) {
 
 export const registerUser = function* (action) {
     let response = yield call(registerUserDetails, action.payload);
-    !response.success && (yield put({ type: REGISTRATION_FAILED, payload: response.data.referral_code ? 'Referral Code is not valid' : REGISTRATION_FAILED_MESSAGE }));
+    !response.success && (yield put({ type: REGISTRATION_FAILED, payload: response.data.referral_code ? 'Referral code isn\'t valid, you can register without applying referral code.' : REGISTRATION_FAILED_MESSAGE }));
     !response.success && (yield put({ type: RESET_AUTH_ERROR }));
     response.success && (yield put({ type: REGISTRATION_SUCCESS, payload: response.data.message }));
     response.success && (yield call(setToken, response));

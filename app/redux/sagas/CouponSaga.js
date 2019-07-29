@@ -46,5 +46,5 @@ export const addCoupon = function* (action) {
     response.success && (yield put({ type: ADD_COUPON_RETURN }), Toast.show('Coupon added successfully'));
     response.success && (yield put({ type: GET_COUPONS }));
     response.success && (yield put({ type: RESET_ADD_COUPON }));
-    !response.success && Toast.show(response.data.message);
+    !response.success && Array.isArray(response.data.message) ? Toast.show(response.data.message[0]) : Toast.show(response.data.message);
 };

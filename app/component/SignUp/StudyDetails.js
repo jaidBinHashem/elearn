@@ -105,11 +105,11 @@ class StudyDetails extends Component {
                             zIndex: 1,
                             marginLeft: 30
                         }}>
-                            <Text style={styles.formTitle}>INSTITUTIONS</Text>
+                            <Text style={styles.formTitle}>School / College / University</Text>
                             <AutoComplete
                                 data={this.state.institutions}
                                 defaultValue={this.state.query}
-                                placeholder="Please search & select your institution"
+                                placeholder="সার্চ দিয়ে সিলেক্ট করুন"
                                 keyExtractor={(item, index) => 'key' + index}
                                 onChangeText={query => {
                                     query.length > 2 && this.getInstitutions(query);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Keyboard,  View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { Keyboard, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
 import BusyIndicator from 'react-native-busy-indicator';
 import { Icon, Input } from 'react-native-elements';
 import Modal from "react-native-modal";

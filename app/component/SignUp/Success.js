@@ -42,7 +42,7 @@ class CourseDetails extends Component {
                     </View>
                 </View>
                 <View>
-                    
+
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.navigation.navigate('Loader')}>

@@ -34,7 +34,7 @@ class EditProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: null,
+            name: props.user.name,
             nameError: "",
             gender: null,
             location: null,
@@ -116,7 +116,7 @@ class EditProfile extends Component {
                                 errorStyle={{ color: 'red' }}
                                 errorMessage={this.props.nameError}
                                 onChangeText={(name) => this.setState({ name })}
-                                value={this.state.name ? this.state.name : this.props.user.name}
+                                value={this.state.name}
                                 leftIcon={
                                     <Icon
                                         name='user'

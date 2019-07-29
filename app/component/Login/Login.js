@@ -92,7 +92,7 @@ class Login extends Component {
                         text: 'Cancel',
                         style: 'cancel',
                     },
-                    { text: 'Sign Up Now', onPress: () => this.props.navigation.navigate('SignUp', { 'phone': number }) },
+                    { text: 'Sign Up Now', onPress: () => this.props.navigation.replace('SignUp', { 'phone': number }) },
                 ],
                 { cancelable: true },
             );
@@ -106,7 +106,7 @@ class Login extends Component {
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />
                 <View style={[styles.registerTextContainer]}>
-                    <Text style={[styles.registerText]}>SIGN IN</Text>
+                    <Text style={[styles.registerText]}>LOG IN</Text>
                 </View>
                 <View style={styles.formContainer}>
                     <View style={{ marginBottom: 50 }}>

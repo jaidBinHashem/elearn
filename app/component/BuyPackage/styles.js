@@ -28,7 +28,6 @@ export default StyleSheet.create({
     borderTopColor: Colors.appTheme,
     padding: 20,
     backgroundColor: '#fff',
-    height: 80,
     elevation: 5,
     borderRadius: 3,
     justifyContent: 'space-between',
