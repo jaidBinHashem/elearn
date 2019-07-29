@@ -9,6 +9,6 @@ export const getCoupons = () => {
 export const addCoupon = (coupon) => {
     return {
         type: ADD_COUPON,
-        payload : coupon
+        payload: coupon
     };
 };

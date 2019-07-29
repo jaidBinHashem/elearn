@@ -124,7 +124,7 @@ export const makeSignUpRequest = function* (action) {
                 type: DUBLICATE_NUMBER_EMAIL,
                 payload: {
                     error: true,
-                    errorMessage: response.data.message,
+                    errorMessage: Array.isArray(response.data.message) ? response.data.message[0] : response.data.message
                 }
             });
             yield put({ type: RESET_AUTH_ERROR });

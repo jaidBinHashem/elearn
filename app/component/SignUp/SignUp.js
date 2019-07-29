@@ -22,7 +22,7 @@ import styles from './styles';
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
 const EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const NUMBER = /^(01)[3456789][0-9]{8}/;
+const NUMBER = /^(01)[3456789][0-9]{8}$/;
 
 class SignUp extends Component {
     static navigationOptions = {
@@ -91,9 +91,9 @@ class SignUp extends Component {
     submitAccount = (name, email, number) => {
         Keyboard.dismiss();
         let nameError = "", emailError = "", numberError = "", err = false;
-        (name.length < 1 || name.length > 191) && (nameError = "Please insert a Full Name", err = true);
+        (name.length < 1 || name.length > 191) && (nameError = "Please insert name", err = true);
         !EMAIL.test(String(email).toLowerCase()) && (emailError = "Please insert a valid Email", err = true);
-        !NUMBER.test(String(number)) && (numberError = "Please intert a valid mobile number", err = true);
+        !NUMBER.test(String(number)) && (numberError = "Please intert a valid phone number", err = true);
 
         err && this.setState({
             nameError,
