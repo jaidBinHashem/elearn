@@ -32,7 +32,7 @@ class Scolarships extends Component {
     }
 
     async componentDidMount() {
-        let token = await AsyncStorage.getItem('USER_TOKEN')
+
         // console.log(token, "token in dash")
     }
 
@@ -46,7 +46,8 @@ class Scolarships extends Component {
     }
 
     render() {
-        let { scholarships } = this.props;
+        // let { scholarships } = this.props;
+        let scholarships = [];
         let scholarshipCards = [];
         scholarships.length > 0 && scholarships.map(scholarship => {
             scholarshipCards.push(
