@@ -13,7 +13,7 @@ import styles from './styles';
 
 class QuestionDetails extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: 'Questions & Answers',
+        title: 'Questions Reponse',
     });
 
     constructor(props) {
@@ -37,8 +37,9 @@ class QuestionDetails extends Component {
     }
 
     getResponses = async () => {
+        let { subject_qna, subject_slug } = this.props.navigation.state.params;
         const request = {
-            endPoint: 'questions/' + this.props.navigation.state.params.question.id + '/answers',
+            endPoint: subject_qna ? subject_slug + '/questions/' + this.props.navigation.state.params.question.id + '/answers' : 'questions/' + this.props.navigation.state.params.question.id + '/answers',
             showLoader: true,
             authenticate: true
         }
@@ -107,7 +108,7 @@ class QuestionDetails extends Component {
                                 </View>
                             }
                         </View>
-                        <Text style={styles.responseCount}>{question.global_answers_count} RESPONSES</Text>
+                        <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} RESPONSES</Text>
                     </View>
 
                     {
@@ -168,9 +169,13 @@ class QuestionDetails extends Component {
                 </ScrollView>
                 <View>
                     <Button
-                        onPress={() => this.props.navigation.navigate('AddQuestion', { 'question_id': question.id })}
+                        onPress={() => this.props.navigation.navigate('AddQuestion', {
+                            'question_id': question.id,
+                            'subject_qna': this.props.navigation.state.params.subject_qna ? true : false,
+                            'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
+                        })}
                         buttonStyle={{ backgroundColor: colors.appTheme, height: 50 }}
-                        title="Add Answer"
+                        title="Add Response"
                     />
                 </View>
                 <BusyIndicator />

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, StatusBar, TouchableOpacity, ScrollView, Alert, RefreshControl } from 'react-native';
+import { Text, View, StatusBar, TouchableOpacity, ScrollView, Alert, RefreshControl, Image } from 'react-native';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import { Icon } from 'react-native-elements';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { getSubjectDetails } from '../../redux/actions/SubjectActions';
+import ActionButton from 'react-native-action-button';
 
 import colors from '../../global/colors'
 import styles from './styles';
@@ -133,6 +134,17 @@ class SubjectDashboard extends Component {
                     </ScrollView>
 
                 </View>
+                <ActionButton
+                    buttonColor='#1E88E5'
+                    shadowStyle={{ elevation: 10 }}
+                    fixNativeFeedbackRadius={true}
+                    useNativeFeedback={true}
+                    renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/a6tMdBA.png' }} />}
+                    onPress={() => {
+                        this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': true, 'subject_slug': this.props.navigation.state.params.subjectDetails.slug });
+                        // Linking.openURL("http://m.me/eshosikhi.bd")
+                    }}
+                />
                 <BusyIndicator />
             </View>
         )

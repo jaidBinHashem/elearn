@@ -27,6 +27,7 @@ const checkStatus = (response) => {
 
 
 export const getService = async (request) => {
+    // console.log(request, "get request");
     try {
         request.showLoader && loaderHandler.showLoader("Loading");
 
@@ -58,7 +59,7 @@ export const getService = async (request) => {
 
 
 export const postService = async (request) => {
-    // console.log(request, "request");
+    // console.log(request, "post request");
     try {
         request.showLoader && loaderHandler.showLoader("Loading");
         

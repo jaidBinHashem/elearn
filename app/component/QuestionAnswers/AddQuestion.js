@@ -23,7 +23,7 @@ const options = {
 
 class AddQuestion extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: navigation.state.params.question_id ? 'Response' : 'Questions & Answers',
+        title: navigation.state.params.question_id ? 'Add Response' : 'Ask Question',
     });
 
     constructor(props) {
@@ -42,6 +42,8 @@ class AddQuestion extends Component {
     }
 
     async componentWillMount() {
+
+        console.log(this.props.navigation.state.params)
 
     }
 
@@ -70,7 +72,7 @@ class AddQuestion extends Component {
 
     submitQuestion = async () => {
         Keyboard.dismiss();
-        let { question_id } = this.props.navigation.state.params;
+        let { question_id, subject_qna, subject_slug } = this.props.navigation.state.params;
         let question = new FormData();
         !question_id && this.state.question && question.append("question", this.state.question);
         question_id && this.state.question && question.append("reply", this.state.question);
@@ -78,7 +80,12 @@ class AddQuestion extends Component {
         this.state.uploadImage && this.state.images.length > 1 && question.append("file_two", this.state.images[1]);
         this.state.uploadImage && this.state.images.length > 2 && question.append("file_three", this.state.images[2]);
         if (question._parts.length > 0) {
-            let url = question_id ? 'questions/' + question_id + '/answers' : 'questions';
+            let url = null;
+            if (subject_qna) {
+                url = question_id ? subject_slug + '/questions/' + question_id + '/answers' : subject_slug + '/questions';
+            } else {
+                url = question_id ? 'questions/' + question_id + '/answers' : 'questions';
+            }
             let request = {
                 endPoint: url,
                 authenticate: true,
@@ -86,8 +93,9 @@ class AddQuestion extends Component {
                 contentType: "multipart/form-data",
                 params: question,
             }
+            console.log(url, "/url");
             let response = await postService(request);
-
+            console.log(response, "/response");
             if (question_id) {
                 response.success
                     ? (Toast.show("Your response has been submited successfully"), this.props.navigation.goBack())
@@ -97,8 +105,6 @@ class AddQuestion extends Component {
                     ? (Toast.show("Your question has been submited successfully"), this.props.navigation.goBack())
                     : (Toast.show("Something went wrong, Please try again"))
             }
-
-
         }
     }
 
@@ -157,7 +163,7 @@ class AddQuestion extends Component {
                             //     />
                             // }
                             // iconRight
-                            title="Submit Question"
+                            title={this.props.navigation.state.params.question_id ? 'Submit Response' : 'Submit Question'}
                         />
                     </View>
                 </ScrollView>

@@ -12,13 +12,9 @@ import { getService } from '../../network';
 import colors from '../../global/../global/colors';
 import styles from './styles';
 
-class QuestionAnswers extends Component {
+class MyQuestionAnswers extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: 'Questions & Answers',
-        headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => navigation.navigate('MyQuestionAnswers', {
-            'subject_qna': navigation.state.params.subject_qna ? true : false,
-            'subject_slug': navigation.state.params.subject_qna ? navigation.state.params.subject_slug : false
-        })}><Icon name='account-question' type='material-community' color='#fff' size={32} /></TouchableOpacity>,
+        title: 'My Questions & Answers',
     });
 
     constructor(props) {
@@ -40,7 +36,7 @@ class QuestionAnswers extends Component {
 
     getQuestions = async (subject_slug = false) => {
         const request = {
-            endPoint: subject_slug ? subject_slug + '/questions' : 'questions',
+            endPoint: subject_slug ? subject_slug + '/my-questions' : 'my-questions',
             showLoader: true,
             authenticate: true
         }
@@ -145,4 +141,4 @@ function mapStateToProps(state) {
 export default connect(
     mapStateToProps,
     {}
-)(QuestionAnswers);
+)(MyQuestionAnswers);

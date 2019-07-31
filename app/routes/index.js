@@ -31,6 +31,7 @@ import Player from '../component/Player';
 import Notifications from '../component/Notifications';
 
 import QuestionAnswers from '../component/QuestionAnswers';
+import MyQuestionAnswers from '../component/QuestionAnswers/MyQuestionAnswers';
 import AddQuestion from '../component/QuestionAnswers/AddQuestion';
 import QuestionDetails from '../component/QuestionAnswers/QuestionDetails';
 
@@ -118,6 +119,7 @@ const AppStack = createStackNavigator(
         Player: Player,
         Notifications: Notifications,
         QuestionAnswers: QuestionAnswers,
+        MyQuestionAnswers: MyQuestionAnswers,
         AddQuestion: AddQuestion,
         QuestionDetails: QuestionDetails
     },
