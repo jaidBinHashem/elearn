@@ -413,7 +413,10 @@ class Dashboard extends Component {
                     fixNativeFeedbackRadius={true}
                     useNativeFeedback={true}
                     renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/a6tMdBA.png' }} />}
-                    onPress={() => Linking.openURL("http://m.me/eshosikhi.bd")}
+                    onPress={() => {
+                        this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': false });
+                        // Linking.openURL("http://m.me/eshosikhi.bd")
+                    }}
                 />
                 <BusyIndicator />
             </View>

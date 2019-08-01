@@ -30,6 +30,11 @@ import Player from '../component/Player';
 
 import Notifications from '../component/Notifications';
 
+import QuestionAnswers from '../component/QuestionAnswers';
+import MyQuestionAnswers from '../component/QuestionAnswers/MyQuestionAnswers';
+import AddQuestion from '../component/QuestionAnswers/AddQuestion';
+import QuestionDetails from '../component/QuestionAnswers/QuestionDetails';
+
 import DrawerComponent from './DrawerComponent';
 
 import colors from '../global/colors'
@@ -112,7 +117,11 @@ const AppStack = createStackNavigator(
         QuizHighlights: QuizHighlights,
         PreviousAttemps: PreviousAttemps,
         Player: Player,
-        Notifications: Notifications
+        Notifications: Notifications,
+        QuestionAnswers: QuestionAnswers,
+        MyQuestionAnswers: MyQuestionAnswers,
+        AddQuestion: AddQuestion,
+        QuestionDetails: QuestionDetails
     },
     {
         initialRouteName: 'Dashboard',
