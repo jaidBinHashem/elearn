@@ -27,6 +27,7 @@ const checkStatus = (response) => {
 
 
 export const getService = async (request) => {
+    console.log(request, "req");
     try {
         request.showLoader && loaderHandler.showLoader("Loading");
 

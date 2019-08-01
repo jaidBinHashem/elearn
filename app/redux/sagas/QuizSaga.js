@@ -38,7 +38,7 @@ const submitQuizResults = async (payload) => {
 const retrivePreviousAttemps = async (lessonId) => {
     try {
         let request = {
-            endPoint: 'quiz/' + lessonId + '/attempts',
+            endPoint: 'quiz/' + lessonId + '/leaderboard',
             // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/attempts',
             authenticate: true,
             temp: false

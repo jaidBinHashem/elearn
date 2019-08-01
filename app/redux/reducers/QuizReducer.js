@@ -7,7 +7,8 @@ const initialState = {
   rightAnswers: [],
   wrongAnswers: [],
   completedQuiz: false,
-  previousAttemps: []
+  previousAttemps: [],
+  userRanking :  null
 };
 
 export default function (state = initialState, action) {
@@ -33,9 +34,11 @@ export default function (state = initialState, action) {
         completedQuiz: false,
       }
     case GET_PREVIOUS_ATTEMPS_RETURN:
+      console.log(action.payload, "pay")
       return {
         ...state,
-        previousAttemps: action.payload.data
+        previousAttemps: action.payload[0].data,
+        userRanking: action.payload[1].data
       }
     default:
       return state;
