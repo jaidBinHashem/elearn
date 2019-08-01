@@ -69,9 +69,12 @@ class QuizHighlights extends Component {
                                 <Text>{this.props.quiz.questions.length - (this.props.quiz.rightAnswers.length + this.props.quiz.wrongAnswers.length)} Unanswered</Text>
                             </View>
                         </View>
-                        <View style={styles.scoreCircleContainer}>
-                            <Text style={styles.scoreCircleText}>{this.props.quiz.rightAnswers.length}</Text>
-                            <Text>{this.props.quiz.questions.length}</Text>
+                        <View>
+                            <Text style={{ marginLeft: 10, marginBottom: 15 }}>Marking</Text>
+                            <View style={styles.scoreCircleContainer}>
+                                <Text style={styles.scoreCircleText}>{(this.props.quiz.rightMark * this.props.quiz.rightAnswers.length) - (this.props.quiz.negativeMark * this.props.quiz.wrongAnswers.length)}</Text>
+                                <Text>{this.props.quiz.totalMark}</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
