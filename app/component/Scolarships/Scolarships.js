@@ -46,8 +46,7 @@ class Scolarships extends Component {
     }
 
     render() {
-        // let { scholarships } = this.props;
-        let scholarships = [];
+        let { scholarships } = this.props;
         let scholarshipCards = [];
         scholarships.length > 0 && scholarships.map(scholarship => {
             scholarshipCards.push(
@@ -65,7 +64,7 @@ class Scolarships extends Component {
                                     size={26}
                                     containerStyle={styles.numberIconContainer}
                                 />
-                                <Text style={{ marginLeft: 15, marginTop: 2 }}>{moment(scholarship.end_date.date).format("DD-MMM-YYYY")}</Text>
+                                <Text style={{ marginLeft: 15, marginTop: 2 }}>{scholarship.end_date && moment(scholarship.end_date.date).format("DD-MMM-YYYY")}</Text>
                             </View>
                         </View>
                     </View>
