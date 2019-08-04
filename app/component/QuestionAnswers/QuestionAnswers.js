@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import moment from 'moment';
-import { Avatar, Icon } from 'react-native-elements';
+import { Avatar, Icon, Button } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 
 import { getService } from '../../network';
@@ -15,10 +15,10 @@ import styles from './styles';
 class QuestionAnswers extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Questions & Answers',
-        headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => navigation.navigate('MyQuestionAnswers', {
-            'subject_qna': navigation.state.params.subject_qna ? true : false,
-            'subject_slug': navigation.state.params.subject_qna ? navigation.state.params.subject_slug : false
-        })}><Icon name='account-question' type='material-community' color='#fff' size={32} /></TouchableOpacity>,
+        // headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => navigation.navigate('MyQuestionAnswers', {
+        //     'subject_qna': navigation.state.params.subject_qna ? true : false,
+        //     'subject_slug': navigation.state.params.subject_qna ? navigation.state.params.subject_slug : false
+        // })}><Icon name='account-question' type='material-community' color='#fff' size={32} /></TouchableOpacity>,
     });
 
     constructor(props) {
@@ -54,10 +54,29 @@ class QuestionAnswers extends Component {
 
     render() {
         let { questions } = this.state;
+        let { navigation } = this.props;
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsHorizontalScrollIndicator={false}>
+                <Button
+                    onPress={() => navigation.navigate('MyQuestionAnswers', {
+                        'subject_qna': navigation.state.params.subject_qna ? true : false,
+                        'subject_slug': navigation.state.params.subject_qna ? navigation.state.params.subject_slug : false
+                    })}
+                    icon={
+                        <Icon
+                            name="account-question"
+                            type='material-community'
+                            color='#fff'
+                            size={22}
+                            containerStyle={{ marginLeft: 20 }}
+                        />
+                    }
+                    containerStyle={{ margin: 10 }}
+                    iconRight
+                    title="My Question & Answers"
+                />
+                <ScrollView showsVerticalScrollIndicator={false}>
                     {
                         questions.map(question =>
                             <TouchableOpacity

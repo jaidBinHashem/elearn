@@ -51,9 +51,9 @@ class Completed extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsVerticalScrollIndicator={false}>
-
-                </ScrollView>
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                    <Text>Esho Shikhi</Text>
+                </View>
             </View>
         )
     }

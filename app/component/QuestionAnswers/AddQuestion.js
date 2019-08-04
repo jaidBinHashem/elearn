@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, Keyboard } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, Keyboard, Alert } from 'react-native'
 import { connect } from "react-redux";
 
 import ImagePicker from 'react-native-image-picker';
@@ -39,12 +39,6 @@ class AddQuestion extends Component {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null
-    }
-
-    async componentWillMount() {
-
-        console.log(this.props.navigation.state.params)
-
     }
 
     componentWillUnmount() {
@@ -93,16 +87,25 @@ class AddQuestion extends Component {
                 contentType: "multipart/form-data",
                 params: question,
             }
-            console.log(url, "/url");
             let response = await postService(request);
-            console.log(response, "/response");
+            response.success && !question_id && this.setState({ question: null, uploadImage: false, images: [] });
             if (question_id) {
                 response.success
                     ? (Toast.show("Your response has been submited successfully"), this.props.navigation.goBack())
                     : (Toast.show("Something went wrong, Please try again"))
             } else {
                 response.success
-                    ? (Toast.show("Your question has been submited successfully"), this.props.navigation.goBack())
+                    ? (Alert.alert(
+                        'Success',
+                        'Your question has been submitted succesfully, An admin will review it soon !', // <- this part is optional, you can pass an empty string
+                        [
+                            {
+                                text: 'OK',
+                                // onPress: () => console.log('OK Pressed') 
+                            },
+                        ],
+                        { cancelable: false },
+                    ))
                     : (Toast.show("Something went wrong, Please try again"))
             }
         }
@@ -116,6 +119,7 @@ class AddQuestion extends Component {
                 <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
                     <Input
                         label='Enter your question'
+                        value={this.state.question}
                         onChangeText={(question) => this.setState({ question })}
                         multiline={true}
                         shake={true} />
