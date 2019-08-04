@@ -95,10 +95,12 @@ const AuthStack = createStackNavigator(
     {
         Welcome: Welcome,
         Login: Login,
-        SignUp: SignUp
+        SignUp: SignUp,
+        ContactUs: Upcoming
     },
     {
         initialRouteName: 'Welcome',
+        headerMode: 'none',
         transitionConfig
     }
 );
@@ -237,6 +239,25 @@ const ScolarshipsStack = createStackNavigator(
     }
 );
 
+const ContactUsStack = createStackNavigator(
+    {
+        ContactUsStack: Upcoming,
+    },
+    {
+        initialRouteName: 'ContactUsStack',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: colors.appTheme,
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                // fontWeight: 'bold',
+            },
+        },
+        transitionConfig
+    }
+);
+
 
 const UpcomingStack = createStackNavigator(
     {
@@ -291,8 +312,8 @@ const SuperLeagueTab = createMaterialTopTabNavigator(
 const SuperLeagueStack = createStackNavigator(
     {
         SuperLeagueTab: {
-            screen: Scolarships,
-            // screen: SuperLeagueTab,
+            // screen: Scolarships,
+            screen: SuperLeagueTab,
             navigationOptions: ({ navigation }) => ({
                 title: 'Super League',
                 headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>
@@ -362,10 +383,10 @@ const AppDrawer = createDrawerNavigator(
                 drawerIcon: ({ tintColor }) => <Icon name='price-ribbon' type='entypo' color={colors.appTheme} />,
             }
         },
-        SuperLeague: {
-            screen: SuperLeagueStack,
+        ContactUs: {
+            screen: ContactUsStack,
             navigationOptions: {
-                drawerLabel: 'Super League',
+                drawerLabel: 'Contact Us',
                 drawerIcon: ({ tintColor }) => <Icon name='fountain-pen-tip' type='material-community' color={colors.appTheme} />,
             }
         },

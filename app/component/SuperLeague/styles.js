@@ -7,8 +7,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 10,
-    paddingHorizontal :20
   },
   name: {
     color: Colors.appTheme,

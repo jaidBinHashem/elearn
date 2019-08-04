@@ -139,10 +139,24 @@ class SubjectDashboard extends Component {
                     shadowStyle={{ elevation: 10 }}
                     fixNativeFeedbackRadius={true}
                     useNativeFeedback={true}
-                    renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/a6tMdBA.png' }} />}
+                    renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/eZvXxPG.png' }} />}
                     onPress={() => {
-                        this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': true, 'subject_slug': this.props.navigation.state.params.subjectDetails.slug });
-                        // Linking.openURL("http://m.me/eshosikhi.bd")
+                        if (this.props.navigation.state.params.subjectDetails.purchased) {
+                            this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': true, 'subject_slug': this.props.navigation.state.params.subjectDetails.slug });
+                        } else {
+                            Alert.alert(
+                                '',
+                                'Please purchase the subject to view it !',
+                                [
+                                    {
+                                        text: 'Cancel',
+                                        style: 'cancel',
+                                    },
+                                    { text: 'Buy Now', onPress: () => this.props.navigation.navigate('BuyPackage') },
+                                ],
+                                { cancelable: true },
+                            );
+                        }
                     }}
                 />
                 <BusyIndicator />
