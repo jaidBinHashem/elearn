@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Image, RefreshControl } from 'react-native'
 import { connect } from "react-redux";
 
 import BusyIndicator from 'react-native-busy-indicator';
@@ -20,6 +20,7 @@ class QuestionDetails extends Component {
         super(props);
         this.state = {
             responses: [],
+            refreshing: false
         }
     }
 
@@ -44,7 +45,7 @@ class QuestionDetails extends Component {
             authenticate: true
         }
         let response = await getService(request);
-        this.setState({ responses: response.data.data });
+        this.setState({ responses: response.data.data, refreshing: false });
     }
 
     componentWillUnmount() {
@@ -58,7 +59,13 @@ class QuestionDetails extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={() => this.getResponses()} />
+                    }
+                    showsVerticalScrollIndicator={false}>
                     <View
                         key={question.created_at}
                         style={styles.questionCardContainer}>
@@ -84,7 +91,7 @@ class QuestionDetails extends Component {
                                 question.file_one &&
                                 <View style={styles.imageContainer}>
                                     <Image
-                                        style={{ width: 100, height: 100, marginTop: 20 }}
+                                        style={{ width: 300, height: 300, marginTop: 20 }}
                                         source={{ uri: question.file_one }}
                                     />
                                 </View>
@@ -93,7 +100,7 @@ class QuestionDetails extends Component {
                                 question.file_two &&
                                 <View style={styles.imageContainer}>
                                     <Image
-                                        style={{ width: 100, height: 100, marginTop: 20 }}
+                                        style={{ width: 300, height: 300, marginTop: 20 }}
                                         source={{ uri: question.file_two }}
                                     />
                                 </View>
@@ -102,7 +109,7 @@ class QuestionDetails extends Component {
                                 question.file_three &&
                                 <View style={styles.imageContainer}>
                                     <Image
-                                        style={{ width: 100, height: 100, marginTop: 20 }}
+                                        style={{ width: 300, height: 300, marginTop: 20 }}
                                         source={{ uri: question.file_three }}
                                     />
                                 </View>
@@ -138,7 +145,7 @@ class QuestionDetails extends Component {
                                         response.file_one &&
                                         <View style={styles.imageContainer}>
                                             <Image
-                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                style={{ width: 300, height: 300, marginTop: 20 }}
                                                 source={{ uri: response.file_one }}
                                             />
                                         </View>
@@ -147,7 +154,7 @@ class QuestionDetails extends Component {
                                         response.file_two &&
                                         <View style={styles.imageContainer}>
                                             <Image
-                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                style={{ width: 300, height: 300, marginTop: 20 }}
                                                 source={{ uri: response.file_two }}
                                             />
                                         </View>
@@ -156,7 +163,7 @@ class QuestionDetails extends Component {
                                         response.file_three &&
                                         <View style={styles.imageContainer}>
                                             <Image
-                                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                                style={{ width: 300, height: 300, marginTop: 20 }}
                                                 source={{ uri: response.file_three }}
                                             />
                                         </View>
