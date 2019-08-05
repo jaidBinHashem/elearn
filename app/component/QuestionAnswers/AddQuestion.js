@@ -101,7 +101,7 @@ class AddQuestion extends Component {
                         [
                             {
                                 text: 'OK',
-                                // onPress: () => console.log('OK Pressed') 
+                                onPress: () => this.props.navigation.goBack()
                             },
                         ],
                         { cancelable: false },
@@ -128,12 +128,25 @@ class AddQuestion extends Component {
                         {
                             images.length > 0 && images.map((image, index) => {
                                 return (
-                                    <Image
-                                        key={index}
-                                        source={{ uri: image.uri }}
-                                        style={{ margin: 10, width: 300, height: 300 }}
-                                        PlaceholderContent={<ActivityIndicator />}
-                                    />
+                                    <View key={index}>
+                                        <Icon
+                                            name="cross"
+                                            type="entypo"
+                                            size={60}
+                                            color="red"
+                                            containerStyle={{ alignSelf: 'flex-end', top: 60, left: 5, zIndex: 1 }}
+                                            onPress={() => {
+                                                let imageArr = [...this.state.images];
+                                                imageArr = imageArr.filter((image, arrIndex) => index != arrIndex)
+                                                this.setState({ images: imageArr });
+                                            }}
+                                        />
+                                        <Image
+                                            source={{ uri: image.uri }}
+                                            style={{ margin: 10, width: 300, height: 300 }}
+                                            PlaceholderContent={<ActivityIndicator />}
+                                        />
+                                    </View>
                                 )
                             })
                         }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity, RefreshControl } from 'react-native'
 import { connect } from "react-redux";
 
 import BusyIndicator from 'react-native-busy-indicator';
@@ -25,6 +25,7 @@ class QuestionAnswers extends Component {
         super(props);
         this.state = {
             questions: [],
+            refreshing: false
         }
     }
 
@@ -45,7 +46,7 @@ class QuestionAnswers extends Component {
             authenticate: true
         }
         let questions = await getService(request);
-        questions.success && this.setState({ questions: questions.data.data });
+        questions.success && this.setState({ questions: questions.data.data, refreshing: false });
     }
 
     componentWillUnmount() {
@@ -76,7 +77,13 @@ class QuestionAnswers extends Component {
                     iconRight
                     title="My Question & Answers"
                 />
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={() => this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions()} />
+                    }
+                    showsVerticalScrollIndicator={false}>
                     {
                         questions.map(question =>
                             <TouchableOpacity
