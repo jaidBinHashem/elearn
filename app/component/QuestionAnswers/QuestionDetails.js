@@ -80,7 +80,7 @@ class QuestionDetails extends Component {
                             />
                             <View style={styles.nameDateContainer}>
                                 <Text style={styles.userName}>{question.user.full_name}</Text>
-                                <Text>{moment(question.created_at).format("Do MMM")}</Text>
+                                <Text>{moment(question.created_at).format('MMMM Do YYYY, h:mm a')}</Text>
                             </View>
                         </View>
                         <View>
@@ -115,7 +115,7 @@ class QuestionDetails extends Component {
                                 </View>
                             }
                         </View>
-                        <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} RESPONSES</Text>
+                        <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} ANSWERS</Text>
                     </View>
 
                     {
@@ -182,7 +182,7 @@ class QuestionDetails extends Component {
                             'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
                         })}
                         buttonStyle={{ backgroundColor: colors.appTheme, height: 50 }}
-                        title="Add Response"
+                        title="Add Answer"
                     />
                 </View>
                 <BusyIndicator />

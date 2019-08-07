@@ -6,7 +6,6 @@ import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import moment from 'moment';
 import { Avatar, Icon, Button } from 'react-native-elements';
-import ActionButton from 'react-native-action-button';
 
 import { getService } from '../../network';
 import colors from '../../global/../global/colors';
@@ -15,10 +14,6 @@ import styles from './styles';
 class QuestionAnswers extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Questions & Answers',
-        // headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => navigation.navigate('MyQuestionAnswers', {
-        //     'subject_qna': navigation.state.params.subject_qna ? true : false,
-        //     'subject_slug': navigation.state.params.subject_qna ? navigation.state.params.subject_slug : false
-        // })}><Icon name='account-question' type='material-community' color='#fff' size={32} /></TouchableOpacity>,
     });
 
     constructor(props) {
@@ -59,24 +54,28 @@ class QuestionAnswers extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <Button
-                    onPress={() => navigation.navigate('MyQuestionAnswers', {
-                        'subject_qna': navigation.state.params.subject_qna ? true : false,
-                        'subject_slug': navigation.state.params.subject_qna ? navigation.state.params.subject_slug : false
-                    })}
-                    icon={
-                        <Icon
-                            name="account-question"
-                            type='material-community'
-                            color='#fff'
-                            size={22}
-                            containerStyle={{ marginLeft: 20 }}
-                        />
-                    }
-                    containerStyle={{ margin: 10 }}
-                    iconRight
-                    title="My Question & Answers"
-                />
+                <View style={{ flexDirection: 'row' }}>
+                    <Button
+                        onPress={() => navigation.navigate('MyQuestionAnswers', {
+                            'subject_qna': navigation.state.params.subject_qna ? true : false,
+                            'subject_slug': navigation.state.params.subject_qna ? navigation.state.params.subject_slug : false
+                        })}
+                        containerStyle={{ flex: 1, margin: 10 }}
+                        iconRight
+                        title="My Questions"
+                    />
+                    <Button
+                        onPress={() => this.props.navigation.navigate('AddQuestion', {
+                            'question_id': false,
+                            'subject_qna': this.props.navigation.state.params.subject_qna ? true : false,
+                            'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false,
+                            'subject_title': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_title : false,
+                        })}
+                        containerStyle={{ flex: 1, margin: 10 }}
+                        iconRight
+                        title="Ask Question"
+                    />
+                </View>
                 <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -103,7 +102,7 @@ class QuestionAnswers extends Component {
                                     />
                                     <View style={styles.nameDateContainer}>
                                         <Text style={styles.userName}>{question.user.full_name}</Text>
-                                        <Text>{moment(question.created_at).format("Do MMM")}</Text>
+                                        <Text>{moment(question.created_at).format('MMMM Do YYYY, h:mm a')}</Text>
                                     </View>
                                 </View>
                                 <View>
@@ -138,23 +137,11 @@ class QuestionAnswers extends Component {
                                         </View>
                                     }
                                 </View>
-                                <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} RESPONSES</Text>
+                                <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} ANSWERS</Text>
                             </TouchableOpacity>
                         )
                     }
                 </ScrollView>
-                <ActionButton
-                    buttonColor='#1E88E5'
-                    shadowStyle={{ elevation: 10 }}
-                    fixNativeFeedbackRadius={true}
-                    useNativeFeedback={true}
-                    // renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/a6tMdBA.png' }} />}
-                    onPress={() => this.props.navigation.navigate('AddQuestion', {
-                        'question_id': false,
-                        'subject_qna': this.props.navigation.state.params.subject_qna ? true : false,
-                        'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
-                    })}
-                />
                 <BusyIndicator />
             </View>
         )

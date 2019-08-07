@@ -170,19 +170,12 @@ class AddQuestion extends Component {
                             onPress={() => this.submitQuestion()}
                             buttonStyle={{ backgroundColor: colors.appTheme }}
                             containerStyle={{ marginTop: 20 }}
-                            // icon={
-                            //     <Icon
-                            //         name="camera"
-                            //         type="entypo"
-                            //         size={20}
-                            //         color="white"
-                            //         containerStyle={{ marginLeft: 15 }}
-                            //     />
-                            // }
-                            // iconRight
-                            title={this.props.navigation.state.params.question_id ? 'Submit Response' : 'Submit Question'}
+                            title={this.props.navigation.state.params.question_id ? 'Enter Your ANSWER' : 'Submit Question'}
                         />
                     </View>
+                    {
+                        !this.props.navigation.state.params.question_id ? this.props.navigation.state.params.subject_qna ? <Text style={{ margin: 15 }}>এখানে শুধুমাত্র {this.props.navigation.state.params.subject_title} বিষয়ের প্রশ্ন জিজ্ঞাসা করতে পারবেন। অন্য বিষয়ের প্রশ্ন করতে ও উত্তর পেতে নির্দিষ্ট বিষয়ের প্রশ্ন ও উত্তর গ্রুপে জিজ্ঞাসা করুন। ধন্যবাদ</Text> : <Text style={{ margin: 15 }}>এখানে শুধুমাত্র এপ্যের  ব্যাপারে এবং আমাদের সেবার ব্যাপারে প্রশ্ন জিজ্ঞাসা করতে পারবেন। অন্য বিষয়ের প্রশ্ন করতে ও উত্তর পেতে নির্দিষ্ট বিষয়ের প্রশ্ন ও উত্তর গ্রুপে জিজ্ঞাসা করুন। ধন্যবাদ</Text> : null
+                    }
                 </ScrollView>
                 <BusyIndicator />
             </View>

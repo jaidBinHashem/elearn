@@ -113,18 +113,6 @@ class MyQuestionAnswers extends Component {
                         )
                     }
                 </ScrollView>
-                <ActionButton
-                    buttonColor='#1E88E5'
-                    shadowStyle={{ elevation: 10 }}
-                    fixNativeFeedbackRadius={true}
-                    useNativeFeedback={true}
-                    // renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/a6tMdBA.png' }} />}
-                    onPress={() => this.props.navigation.navigate('AddQuestion', {
-                        'question_id': false,
-                        'subject_qna': this.props.navigation.state.params.subject_qna ? true : false,
-                        'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
-                    })}
-                />
                 <BusyIndicator />
             </View>
         )
