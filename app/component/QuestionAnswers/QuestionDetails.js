@@ -159,7 +159,7 @@ class QuestionDetails extends Component {
                                     />
                                     <View style={styles.nameDateContainer}>
                                         <Text style={styles.userName}>{response.user.full_name}</Text>
-                                        <Text>{moment(response.created_at).format("Do MMM")}</Text>
+                                        <Text>{moment(response.created_at).format('MMMM Do YYYY, h:mm a')}</Text>
                                     </View>
                                 </View>
                                 <View>
