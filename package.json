@@ -24,6 +24,7 @@
     "react-native-firebase": "^5.4.2",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-image-picker": "^0.28.1",
+    "react-native-image-zoom-viewer": "^2.2.26",
     "react-native-katex": "^0.3.0",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-modal": "^9.0.0",

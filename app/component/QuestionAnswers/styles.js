@@ -33,6 +33,7 @@ export default StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
+    marginTop: 10
   },
   responseCount: {
     color: colors.appTheme,
