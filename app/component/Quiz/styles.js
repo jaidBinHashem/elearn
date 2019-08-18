@@ -191,7 +191,7 @@ export default StyleSheet.create({
   },
   attempsHeaderText: {
     color: 'black',
-    fontWeight: '600'
+    fontWeight: '600',
   },
   katex: {
     height: 90

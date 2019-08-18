@@ -27,7 +27,11 @@ const checkStatus = (response) => {
 
 
 export const getService = async (request) => {
+<<<<<<< HEAD
     // console.log(request, "get request");
+=======
+    console.log(request, "req");
+>>>>>>> feature/leaderboard
     try {
         request.showLoader && loaderHandler.showLoader("Loading");
 
