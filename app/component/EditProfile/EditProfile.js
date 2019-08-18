@@ -21,6 +21,7 @@ const options = {
         skipBackup: true,
         path: 'images',
     },
+    rotation: 360
 };
 
 
