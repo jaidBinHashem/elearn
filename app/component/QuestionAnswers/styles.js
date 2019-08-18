@@ -24,7 +24,8 @@ export default StyleSheet.create({
     marginLeft: 10
   },
   userName: {
-    fontSize: 18
+    fontSize: 18,
+    fontWeight: '500'
   },
   question: {
     fontSize: 18,
@@ -32,6 +33,7 @@ export default StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
+    marginTop: 10
   },
   responseCount: {
     color: colors.appTheme,

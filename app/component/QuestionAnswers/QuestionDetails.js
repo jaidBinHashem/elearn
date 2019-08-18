@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Image, RefreshControl } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Image, RefreshControl, Modal, TouchableOpacity } from 'react-native'
 import { connect } from "react-redux";
 
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import moment from 'moment';
 import { Avatar, Button, Icon } from 'react-native-elements';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 import { getService } from '../../network';
 import colors from '../../global/../global/colors';
@@ -20,7 +21,9 @@ class QuestionDetails extends Component {
         super(props);
         this.state = {
             responses: [],
-            refreshing: false
+            refreshing: false,
+            modalView: false,
+            selectedImage: []
         }
     }
 
@@ -48,6 +51,15 @@ class QuestionDetails extends Component {
         this.setState({ responses: response.data.data, refreshing: false });
     }
 
+    showModal = (url) => {
+        let selectedImage = [];
+        let image = {
+            'url': url
+        }
+        selectedImage.push(image);
+        this.setState({ selectedImage, modalView: true })
+    }
+
     componentWillUnmount() {
         this.focusListener.remove();
         loaderHandler.hideLoader();
@@ -58,6 +70,13 @@ class QuestionDetails extends Component {
         let responses = [...this.state.responses];
         return (
             <View style={[styles.container]}>
+                <Modal visible={this.state.modalView} transparent={true} onRequestClose={() => this.setState({ modalView: false })}>
+                    <ImageViewer
+                        imageUrls={this.state.selectedImage}
+                        enableSwipeDown={true}
+                        onCancel={() => this.setState({ modalView: false })}
+                    />
+                </Modal>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView
                     refreshControl={
@@ -80,7 +99,7 @@ class QuestionDetails extends Component {
                             />
                             <View style={styles.nameDateContainer}>
                                 <Text style={styles.userName}>{question.user.full_name}</Text>
-                                <Text>{moment(question.created_at).format("Do MMM")}</Text>
+                                <Text>{moment(question.created_at).format('MMMM Do YYYY, h:mm a')}</Text>
                             </View>
                         </View>
                         <View>
@@ -89,33 +108,39 @@ class QuestionDetails extends Component {
                             </View>
                             {
                                 question.file_one &&
-                                <View style={styles.imageContainer}>
+                                <TouchableOpacity
+                                    onPress={() => this.showModal(question.file_one)}
+                                    style={styles.imageContainer}>
                                     <Image
-                                        style={{ width: 300, height: 300, marginTop: 20 }}
+                                        style={{ width: 200, height: 200 }}
                                         source={{ uri: question.file_one }}
                                     />
-                                </View>
+                                </TouchableOpacity>
                             }
                             {
                                 question.file_two &&
-                                <View style={styles.imageContainer}>
+                                <TouchableOpacity
+                                    onPress={() => this.showModal(question.file_two)}
+                                    style={styles.imageContainer}>
                                     <Image
-                                        style={{ width: 300, height: 300, marginTop: 20 }}
+                                        style={{ width: 200, height: 200 }}
                                         source={{ uri: question.file_two }}
                                     />
-                                </View>
+                                </TouchableOpacity>
                             }
                             {
                                 question.file_three &&
-                                <View style={styles.imageContainer}>
+                                <TouchableOpacity
+                                    onPress={() => this.showModal(question.file_three)}
+                                    style={styles.imageContainer}>
                                     <Image
-                                        style={{ width: 300, height: 300, marginTop: 20 }}
+                                        style={{ width: 200, height: 200 }}
                                         source={{ uri: question.file_three }}
                                     />
-                                </View>
+                                </TouchableOpacity>
                             }
                         </View>
-                        <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} RESPONSES</Text>
+                        <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} ANSWERS</Text>
                     </View>
 
                     {
@@ -143,30 +168,36 @@ class QuestionDetails extends Component {
                                     </View>
                                     {
                                         response.file_one &&
-                                        <View style={styles.imageContainer}>
+                                        <TouchableOpacity
+                                            onPress={() => this.showModal(response.file_one)}
+                                            style={styles.imageContainer}>
                                             <Image
-                                                style={{ width: 300, height: 300, marginTop: 20 }}
+                                                style={{ width: 200, height: 200}}
                                                 source={{ uri: response.file_one }}
                                             />
-                                        </View>
+                                        </TouchableOpacity>
                                     }
                                     {
                                         response.file_two &&
-                                        <View style={styles.imageContainer}>
+                                        <TouchableOpacity
+                                            onPress={() => this.showModal(response.file_two)}
+                                            style={styles.imageContainer}>
                                             <Image
-                                                style={{ width: 300, height: 300, marginTop: 20 }}
+                                                style={{ width: 200, height: 200 }}
                                                 source={{ uri: response.file_two }}
                                             />
-                                        </View>
+                                        </TouchableOpacity>
                                     }
                                     {
                                         response.file_three &&
-                                        <View style={styles.imageContainer}>
+                                        <TouchableOpacity
+                                            onPress={() => this.showModal(response.file_three)}
+                                            style={styles.imageContainer}>
                                             <Image
-                                                style={{ width: 300, height: 300, marginTop: 20 }}
+                                                style={{ width: 200, height: 200 }}
                                                 source={{ uri: response.file_three }}
                                             />
-                                        </View>
+                                        </TouchableOpacity>
                                     }
                                 </View>
                             </View>
@@ -182,7 +213,7 @@ class QuestionDetails extends Component {
                             'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
                         })}
                         buttonStyle={{ backgroundColor: colors.appTheme, height: 50 }}
-                        title="Add Response"
+                        title="Add Answer"
                     />
                 </View>
                 <BusyIndicator />

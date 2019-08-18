@@ -142,7 +142,7 @@ class SubjectDashboard extends Component {
                     renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/eZvXxPG.png' }} />}
                     onPress={() => {
                         if (this.props.navigation.state.params.subjectDetails.purchased) {
-                            this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': true, 'subject_slug': this.props.navigation.state.params.subjectDetails.slug });
+                            this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': true, 'subject_slug': this.props.navigation.state.params.subjectDetails.slug, 'subject_title': this.props.navigation.state.params.subjectDetails.title });
                         } else {
                             Alert.alert(
                                 '',
