@@ -12,7 +12,7 @@ import styles from './styles';
 
 class PreviousAttemps extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: 'Leader Board',
+        title: 'Leaderboard',
     });
 
     componentWillMount() {

@@ -143,6 +143,8 @@ class Quiz extends Component {
                 'question': {
                     'id': question.id,
                     'question': question.question,
+                    'mark': question.mark,
+                    'negetive_mark': question.negetive_mark,
                     "selectedAnswer": selectedAnswersObject
                 }
             }
@@ -152,6 +154,8 @@ class Quiz extends Component {
                 'question': {
                     'id': question.id,
                     'question': question.question,
+                    'mark': question.mark,
+                    'negetive_mark': question.negetive_mark,
                     "selectedAnswer": selectedAnswersObject
                 }
             });
