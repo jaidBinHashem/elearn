@@ -12,7 +12,7 @@ import styles from './styles';
 
 class PreviousAttemps extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: 'Previous Attemps',
+        title: 'Leader Board',
     });
 
     componentWillMount() {
@@ -24,6 +24,10 @@ class PreviousAttemps extends Component {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null;
+        loaderHandler.hideLoader();
+    }
+
+    componentWillUnmount() {
         loaderHandler.hideLoader();
     }
 
