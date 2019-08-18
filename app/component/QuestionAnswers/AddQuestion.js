@@ -19,6 +19,7 @@ const options = {
         skipBackup: true,
         path: 'images',
     },
+    rotation: 360
 };
 
 class AddQuestion extends Component {
