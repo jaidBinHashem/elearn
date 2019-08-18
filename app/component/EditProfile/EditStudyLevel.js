@@ -223,6 +223,7 @@ class EditStudyLevel extends Component {
                 </View>
                 <TouchableOpacity
                     onPress={() => {
+                        console.log(this.props.user.institutionSlug, this.props.user.studySlug,this.props, "okay");
                         unsubscribeFromTopic([this.props.user.institutionSlug, this.props.user.studySlug]);
                         this.props.updateStudyLevel({
                             "study_level_id": this.state.selectedStudyLevel.id,

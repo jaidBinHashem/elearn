@@ -171,9 +171,9 @@ export default StyleSheet.create({
     marginRight: 40,
     borderColor: Colors.appTheme,
     borderWidth: 2,
-    height: 67,
-    width: 67,
-    borderRadius: 67 / 2
+    height: 77,
+    width: 77,
+    borderRadius: 77 / 2
   },
   scoreCircleText: {
     borderBottomWidth: 2,

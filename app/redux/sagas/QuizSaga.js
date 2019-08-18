@@ -52,6 +52,7 @@ const retrivePreviousAttemps = async (lessonId) => {
 
 export const setQuiz = function* (action) {
     let quizDetails = yield call(retriveQuizDetails, action.payload);
+    console.log(quizDetails, "quiz details");
     quizDetails.success && quizDetails.data && (yield put({ type: SET_QUIZ_DONE, payload: quizDetails.data }));
 };
 

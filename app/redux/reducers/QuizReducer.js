@@ -16,7 +16,10 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions: action.payload.data,
-        time: action.payload.time
+        time: action.payload.time,
+        totalMark: action.payload.total_mark,
+        negativeMark: action.payload.negetive_mark,
+        rightMark: action.payload.total_mark / action.payload.data.length
       }
     case SUBMIT_QUIZ_RETURN:
       return {
