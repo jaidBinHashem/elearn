@@ -108,7 +108,7 @@ class MyQuestionAnswers extends Component {
                                         </View>
                                     }
                                 </View>
-                                <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} RESPONSES</Text>
+                                <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} ANSWERS</Text>
                             </TouchableOpacity>
                         )
                     }

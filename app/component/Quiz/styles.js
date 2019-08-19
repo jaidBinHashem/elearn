@@ -187,11 +187,13 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     elevation: 5,
-    marginTop: 10
+    marginTop: 10,
+    alignItems: 'center'
   },
   attempsHeaderText: {
     color: 'black',
     fontWeight: '600',
+    fontSize: 18
   },
   katex: {
     height: 90

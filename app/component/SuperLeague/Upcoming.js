@@ -4,6 +4,12 @@ import ActionButton from 'react-native-action-button';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { Icon } from 'react-native-elements';
+import { WebView } from 'react-native-webview';
+import { getService } from '../../network';
+
+
+import BusyIndicator from 'react-native-busy-indicator';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 import Colors from '../../global/colors';
 import styles from './styles';
@@ -14,6 +20,34 @@ class Upcoming extends Component {
         headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
         // headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => console.log("here")}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
     });
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+        }
+    }
+
+
+
+    // async componentWillMount() {
+    //     const { navigation } = this.props;
+    //     this.focusListener = navigation.addListener("didFocus", () => {
+    //         this.getData();
+    //     });
+    // }
+
+
+    // getData = async () => {
+    //     const request = {
+    //         endPoint: 'contact-page-data',
+    //         showLoader: true,
+    //         authenticate: true
+    //     }
+    //     let data = await getService(request);
+    //     // console.log(history, "history");
+    //     this.setState({ data: data.data.data });
+    // }
 
     render() {
         return (
@@ -31,6 +65,15 @@ class Upcoming extends Component {
                     <Text>Mobile : <Text onPress={() => Linking.openURL('tel:+8801575023458')}>+8801575023458</Text></Text>
                     <Text style={{ maxWidth: 350, textAlign: 'center' }}>Address : 324, 3rd floor, R H Home Tower, Green Road, Farmgate, Dhaka</Text>
                 </View>
+                {/* {this.state.data && (
+                    <WebView
+                        originWhitelist={['*']}
+                        scalesPageToFit={false}
+                        source={{ html: this.state.data.value }}
+                        onLoadStart={() => loaderHandler.showLoader("Loading")}
+                        onLoadEnd={() => loaderHandler.hideLoader()}
+                    />)}
+                <BusyIndicator /> */}
                 {
                     this.props.navigation.state.routeName === "ContactUs" &&
                     <ActionButton

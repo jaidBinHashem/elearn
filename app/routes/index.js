@@ -15,6 +15,7 @@ import MySubjects from '../component/MySubjects';
 import Coupon from '../component/Coupon';
 import BuyPackage from '../component/BuyPackage';
 import ConfirmBuyPackage from '../component/BuyPackage/ConfirmBuyPackage';
+import PurchaseHistory from '../component/PurchaseHistory';
 import Payment from '../component/BuyPackage/Payment';
 import Scolarships from '../component/Scolarships';
 import Upcoming from '../component/SuperLeague/Upcoming';
@@ -258,6 +259,25 @@ const ContactUsStack = createStackNavigator(
     }
 );
 
+const PurchaseHistoryStack = createStackNavigator(
+    {
+        PurchaseStack: PurchaseHistory,
+    },
+    {
+        initialRouteName: 'PurchaseStack',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: colors.appTheme,
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                // fontWeight: 'bold',
+            },
+        },
+        transitionConfig
+    }
+);
+
 
 const UpcomingStack = createStackNavigator(
     {
@@ -376,6 +396,13 @@ const AppDrawer = createDrawerNavigator(
                 drawerIcon: ({ tintColor }) => <Icon name='shop' type='material' color={colors.appTheme} />,
             }
         },
+        // PurchaseHistory: {
+        //     screen: PurchaseHistoryStack,
+        //     navigationOptions: {
+        //         drawerLabel: 'Purchase History',
+        //         drawerIcon: ({ tintColor }) => <Icon name='shop' type='material' color={colors.appTheme} />,
+        //     }
+        // },
         Scolarships: {
             screen: ScolarshipsStack,
             navigationOptions: {
@@ -395,13 +422,6 @@ const AppDrawer = createDrawerNavigator(
         //     navigationOptions: {
         //         drawerLabel: 'Terms & Conditions',
         //         drawerIcon: ({ tintColor }) => <Icon name='exclamationcircle' type='antdesign' color={colors.appTheme} />,
-        //     }
-        // },
-        // Share: {
-        //     screen: AppStack,
-        //     navigationOptions: {
-        //         drawerLabel: 'Share The App',
-        //         drawerIcon: ({ tintColor }) => <Icon name='share-alt' type='font-awesome' color={colors.appTheme} />,
         //     }
         // },
     },
