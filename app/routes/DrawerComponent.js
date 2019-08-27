@@ -13,9 +13,9 @@ class DrawerComponent extends Component {
     shareApp = async () => {
         try {
             const result = await Share.share({
-                message: 'https://play.google.com/store/apps/details?id=com.aci.idss&hl=en',
-                url: 'https://play.google.com/store/apps/details?id=com.aci.idss&hl=en',
-                title: 'https://play.google.com/store/apps/details?id=com.aci.idss&hl=en'
+                message: 'https://play.google.com/store/apps/details?id=com.eshosikhi',
+                url: 'https://play.google.com/store/apps/details?id=com.eshosikhi',
+                title: 'https://play.google.com/store/apps/details?id=com.eshosikhi'
             }, {
                     dialogTitle: 'Share Esho Sikhi',
                 })

@@ -12,7 +12,7 @@ import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import RNExitApp from 'react-native-exit-app';
 import { setToken, subscribeToToic } from '../../Firebase';
-import firebase from 'react-native-firebase';
+import firebase, { Notification, NotificationOpen } from 'react-native-firebase';
 
 import { getService } from '../../network';
 
@@ -42,22 +42,86 @@ class Dashboard extends Component {
 
     componentDidMount() {
         loaderHandler.showLoader("Loading");
-        this.messageListener = firebase.notifications().onNotification(async notification => {
-            notification.android.setChannelId("Esho_Sikhi");
-            await firebase.notifications().displayNotification(notification);
-        });
-
+        this.setUpFirebase();
 
         setTimeout(() => {
-            setToken();
-            this.props.user.institutionSlug && this.props.user.studySlug && subscribeToToic(['all', this.props.user.institutionSlug, this.props.user.studySlug]);
             loaderHandler.hideLoader();
         }, 1500);
         this.getAppVersion();
     }
 
+    setUpFirebase = () => {
+        setToken();
+        this.props.user.institutionSlug && this.props.user.studySlug && subscribeToToic(['all', this.props.user.institutionSlug, this.props.user.studySlug]);
+
+        this.createNotificationChannel();
+        this.checkPermission();
+
+        // fires when the app is fully closed
+        firebase.notifications().getInitialNotification()
+            .then((notificationOpen: NotificationOpen) => {
+                if (notificationOpen) {
+                    const notification: Notification = notificationOpen.notification;
+                    console.log(notification, "noti 1");
+                    notification._data.notificationType === 'notificationCenter' && this.props.navigation.navigate('Notifications');
+                    notification._data.notificationType === 'globalQandA' && this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': false });
+                }
+            });
+
+
+
+        // fires when the app is in background
+        this.removeNotificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
+            const notification: Notification = notificationOpen.notification;
+            console.log(notificationOpen, "noti 2");
+            notification._data.notificationType === 'notificationCenter' && this.props.navigation.navigate('Notifications');
+            notification._data.notificationType === 'globalQandA' && this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': false });
+        });
+    }
+
+
+    createNotificationChannel = () => {
+        const channel = new firebase.notifications.Android.Channel(
+            "esho_shikhi",
+            "eshoshikhi",
+            firebase.notifications.Android.Importance.High
+        ).setDescription("Used for getting reminder notification");
+        firebase.notifications().android.createChannel(channel);
+    };
+
+
+
+    checkPermission = async () => {
+        const enabled = await firebase.messaging().hasPermission();
+        if (enabled) {
+            this.notificationListener = firebase
+                .notifications()
+                .onNotification(async notification => {
+                    console.log(notification, "noti 3");
+                    const channelId = new firebase.notifications.Android.Channel("Default", "Default", firebase.notifications.Android.Importance.High);
+                    firebase.notifications().android.createChannel(channelId);
+                    const newNotification = new firebase.notifications.Notification()
+                        .android.setChannelId('Default')
+                        .setNotificationId(notification._notificationId)
+                        .setTitle(notification._title)
+                        .setBody(notification._body)
+                        .setSound("default")
+                        .android.setAutoCancel(true)
+                        .android.setPriority(firebase.notifications.Android.Priority.High);
+
+                    await firebase.notifications().displayNotification(newNotification);
+                });
+        } else {
+            try {
+                await firebase.messaging().requestPermission();
+            } catch (error) {
+                Alert.alert("Unable to access the Notification permission. Please enable the Notification Permission from the settings");
+            }
+        }
+    };
+
     _onRefresh = () => {
-        this.props.navigation.navigate('Loader')
+        this.props.navigation.navigate('Loader');
     }
 
     getAppVersion = async () => {

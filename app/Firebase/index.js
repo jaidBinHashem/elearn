@@ -5,6 +5,7 @@ export const setToken = async () => {
     firebase.messaging().getToken()
         .then(async (fcmToken) => {
             if (fcmToken) {
+                console.log(fcmToken, "token")
                 let request = {
                     endPoint: 'save-device-token',
                     authenticate: true,
