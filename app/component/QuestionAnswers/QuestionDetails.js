@@ -104,7 +104,7 @@ class QuestionDetails extends Component {
                         </View>
                         <View>
                             <View>
-                                <Text style={styles.question}>{question.question}</Text>
+                                <Text selectable={true} style={styles.question}>{question.question}</Text>
                             </View>
                             {
                                 question.file_one &&
@@ -164,7 +164,7 @@ class QuestionDetails extends Component {
                                 </View>
                                 <View>
                                     <View>
-                                        <Text style={styles.question}>{response.reply}</Text>
+                                        <Text selectable={true} style={styles.question}>{response.reply}</Text>
                                     </View>
                                     {
                                         response.file_one &&
@@ -172,7 +172,7 @@ class QuestionDetails extends Component {
                                             onPress={() => this.showModal(response.file_one)}
                                             style={styles.imageContainer}>
                                             <Image
-                                                style={{ width: 200, height: 200}}
+                                                style={{ width: 200, height: 200 }}
                                                 source={{ uri: response.file_one }}
                                             />
                                         </TouchableOpacity>

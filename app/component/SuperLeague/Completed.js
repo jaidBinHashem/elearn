@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { Image, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon, Input } from 'react-native-elements';
 import Modal from "react-native-modal";
@@ -51,8 +51,16 @@ class Completed extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <View style={{ flex: 1, justifyContent: 'center' }}>
-                    <Text>Esho Shikhi</Text>
+                <View style={{ flex: 1 }}>
+                    <View key="key" style={{ elevation: 5, backgroundColor: 'white', padding: 10, margin: 10 }}>
+                        <Image
+                            resizeMode='cover'
+                            source={{ uri: 'https://i.imgur.com/t3Hb5zC.jpg' }}
+                            style={{ height: 200, marginBottom: 20 }}
+                        />
+                        <Text style={{ color: 'black', fontSize: 16, fontWeight: '500' }} numberOfLines={1}>Title</Text>
+                        <Text style={{ paddingTop: 5 }}>Content ContentContentContent ContentContentContent Content ContentContentContentContent ContentContentContent ContentContentContent ContentContentContent ContentContentContentContent ContentContentContent ContentContentContentContent</Text>
+                    </View>
                 </View>
             </View>
         )
