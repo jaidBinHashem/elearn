@@ -88,3 +88,34 @@ export const postService = async (request) => {
         return { success: false, data: response, errorCode: err.ERROR_BODY.status }
     }
 }
+
+
+export const deleteService = async (request) => {
+    // console.log(request, "delete request");
+    try {
+        request.showLoader && loaderHandler.showLoader("Loading");
+        
+        let requestHeaders = {
+            'Content-Type': request.contentType ? request.contentType : 'application/json',
+            'Accept': 'application/json'
+        };
+        if (request.authenticate) {
+            let accessToken = await AsyncStorage.getItem("USER_TOKEN");
+            requestHeaders.authorization = 'Bearer ' + accessToken;
+        }
+        let response = await fetch(!request.temp ? BASE_URL + request.endPoint : request.baseUrl, {
+            method: 'DELETE',
+            headers: requestHeaders,
+        });
+        response = await checkStatus(response).json();
+        // console.log(response, "post success response");
+        request.showLoader && loaderHandler.hideLoader();
+        return { success: true, data: response };
+    }
+    catch (err) {
+        response = await err.ERROR_BODY.json();
+        // console.log(response, "JSON Error in post service");
+        request.showLoader && loaderHandler.hideLoader();
+        return { success: false, data: response, errorCode: err.ERROR_BODY.status }
+    }
+}

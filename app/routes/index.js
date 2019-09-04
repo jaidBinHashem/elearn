@@ -34,6 +34,7 @@ import Notifications from '../component/Notifications';
 import QuestionAnswers from '../component/QuestionAnswers';
 import MyQuestionAnswers from '../component/QuestionAnswers/MyQuestionAnswers';
 import AddQuestion from '../component/QuestionAnswers/AddQuestion';
+import EditResponse from '../component/QuestionAnswers/EditResponse';
 import QuestionDetails from '../component/QuestionAnswers/QuestionDetails';
 
 import DrawerComponent from './DrawerComponent';
@@ -124,6 +125,7 @@ const AppStack = createStackNavigator(
         QuestionAnswers: QuestionAnswers,
         MyQuestionAnswers: MyQuestionAnswers,
         AddQuestion: AddQuestion,
+        EditResponse: EditResponse,
         QuestionDetails: QuestionDetails
     },
     {

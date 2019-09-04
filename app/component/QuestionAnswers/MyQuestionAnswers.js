@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity, Alert } from 'react-native'
 import { connect } from "react-redux";
 
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 import moment from 'moment';
 import { Avatar, Icon } from 'react-native-elements';
-import ActionButton from 'react-native-action-button';
+import Toast from 'react-native-simple-toast';
 
-import { getService } from '../../network';
-import colors from '../../global/../global/colors';
+import { getService, deleteService } from '../../network';
 import styles from './styles';
 
 class MyQuestionAnswers extends Component {
@@ -42,6 +41,39 @@ class MyQuestionAnswers extends Component {
         }
         let questions = await getService(request);
         questions.success && this.setState({ questions: questions.data.data });
+    }
+
+    confirmDeleteQuestion = (question_id) => {
+        Alert.alert(
+            'Delete Question !',
+            'Are you sure you want to delete the question ?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Delete',
+                    onPress: () => {
+                        this.deleteQuestion(question_id);
+                    }
+                },
+            ],
+            { cancelable: true },
+        );
+    }
+
+    deleteQuestion = async (question_id) => {
+        let url = this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug + '/questions/' + question_id : 'questions/' + question_id;
+        const request = {
+            endPoint: url,
+            showLoader: true,
+            authenticate: true
+        }
+        let response = await deleteService(request);
+        response.success
+            ? (Toast.show("Question deleted successfull"), this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions())
+            : Toast.show("Something went wrong, Please try again !");
     }
 
     componentWillUnmount() {
@@ -108,7 +140,10 @@ class MyQuestionAnswers extends Component {
                                         </View>
                                     }
                                 </View>
-                                <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} ANSWERS</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} ANSWERS</Text>
+                                    <Icon onPress={() => this.confirmDeleteQuestion(question.id)} containerStyle={{ marginTop: 30 }} name='delete' type='antdesign' color='gray' size={20} />
+                                </View>
                             </TouchableOpacity>
                         )
                     }

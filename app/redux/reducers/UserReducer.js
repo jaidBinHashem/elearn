@@ -24,6 +24,7 @@ export default function (state = initialState, action) {
     case SET_USER_MYPROFILE:
       return {
         ...state,
+        id: action.payload.id,
         birthDate: action.payload.birth_date,
         avatar: action.payload.image,
         email: action.payload.email,

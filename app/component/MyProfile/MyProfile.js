@@ -8,8 +8,6 @@ import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { getUser } from '../../redux/actions/UserActions';
 
-import { getService } from '../../network';
-
 import Colors from '../../global/colors';
 import styles from './styles';
 
