@@ -237,7 +237,12 @@ class QuestionDetails extends Component {
                                 {
                                     response.user.id === this.props.userId && (
                                         <View style={{ flexDirection: 'row', alignSelf: 'flex-end', marginTop: 15 }}>
-                                            <Icon containerStyle={{ marginHorizontal: 10 }} name='edit' type='antdesign' color='gray' size={20} />
+                                            <Icon onPress={() => this.props.navigation.navigate('EditResponse', {
+                                                'answer': response,
+                                                'question_id': question.id,
+                                                'subject_qna': this.props.navigation.state.params.subject_qna ? true : false,
+                                                'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
+                                            })} containerStyle={{ marginHorizontal: 10 }} name='edit' type='antdesign' color='gray' size={20} />
                                             <Icon onPress={() => this.confirmDeleteResponse(response.question_id, response.id)} containerStyle={{ marginHorizontal: 10 }} name='delete' type='antdesign' color='gray' size={20} />
                                         </View>
                                     )
