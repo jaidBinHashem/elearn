@@ -66,7 +66,7 @@ class Player extends Component {
                         injectedJavaScript={yourAlert}
 
 
-                        style={{ }}
+                        style={{}}
                         source={{
                             uri: BASE_URL + 'lessons/' + this.props.navigation.state.params.slug + '/video',
                             headers: {
@@ -76,7 +76,7 @@ class Player extends Component {
                     />)}
                 </View>
                 <View>
-                    <Text>{this.props.navigation.state.params.description && this.props.navigation.state.params.description}</Text>
+                    <Text style={{ margin: 20 }}>{this.props.navigation.state.params.description && this.props.navigation.state.params.description}</Text>
                 </View>
                 <BusyIndicator />
             </View>
@@ -93,5 +93,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    {  }
+    {}
 )(Player);

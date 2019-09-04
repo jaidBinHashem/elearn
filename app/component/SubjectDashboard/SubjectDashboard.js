@@ -44,7 +44,7 @@ class SubjectDashboard extends Component {
             if (lesson.lesson_type === 'video') {
                 this.props.navigation.navigate('Player', { title: lesson.title, slug: lesson.slug, description: lesson.description })
             } else if (lesson.lesson_type === 'quiz') {
-                this.props.navigation.navigate('QuizDashboard', { showExplanation: false, lessonId: lesson.id })
+                this.props.navigation.navigate('QuizDashboard', { showExplanation: false, lessonId: lesson.id, description: lesson.description })
             } else {
                 this.props.navigation.navigate('ArticleWebView', { lesson: true, title: lesson.title, slug: lesson.slug, category: 'user/lessons' })
             }

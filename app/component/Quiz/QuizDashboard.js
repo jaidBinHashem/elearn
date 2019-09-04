@@ -67,10 +67,10 @@ class QuizDashboard extends Component {
                             </View>
                         </View>
                     </View>
-                    {/* <View style={styles.instructionContainer}>
+                    <View style={styles.instructionContainer}>
                         <Text style={styles.instructionTitle}>Instructions</Text>
-                        <Text style={styles.instruction}>There will be a good amount of instruction. There will be a good amount of instruction. There will be a good amount of instruction. There will be a good amount of instruction.</Text>
-                    </View> */}
+                        <Text style={styles.instruction}>{this.props.navigation.state.params.description && this.props.navigation.state.params.description}</Text>
+                    </View>
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => {
