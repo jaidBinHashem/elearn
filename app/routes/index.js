@@ -19,7 +19,7 @@ import PurchaseHistory from '../component/PurchaseHistory';
 import Payment from '../component/BuyPackage/Payment';
 import Scolarships from '../component/Scolarships';
 import Upcoming from '../component/SuperLeague/Upcoming';
-import Completed from '../component/SuperLeague/Completed';
+import Offers from '../component/SuperLeague/Offers';
 import SubjectDashboard from '../component/SubjectDashboard'
 
 import QuizDashboard from '../component/Quiz';
@@ -259,10 +259,10 @@ const UpcomingStack = createStackNavigator(
 
 const OffersStack = createStackNavigator(
     {
-        Completed: Completed,
+        Offers: Offers,
     },
     {
-        initialRouteName: 'Completed',
+        initialRouteName: 'Offers',
         headerMode: 'none',
         transitionConfig
     }
