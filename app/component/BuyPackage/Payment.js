@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { View, WebView, Text, } from 'react-native';
+import { View } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 

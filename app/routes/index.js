@@ -19,7 +19,7 @@ import PurchaseHistory from '../component/PurchaseHistory';
 import Payment from '../component/BuyPackage/Payment';
 import Scolarships from '../component/Scolarships';
 import Upcoming from '../component/SuperLeague/Upcoming';
-import Completed from '../component/SuperLeague/Completed';
+import Offers from '../component/SuperLeague/Offers';
 import SubjectDashboard from '../component/SubjectDashboard'
 
 import QuizDashboard from '../component/Quiz';
@@ -106,41 +106,7 @@ const AuthStack = createStackNavigator(
     }
 );
 
-const AppStack = createStackNavigator(
-    {
-        Dashboard: Dashboard,
-        SubjectDashboard: SubjectDashboard,
-        ArticleWebView: ArticleWebView,
-        QuizDashboard: QuizDashboard,
-        Quiz: {
-            screen: Quiz,
-            navigationOptions: { drawerLockMode: 'locked-closed' }
-        },
-        QuizSolutions: Quiz,
-        QuizHighlights: QuizHighlights,
-        PreviousAttemps: PreviousAttemps,
-        Player: Player,
-        Notifications: Notifications,
-        QuestionAnswers: QuestionAnswers,
-        MyQuestionAnswers: MyQuestionAnswers,
-        AddQuestion: AddQuestion,
-        QuestionDetails: QuestionDetails
-    },
-    {
-        initialRouteName: 'Dashboard',
-        defaultNavigationOptions: {
-            headerStyle: {
-                backgroundColor: colors.appTheme,
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-                // fontWeight: 'bold',
-            },
-        },
-        drawerLockMode: 'locked-closed',
-        transitionConfig
-    }
-);
+
 
 
 const ProfileStack = createStackNavigator(
@@ -291,22 +257,22 @@ const UpcomingStack = createStackNavigator(
 );
 
 
-const CompletedStack = createStackNavigator(
+const OffersStack = createStackNavigator(
     {
-        Completed: Completed,
+        Offers: Offers,
     },
     {
-        initialRouteName: 'Completed',
+        initialRouteName: 'Offers',
         headerMode: 'none',
         transitionConfig
     }
 );
 
 
-const SuperLeagueTab = createMaterialTopTabNavigator(
+const NotificationTab = createMaterialTopTabNavigator(
     {
-        Upcoming: UpcomingStack,
-        Completed: CompletedStack,
+        Notifications: Notifications,
+        Offers: OffersStack,
     },
     {
         tabBarComponent: TabBarTop,
@@ -329,20 +295,33 @@ const SuperLeagueTab = createMaterialTopTabNavigator(
     }
 );
 
-const SuperLeagueStack = createStackNavigator(
+const AppStack = createStackNavigator(
     {
-        SuperLeagueTab: {
-            // screen: Scolarships,
-            screen: SuperLeagueTab,
-            navigationOptions: ({ navigation }) => ({
-                title: 'Super League',
-                headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>
-            })
+        Dashboard: Dashboard,
+        SubjectDashboard: SubjectDashboard,
+        ArticleWebView: ArticleWebView,
+        QuizDashboard: QuizDashboard,
+        Quiz: {
+            screen: Quiz,
+            navigationOptions: { drawerLockMode: 'locked-closed' }
         },
+        QuizSolutions: Quiz,
+        QuizHighlights: QuizHighlights,
+        PreviousAttemps: PreviousAttemps,
+        Player: Player,
+        Notifications: {
+            screen: NotificationTab,
+            navigationOptions: {
+                header: null
+            }
+        },
+        QuestionAnswers: QuestionAnswers,
+        MyQuestionAnswers: MyQuestionAnswers,
+        AddQuestion: AddQuestion,
+        QuestionDetails: QuestionDetails
     },
     {
-        initialRouteName: 'SuperLeagueTab',
-        headerMode: 'screen',
+        initialRouteName: 'Dashboard',
         defaultNavigationOptions: {
             headerStyle: {
                 backgroundColor: colors.appTheme,
@@ -352,11 +331,10 @@ const SuperLeagueStack = createStackNavigator(
                 // fontWeight: 'bold',
             },
         },
+        drawerLockMode: 'locked-closed',
         transitionConfig
     }
 );
-
-
 
 
 
