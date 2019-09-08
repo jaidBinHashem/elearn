@@ -294,47 +294,6 @@ const NotificationTab = createMaterialTopTabNavigator(
     }
 );
 
-// const AppStack = createStackNavigator(
-//     {
-//         Dashboard: Dashboard,
-//         SubjectDashboard: SubjectDashboard,
-//         ArticleWebView: ArticleWebView,
-//         QuizDashboard: QuizDashboard,
-//         Quiz: {
-//             screen: Quiz,
-//             navigationOptions: { drawerLockMode: 'locked-closed' }
-//         },
-//         QuizSolutions: Quiz,
-//         QuizHighlights: QuizHighlights,
-//         PreviousAttemps: PreviousAttemps,
-//         Player: Player,
-//         Notifications: {
-//             screen: NotificationTab,
-//             navigationOptions: {
-//                 header: null
-//             }
-//         },
-//         QuestionAnswers: QuestionAnswers,
-//         MyQuestionAnswers: MyQuestionAnswers,
-//         AddQuestion: AddQuestion,
-//         QuestionDetails: QuestionDetails
-//     },
-//     {
-//         initialRouteName: 'Dashboard',
-//         defaultNavigationOptions: {
-//             headerStyle: {
-//                 backgroundColor: colors.appTheme,
-//             },
-//             headerTintColor: '#fff',
-//             headerTitleStyle: {
-//                 // fontWeight: 'bold',
-//             },
-//         },
-//         drawerLockMode: 'locked-closed',
-//         transitionConfig
-//     }
-// );
-
 
 const AppStack = createStackNavigator(
     {
@@ -416,13 +375,13 @@ const AppDrawer = createDrawerNavigator(
                 drawerIcon: ({ tintColor }) => <Icon name='shop' type='material' color={colors.appTheme} />,
             }
         },
-        // PurchaseHistory: {
-        //     screen: PurchaseHistoryStack,
-        //     navigationOptions: {
-        //         drawerLabel: 'Purchase History',
-        //         drawerIcon: ({ tintColor }) => <Icon name='shop' type='material' color={colors.appTheme} />,
-        //     }
-        // },
+        PurchaseHistory: {
+            screen: PurchaseHistoryStack,
+            navigationOptions: {
+                drawerLabel: 'Purchase History',
+                drawerIcon: ({ tintColor }) => <Icon name='shop' type='material' color={colors.appTheme} />,
+            }
+        },
         Scolarships: {
             screen: ScolarshipsStack,
             navigationOptions: {

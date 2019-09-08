@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl, Image, Linking, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
-import { Icon } from 'react-native-elements';
+import { Icon, Avatar, Badge } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
@@ -14,7 +14,7 @@ import RNExitApp from 'react-native-exit-app';
 import { setToken, subscribeToToic } from '../../Firebase';
 import firebase, { Notification, NotificationOpen } from 'react-native-firebase';
 
-import { getService } from '../../network';
+import { getService, postService } from '../../network';
 
 import styles from './styles';
 
@@ -23,13 +23,18 @@ class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Dashboard',
         headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
-        headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => navigation.navigate('Notifications')}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
+        headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => navigation.navigate('Notifications')}>
+            <View style={{ flexDirection: 'row', right: 10 }}>
+                <Icon name='bell' type='feather' color='#fff' size={30} containerStyle={{ left: 20 }} />
+                <Badge value={navigation.state.params ? navigation.state.params.notificationCount : 0} status="primary" containerStyle={{ position: 'absolute', right: 4 }} />
+            </View>
+        </TouchableOpacity>,
     });
 
     constructor(props) {
         super(props);
         this.state = {
-            refreshing: false
+            refreshing: false,
         }
     }
 
@@ -41,6 +46,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
+        const { navigation } = this.props;
         loaderHandler.showLoader("Loading");
         this.setUpFirebase();
 
@@ -48,6 +54,33 @@ class Dashboard extends Component {
             loaderHandler.hideLoader();
         }, 1500);
         this.getAppVersion();
+
+        this.focusListener = navigation.addListener("didFocus", () => {
+            this.setGetNotificationCount();
+        });
+    }
+
+    setGetNotificationCount = async () => {
+        let notificationDate = await AsyncStorage.getItem("NOTIFICATION_DATE");
+        if (!notificationDate) {
+            await AsyncStorage.setItem('NOTIFICATION_DATE', moment().format('YYYY-MM-DD HH:mm:ss'));
+        } else {
+            const request = {
+                endPoint: 'push-notification-count',
+                authenticate: true,
+                params: {
+                    date: notificationDate
+                },
+            }
+            let notificationCountObject = await postService(request);
+            notificationCountObject.success && this.props.navigation.setParams({
+                notificationCount: notificationCountObject.data,
+            });
+        }
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
     }
 
     setUpFirebase = () => {
@@ -195,7 +228,7 @@ class Dashboard extends Component {
         let subj = [...this.props.subjectsTitleArr];
         let allSubjects = [...this.props.allSubjects];
         let allSubjectsTitleArr = [...this.props.allSubjectsTitleArr];
-        let colors = ['#BC9CFF', '#F6D365', '#F093FB', '#0BA360', '#74DBC9', '#677DCB', '#501A57', '#F07B52'];
+        let colors = ['#BC9CFF', '#F6D365', '#F093FB', '#0BA360', '#74DBC9', '#677DCB', '#F6D365', '#F07B52'];
         let colorsArr = [...colors];
         let allSubjectColorsArr = [...colors];
         let views = [], length = Math.ceil(subj.length / 4);
