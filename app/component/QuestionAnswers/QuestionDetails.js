@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Image, RefreshControl, Modal, TouchableOpacity } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Image, RefreshControl, Modal, TouchableOpacity, Alert } from 'react-native'
 import { connect } from "react-redux";
+import Toast from 'react-native-simple-toast';
 
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
@@ -8,7 +9,7 @@ import moment from 'moment';
 import { Avatar, Button, Icon } from 'react-native-elements';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
-import { getService } from '../../network';
+import { getService, deleteService } from '../../network';
 import colors from '../../global/../global/colors';
 import styles from './styles';
 
@@ -58,6 +59,39 @@ class QuestionDetails extends Component {
         }
         selectedImage.push(image);
         this.setState({ selectedImage, modalView: true })
+    }
+
+    confirmDeleteResponse = (question_id, answer_id) => {
+        Alert.alert(
+            'Delete Answer !',
+            'Are you sure you want to delete the answer ?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Delete',
+                    onPress: () => {
+                        this.deleteResponse(question_id, answer_id);
+                    }
+                },
+            ],
+            { cancelable: true },
+        );
+    }
+
+    deleteResponse = async (question_id, answer_id) => {
+        let url = this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug + '/questions/' + question_id + '/answers/' + answer_id : 'questions/' + question_id + '/answers/' + answer_id;
+        const request = {
+            endPoint: url,
+            showLoader: true,
+            authenticate: true
+        }
+        let response = await deleteService(request);
+        response.success
+            ? (Toast.show("Question deleted successfull"), this.getResponses())
+            : Toast.show("Something went wrong, Please try again !");
     }
 
     componentWillUnmount() {
@@ -200,6 +234,19 @@ class QuestionDetails extends Component {
                                         </TouchableOpacity>
                                     }
                                 </View>
+                                {
+                                    response.user.id === this.props.userId && (
+                                        <View style={{ flexDirection: 'row', alignSelf: 'flex-end', marginTop: 15 }}>
+                                            <Icon onPress={() => this.props.navigation.navigate('EditResponse', {
+                                                'answer': response,
+                                                'question_id': question.id,
+                                                'subject_qna': this.props.navigation.state.params.subject_qna ? true : false,
+                                                'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
+                                            })} containerStyle={{ marginHorizontal: 10 }} name='edit' type='antdesign' color='gray' size={20} />
+                                            <Icon onPress={() => this.confirmDeleteResponse(response.question_id, response.id)} containerStyle={{ marginHorizontal: 10 }} name='delete' type='antdesign' color='gray' size={20} />
+                                        </View>
+                                    )
+                                }
                             </View>
                         )
                     }
@@ -225,7 +272,8 @@ class QuestionDetails extends Component {
 
 function mapStateToProps(state) {
     return {
-        auth: state.AuthReducer
+        auth: state.AuthReducer,
+        userId: state.UserReducer.id
     };
 }
 

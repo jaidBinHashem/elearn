@@ -31,7 +31,10 @@ class QuestionAnswers extends Component {
     }
 
     async componentWillMount() {
-        this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions();
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener("didFocus", () => {
+            this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions();
+        });
     }
 
     getQuestions = async (subject_slug = false) => {
@@ -45,6 +48,7 @@ class QuestionAnswers extends Component {
     }
 
     componentWillUnmount() {
+        this.focusListener.remove();
         loaderHandler.hideLoader();
     }
 

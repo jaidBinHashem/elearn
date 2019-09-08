@@ -34,6 +34,7 @@ import Notifications from '../component/Notifications';
 import QuestionAnswers from '../component/QuestionAnswers';
 import MyQuestionAnswers from '../component/QuestionAnswers/MyQuestionAnswers';
 import AddQuestion from '../component/QuestionAnswers/AddQuestion';
+import EditResponse from '../component/QuestionAnswers/EditResponse';
 import QuestionDetails from '../component/QuestionAnswers/QuestionDetails';
 
 import DrawerComponent from './DrawerComponent';
@@ -105,8 +106,6 @@ const AuthStack = createStackNavigator(
         transitionConfig
     }
 );
-
-
 
 
 const ProfileStack = createStackNavigator(
@@ -295,6 +294,48 @@ const NotificationTab = createMaterialTopTabNavigator(
     }
 );
 
+// const AppStack = createStackNavigator(
+//     {
+//         Dashboard: Dashboard,
+//         SubjectDashboard: SubjectDashboard,
+//         ArticleWebView: ArticleWebView,
+//         QuizDashboard: QuizDashboard,
+//         Quiz: {
+//             screen: Quiz,
+//             navigationOptions: { drawerLockMode: 'locked-closed' }
+//         },
+//         QuizSolutions: Quiz,
+//         QuizHighlights: QuizHighlights,
+//         PreviousAttemps: PreviousAttemps,
+//         Player: Player,
+//         Notifications: {
+//             screen: NotificationTab,
+//             navigationOptions: {
+//                 header: null
+//             }
+//         },
+//         QuestionAnswers: QuestionAnswers,
+//         MyQuestionAnswers: MyQuestionAnswers,
+//         AddQuestion: AddQuestion,
+//         QuestionDetails: QuestionDetails
+//     },
+//     {
+//         initialRouteName: 'Dashboard',
+//         defaultNavigationOptions: {
+//             headerStyle: {
+//                 backgroundColor: colors.appTheme,
+//             },
+//             headerTintColor: '#fff',
+//             headerTitleStyle: {
+//                 // fontWeight: 'bold',
+//             },
+//         },
+//         drawerLockMode: 'locked-closed',
+//         transitionConfig
+//     }
+// );
+
+
 const AppStack = createStackNavigator(
     {
         Dashboard: Dashboard,
@@ -318,6 +359,7 @@ const AppStack = createStackNavigator(
         QuestionAnswers: QuestionAnswers,
         MyQuestionAnswers: MyQuestionAnswers,
         AddQuestion: AddQuestion,
+        EditResponse: EditResponse,
         QuestionDetails: QuestionDetails
     },
     {
