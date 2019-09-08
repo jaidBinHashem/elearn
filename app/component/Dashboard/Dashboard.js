@@ -62,9 +62,9 @@ class Dashboard extends Component {
             .then((notificationOpen: NotificationOpen) => {
                 if (notificationOpen) {
                     const notification: Notification = notificationOpen.notification;
-                    console.log(notification, "noti 1");
                     notification._data.notificationType === 'notificationCenter' && this.props.navigation.navigate('Notifications');
                     notification._data.notificationType === 'globalQandA' && this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': false });
+                    notification._data.notificationType === 'subjectQandA' && this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': true, 'subject_slug': notification._data.subjectSlug, 'subject_title': notification._data.subjectTitle ? notification._data.subjectTitle : notification._data.subjectSlug });
                 }
             });
 
@@ -73,9 +73,10 @@ class Dashboard extends Component {
         // fires when the app is in background
         this.removeNotificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
             const notification: Notification = notificationOpen.notification;
-            console.log(notificationOpen, "noti 2");
+            console.log(notification, "notification");
             notification._data.notificationType === 'notificationCenter' && this.props.navigation.navigate('Notifications');
             notification._data.notificationType === 'globalQandA' && this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': false });
+            notification._data.notificationType === 'subjectQandA' && this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': true, 'subject_slug': notification._data.subjectSlug, 'subject_title': notification._data.subjectTitle ? notification._data.subjectTitle : notification._data.subjectSlug });
         });
     }
 
@@ -97,7 +98,7 @@ class Dashboard extends Component {
             this.notificationListener = firebase
                 .notifications()
                 .onNotification(async notification => {
-                    console.log(notification, "noti 3");
+                    console.log(notification, "noti");
                     const channelId = new firebase.notifications.Android.Channel("Default", "Default", firebase.notifications.Android.Importance.High);
                     firebase.notifications().android.createChannel(channelId);
                     const newNotification = new firebase.notifications.Notification()
