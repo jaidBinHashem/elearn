@@ -23,6 +23,7 @@
     "react-native-facebook-account-kit": "^1.1.0",
     "react-native-firebase": "^5.4.2",
     "react-native-gesture-handler": "^1.1.0",
+    "react-native-hyperlink": "^0.0.16",
     "react-native-image-picker": "^0.28.1",
     "react-native-image-zoom-viewer": "^2.2.26",
     "react-native-katex": "^0.3.0",

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { ImageBackground, Picker, View, StatusBar, Text, TouchableOpacity, ScrollView, RefreshControl, Image, Linking, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
-import { Icon, Avatar, Badge } from 'react-native-elements';
+import { Icon, Badge } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';

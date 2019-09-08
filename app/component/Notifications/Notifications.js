@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, StatusBar, Text, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from "react-redux";
+import Hyperlink from 'react-native-hyperlink';
 
 import BusyIndicator from 'react-native-busy-indicator';
 import moment from 'moment';
@@ -52,7 +53,9 @@ class Notifications extends Component {
                                 <View key={notification.id} style={{ flex: 1, elevation: 5, backgroundColor: 'white', padding: 10, margin: 10 }}>
                                     <Text style={{ color: 'black', fontSize: 16, fontWeight: '500' }} numberOfLines={1}>{notification.title}</Text>
                                     <Text style={{ fontSize: 12 }} numberOfLines={1}>{moment(notifications.updated_at).format("Do MMM")}</Text>
-                                    <Text style={{ paddingTop: 5 }}>{notification.content}</Text>
+                                    <Hyperlink linkDefault={true}>
+                                        <Text style={{ paddingTop: 5 }}>{notification.content}</Text>
+                                    </Hyperlink>
                                 </View>)
                         })
                     }
