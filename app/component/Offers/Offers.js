@@ -22,13 +22,13 @@ class Offers extends Component {
     }
 
     async componentWillMount() {
-        const request = {
-            endPoint: 'offer-list',
-            showLoader: true,
-            authenticate: true
-        }
-        let offers = await getService(request);
-        this.setState({ offers: offers.data.data });
+        // const request = {
+        //     endPoint: 'offer-list',
+        //     showLoader: true,
+        //     authenticate: true
+        // }
+        // let offers = await getService(request);
+        // this.setState({ offers: offers.data.data });
     }
 
     signOut = async () => {

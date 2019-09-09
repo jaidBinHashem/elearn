@@ -247,7 +247,7 @@ class Quiz extends Component {
                             {questionContent.map((value, index) => {
                                 if (index % 2 === 0) {
                                     if (value.length > 0) {
-                                        return (<View key={index}><Text style={{ fontSize: 26 }}>{value}</Text></View>)
+                                        return (<View key={index} style={{ marginVertical: 15 }}><Text style={{ fontSize: 22 }}>{value}</Text></View>)
                                     }
                                 } else {
                                     return (

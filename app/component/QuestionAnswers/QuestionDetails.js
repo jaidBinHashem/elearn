@@ -197,7 +197,7 @@ class QuestionDetails extends Component {
                                     </View>
                                 </View>
                                 <View>
-                                    <View>
+                                    <View style={{ margin: 10 }}>
                                         <Text selectable={true} style={styles.question}>{response.reply}</Text>
                                     </View>
                                     {

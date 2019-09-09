@@ -8,7 +8,6 @@ import moment from 'moment';
 import { Avatar, Icon, Button } from 'react-native-elements';
 
 import { getService } from '../../network';
-import colors from '../../global/../global/colors';
 import styles from './styles';
 
 class QuestionAnswers extends Component {
@@ -44,6 +43,7 @@ class QuestionAnswers extends Component {
             authenticate: true
         }
         let questions = await getService(request);
+        console.log(questions);
         questions.success && this.setState({ questions: questions.data.data, refreshing: false });
     }
 
@@ -110,7 +110,7 @@ class QuestionAnswers extends Component {
                                     </View>
                                 </View>
                                 <View>
-                                    <View>
+                                    <View style={{ margin: 10 }}>
                                         <Text style={styles.question}>{question.question}</Text>
                                     </View>
                                     {

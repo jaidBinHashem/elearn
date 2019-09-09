@@ -18,8 +18,8 @@ import ConfirmBuyPackage from '../component/BuyPackage/ConfirmBuyPackage';
 import PurchaseHistory from '../component/PurchaseHistory';
 import Payment from '../component/BuyPackage/Payment';
 import Scolarships from '../component/Scolarships';
-import Upcoming from '../component/SuperLeague/Upcoming';
-import Offers from '../component/SuperLeague/Offers';
+import Upcoming from '../component/Offers/Upcoming';
+import Offers from '../component/Offers/Offers';
 import SubjectDashboard from '../component/SubjectDashboard'
 
 import QuizDashboard from '../component/Quiz';

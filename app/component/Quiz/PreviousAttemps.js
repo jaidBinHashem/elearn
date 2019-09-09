@@ -33,7 +33,6 @@ class PreviousAttemps extends Component {
 
     render() {
         let attemps = this.props.quiz.previousAttemps;
-        console.log(attemps, "atmps");
         let { userRanking } = this.props.quiz;
         return (
             <View style={[styles.container, styles.horizontal]}>

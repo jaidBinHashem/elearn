@@ -119,7 +119,7 @@ class AddQuestion extends Component {
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView keyboardShouldPersistTaps={"handled"} showsVerticalScrollIndicator={false}>
                     <Input
-                        label='Enter your question'
+                        label={this.props.navigation.state.params.question_id ? 'Enter Your Answer' : 'Enter Your Question'}
                         value={this.state.question}
                         onChangeText={(question) => this.setState({ question })}
                         multiline={true}
@@ -171,7 +171,7 @@ class AddQuestion extends Component {
                             onPress={() => this.submitQuestion()}
                             buttonStyle={{ backgroundColor: colors.appTheme }}
                             containerStyle={{ marginTop: 20 }}
-                            title={this.props.navigation.state.params.question_id ? 'Enter Your ANSWER' : 'Submit Question'}
+                            title={this.props.navigation.state.params.question_id ? 'Submit Your Answer' : 'Submit Question'}
                         />
                     </View>
                     {
