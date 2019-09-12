@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity, RefreshControl } from 'react-native'
+import { View, StatusBar, Text, ScrollView, Image, TouchableOpacity, RefreshControl, FlatList } from 'react-native'
 import { connect } from "react-redux";
 
 import BusyIndicator from 'react-native-busy-indicator';
@@ -19,7 +19,10 @@ class QuestionAnswers extends Component {
         super(props);
         this.state = {
             questions: [],
-            refreshing: false
+            refreshing: false,
+            currentPage: 0,
+            lastPage: 0,
+            nextPageUrl: null
         }
     }
 
@@ -29,26 +32,106 @@ class QuestionAnswers extends Component {
             : null
     }
 
-    async componentWillMount() {
-        const { navigation } = this.props;
-        this.focusListener = navigation.addListener("didFocus", () => {
-            this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions();
-        });
+    async componentDidMount() {
+        this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions();
     }
 
     getQuestions = async (subject_slug = false) => {
-        const request = {
-            endPoint: subject_slug ? subject_slug + '/questions' : 'questions',
-            showLoader: true,
-            authenticate: true
+        if (this.state.currentPage === 0) {
+            const request = {
+                endPoint: subject_slug ? subject_slug + '/questions' : 'questions',
+                showLoader: true,
+                authenticate: true
+            }
+            let questions = await getService(request);
+            questions.success && this.setState({
+                questions: questions.data.data,
+                currentPage: questions.data.current_page,
+                lastPage: questions.data.last_page,
+                nextPageUrl: questions.data.next_page_url,
+                refreshing: false
+            });
+        } else if (this.state.currentPage > 0 && this.state.currentPage !== this.state.lastPage) {
+            const request = {
+                baseUrl: this.state.nextPageUrl,
+                showLoader: true,
+                authenticate: true
+            }
+            let questions = await getService(request);
+            if (questions.success) {
+                let questionsArr = [...this.state.questions];
+                Array.prototype.push.apply(questionsArr, questions.data.data);
+                this.state.currentPage !== questions.data.current_page && this.setState({
+                    questions: questionsArr,
+                    currentPage: questions.data.current_page,
+                    lastPage: questions.data.last_page,
+                    nextPageUrl: questions.data.next_page_url,
+                    refreshing: false
+                });
+            }
         }
-        let questions = await getService(request);
-        console.log(questions);
-        questions.success && this.setState({ questions: questions.data.data, refreshing: false });
+    }
+
+    renderItem = (question) => {
+        return (
+            <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('QuestionDetails', {
+                    'question': question,
+                    'subject_qna': this.props.navigation.state.params.subject_qna ? true : false,
+                    'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
+                })}
+                key={question.created_at}
+                style={styles.questionCardContainer}>
+                <View style={styles.avatarContainer}>
+                    <Avatar
+                        size="medium"
+                        source={{
+                            uri: question.user.full_url_avatar,
+                        }}
+                    />
+                    <View style={styles.nameDateContainer}>
+                        <Text style={styles.userName}>{question.user.full_name}</Text>
+                        <Text>{moment(question.created_at).format('MMMM Do YYYY, h:mm a')}</Text>
+                    </View>
+                </View>
+                <View>
+                    <View style={{ margin: 10 }}>
+                        <Text style={styles.question}>{question.question}</Text>
+                    </View>
+                    {
+                        question.file_one &&
+                        <View style={styles.imageContainer}>
+                            <Image
+                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                source={{ uri: question.file_one }}
+                            />
+                        </View>
+                    }
+                    {
+                        question.file_two &&
+                        <View style={styles.imageContainer}>
+                            <Image
+                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                source={{ uri: question.file_two }}
+                            />
+                        </View>
+                    }
+                    {
+                        question.file_three &&
+                        <View style={styles.imageContainer}>
+                            <Image
+                                style={{ width: 100, height: 100, marginTop: 20 }}
+                                source={{ uri: question.file_three }}
+                            />
+                        </View>
+                    }
+                </View>
+                <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} ANSWERS</Text>
+            </TouchableOpacity>
+        )
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
         loaderHandler.hideLoader();
     }
 
@@ -58,7 +141,7 @@ class QuestionAnswers extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: .1, flexDirection: 'row' }}>
                     <Button
                         onPress={() => navigation.navigate('MyQuestionAnswers', {
                             'subject_qna': navigation.state.params.subject_qna ? true : false,
@@ -80,72 +163,17 @@ class QuestionAnswers extends Component {
                         title="Ask Question"
                     />
                 </View>
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={() => this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions()} />
-                    }
-                    showsVerticalScrollIndicator={false}>
-                    {
-                        questions.map(question =>
-                            <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate('QuestionDetails', {
-                                    'question': question,
-                                    'subject_qna': this.props.navigation.state.params.subject_qna ? true : false,
-                                    'subject_slug': this.props.navigation.state.params.subject_qna ? this.props.navigation.state.params.subject_slug : false
-                                })}
-                                key={question.created_at}
-                                style={styles.questionCardContainer}>
-                                <View style={styles.avatarContainer}>
-                                    <Avatar
-                                        size="medium"
-                                        source={{
-                                            uri: question.user.full_url_avatar,
-                                        }}
-                                    />
-                                    <View style={styles.nameDateContainer}>
-                                        <Text style={styles.userName}>{question.user.full_name}</Text>
-                                        <Text>{moment(question.created_at).format('MMMM Do YYYY, h:mm a')}</Text>
-                                    </View>
-                                </View>
-                                <View>
-                                    <View style={{ margin: 10 }}>
-                                        <Text style={styles.question}>{question.question}</Text>
-                                    </View>
-                                    {
-                                        question.file_one &&
-                                        <View style={styles.imageContainer}>
-                                            <Image
-                                                style={{ width: 100, height: 100, marginTop: 20 }}
-                                                source={{ uri: question.file_one }}
-                                            />
-                                        </View>
-                                    }
-                                    {
-                                        question.file_two &&
-                                        <View style={styles.imageContainer}>
-                                            <Image
-                                                style={{ width: 100, height: 100, marginTop: 20 }}
-                                                source={{ uri: question.file_two }}
-                                            />
-                                        </View>
-                                    }
-                                    {
-                                        question.file_three &&
-                                        <View style={styles.imageContainer}>
-                                            <Image
-                                                style={{ width: 100, height: 100, marginTop: 20 }}
-                                                source={{ uri: question.file_three }}
-                                            />
-                                        </View>
-                                    }
-                                </View>
-                                <Text style={styles.responseCount}>{question.global_answers_count || question.subject_answers_count || 0} ANSWERS</Text>
-                            </TouchableOpacity>
-                        )
-                    }
-                </ScrollView>
+                <View style={{ flex: .9 }}>
+                    <FlatList
+                        data={questions}
+                        renderItem={({ item }) => this.renderItem(item)}
+                        keyExtractor={question => String(question.id)}
+                        showsVerticalScrollIndicator={false}
+                        refreshing={this.state.refreshing}
+                        onRefresh={() => this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions()}
+                        onEndReached={() => this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions()}
+                    />
+                </View>
                 <BusyIndicator />
             </View>
         )
