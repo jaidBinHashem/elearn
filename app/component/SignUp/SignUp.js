@@ -154,6 +154,8 @@ class SignUp extends Component {
                                 showsPagination={false}
                                 loop={false}
                                 scrollEnabled={true}
+                                loadMinimal={true}
+                                loadMinimalSize={0}
                                 onIndexChanged={(index) => this.setState({ index })}
                             >
                                 <PersonalDetails

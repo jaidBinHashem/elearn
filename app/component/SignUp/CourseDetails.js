@@ -4,6 +4,7 @@ import Toast from 'react-native-simple-toast';
 import { Input, Icon } from 'react-native-elements';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
 import { getService } from '../../network'
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 
 import CounterView from './CounterView';
 
@@ -12,8 +13,8 @@ import styles from './styles';
 
 
 
+const CopilotView = walkthroughable(View);
 const deviceWidth = Dimensions.get("window").width;
-const ios_blue = "#007AFF";
 
 
 class CourseDetails extends Component {
@@ -29,6 +30,10 @@ class CourseDetails extends Component {
             selectedValues: [],
             referralCode: null
         }
+    }
+
+    componentDidMount() {
+        this.props.start();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -74,39 +79,45 @@ class CourseDetails extends Component {
                     {this.state.buttonData.length > 0 && (<View>
                         <Text style={styles.formTitle}>COURSE SELECTION</Text>
                     </View>)}
-                    <View>
-                        <SelectMultipleGroupButton
-                            containerViewStyle={{
-                                justifyContent: 'center',
-                                marginTop: 20
-                            }}
-                            buttonViewStyle={{ height: 50 }}
-                            highLightStyle={{
-                                height: 50,
-                                borderColor: colors.appTheme,
-                                backgroundColor: "transparent",
-                                textColor: colors.appTheme,
-                                borderTintColor: colors.appTheme,
-                                backgroundTintColor: colors.appTheme,
-                                textTintColor: '#fff'
-                            }}
-                            multiple={false}
-                            onSelectedValuesChange={selectedValues => this._groupButtonOnSelectedValuesChange(selectedValues)}
-                            group={this.state.buttonData}
-                        />
-                    </View>
-                    <View >
-                        <Input
-                            label="Referral Code (Optional)"
-                            labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10, marginTop:30 }}
-                            inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
-                            placeholder='না থাকলে ঘরটি খালি রাখুন'
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={this.props.emailError}
-                            onChangeText={(referralCode) => this.setState({ referralCode })}
-                            value={this.state.referralCode}
-                        />
-                    </View>
+                    {this.state.buttonData.length > 0 && (
+                        <CopilotStep text="আপনার প্রয়োজনীয় কোর্সটিতে ক্লিক করে সিলেক্ট করুন।" order={1} name="course">
+                            <CopilotView>
+                                <SelectMultipleGroupButton
+                                    containerViewStyle={{
+                                        justifyContent: 'center',
+                                        marginTop: 20
+                                    }}
+                                    buttonViewStyle={{ height: 50 }}
+                                    highLightStyle={{
+                                        height: 50,
+                                        borderColor: colors.appTheme,
+                                        backgroundColor: "transparent",
+                                        textColor: colors.appTheme,
+                                        borderTintColor: colors.appTheme,
+                                        backgroundTintColor: colors.appTheme,
+                                        textTintColor: '#fff'
+                                    }}
+                                    multiple={false}
+                                    onSelectedValuesChange={selectedValues => this._groupButtonOnSelectedValuesChange(selectedValues)}
+                                    group={this.state.buttonData}
+                                />
+                            </CopilotView>
+                        </CopilotStep>
+                    )}
+                    <CopilotStep text="খালি রাখুন।" order={2} name="referralCode">
+                        <CopilotView>
+                            <Input
+                                label="Referral Code (Optional)"
+                                labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
+                                inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                                placeholder='না থাকলে ঘরটি খালি রাখুন'
+                                errorStyle={{ color: 'red' }}
+                                errorMessage={this.props.emailError}
+                                onChangeText={(referralCode) => this.setState({ referralCode })}
+                                value={this.state.referralCode}
+                            />
+                        </CopilotView>
+                    </CopilotStep>
                 </ScrollView>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => this.sendCourse()}>
@@ -125,4 +136,4 @@ class CourseDetails extends Component {
     }
 }
 
-export default CourseDetails;
+export default copilot()(CourseDetails);

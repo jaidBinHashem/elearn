@@ -6,7 +6,6 @@ import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import CounterView from './CounterView';
 import styles from './styles';
 
-const CopilotText = walkthroughable(Text);
 const CopilotView = walkthroughable(View);
 
 class PersonalDetails extends Component {
@@ -30,6 +29,7 @@ class PersonalDetails extends Component {
     }
 
     componentDidMount() {
+        this.props.start();
     }
 
 
@@ -40,7 +40,7 @@ class PersonalDetails extends Component {
                     <CounterView pageNumber={0} />
                 </View>
                 <View style={styles.formContainer}>
-                    <CopilotStep text="Hey! This is the first step of the tour!" order={1} name="openApp">
+                    <CopilotStep text="এখানে আপনার পূর্ণ নাম লিখুন।" order={1} name="name">
                         <CopilotView style={{ marginBottom: 20 }}>
                             <Input
                                 label="FULL NAME"
@@ -64,59 +64,60 @@ class PersonalDetails extends Component {
                             />
                         </CopilotView>
                     </CopilotStep>
-                    <View style={{ marginBottom: 20 }}>
-                        <Input
-                            label="EMAIL"
-                            labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
-                            inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
-                            placeholder='Your Email'
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={this.props.emailError}
-                            onChangeText={(email) => this.setState({ email })}
-                            value={this.state.email}
-                            keyboardType={'email-address'}
-                            leftIcon={
-                                <Icon
-                                    name='email'
-                                    size={24}
-                                    type='entypo'
-                                    color='lightgray'
-                                    containerStyle={styles.inputIconContainer}
-                                />
-                            }
-                        />
-                    </View>
-                    <View style={{ marginBottom: 20 }}>
-                        <Input
-                            label="PHONE NUMBER"
-                            labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
-                            inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
-                            placeholder='01XXXXXXXXX'
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={this.props.numberError}
-                            onChangeText={(number) => this.setState({ number })}
-                            value={this.state.number}
-                            keyboardType={'phone-pad'}
-                            leftIcon={
-                                <Icon
-                                    name='mobile'
-                                    size={24}
-                                    type='entypo'
-                                    color='lightgray'
-                                    containerStyle={styles.inputIconContainer}
-                                />
-                            }
-                        />
-                    </View>
+                    <CopilotStep text="এখানে আপনার ইমেইল লিখুন। ইমেইল মনে না থাকলে  Google Play ওপেন করে দেখে নিতে পারেন।" order={2} name="email">
+
+                        <CopilotView style={{ marginBottom: 20 }}>
+                            <Input
+                                label="EMAIL"
+                                labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
+                                inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                                placeholder='Your Email'
+                                errorStyle={{ color: 'red' }}
+                                errorMessage={this.props.emailError}
+                                onChangeText={(email) => this.setState({ email })}
+                                value={this.state.email}
+                                keyboardType={'email-address'}
+                                leftIcon={
+                                    <Icon
+                                        name='email'
+                                        size={24}
+                                        type='entypo'
+                                        color='lightgray'
+                                        containerStyle={styles.inputIconContainer}
+                                    />
+                                }
+                            />
+                        </CopilotView>
+                    </CopilotStep>
+
+                    <CopilotStep text="এখানে আপনার মোবাইল নম্বরটি  (017xxxxxxxx) লিখুন। " order={3} name="number">
+                        <CopilotView style={{ marginBottom: 20 }}>
+                            <Input
+                                label="PHONE NUMBER"
+                                labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
+                                inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                                placeholder='01XXXXXXXXX'
+                                errorStyle={{ color: 'red' }}
+                                errorMessage={this.props.numberError}
+                                onChangeText={(number) => this.setState({ number })}
+                                value={this.state.number}
+                                keyboardType={'phone-pad'}
+                                leftIcon={
+                                    <Icon
+                                        name='mobile'
+                                        size={24}
+                                        type='entypo'
+                                        color='lightgray'
+                                        containerStyle={styles.inputIconContainer}
+                                    />
+                                }
+                            />
+                        </CopilotView>
+                    </CopilotStep>
                 </View>
-                <TouchableOpacity onPress={() => this.props.start()}>
-                    <Text>Press</Text>
-                </TouchableOpacity>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.submitAccount(this.state.name, this.state.email.toLowerCase(), this.state.number)}>
-                        <CopilotStep text="This is a hello world example!" order={2} name="next_step">
-                            <CopilotText style={styles.submitText}>Next Step</CopilotText>
-                        </CopilotStep>
+                            <Text style={styles.submitText}>Next Step</Text>
                         <Icon
                             name='arrowright'
                             size={22}
