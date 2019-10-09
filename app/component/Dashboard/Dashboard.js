@@ -368,7 +368,7 @@ class Dashboard extends Component {
         newsAndUpdates.length > 0 && newsAndUpdates.map((newsAndUpdate) => {
             newsAndUpdatesView.push(
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('ArticleWebView', { newsAndUpdate: true, title: newsAndUpdate.title, slug: newsAndUpdate.slug, category: 'news-and-infos' })} T
+                    onPress={() => this.props.navigation.navigate('ArticleWebView', { newsAndUpdate: true, title: newsAndUpdate.title, slug: newsAndUpdate.slug, category: 'news-and-infos', deepLinkQuizId: newsAndUpdate.quiz_id })} T
                     key={newsAndUpdate.id} style={styles.cards}>
                     <ImageBackground
                         style={{ width: '100%', height: '100%', borderRadius: 20 }}

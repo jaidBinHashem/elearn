@@ -22,7 +22,6 @@ const submitQuizResults = async (payload) => {
     try {
         let request = {
             endPoint: 'quiz/' + payload.lessonId + '/questions',
-            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/questions',
             authenticate: true,
             temp: false,
             params: {
@@ -39,7 +38,6 @@ const retrivePreviousAttemps = async (lessonId) => {
     try {
         let request = {
             endPoint: 'quiz/' + lessonId + '/leaderboard',
-            // baseUrl: 'http://172.16.228.145:8080/api/quiz/51/attempts',
             authenticate: true,
             temp: false
         }
@@ -52,7 +50,6 @@ const retrivePreviousAttemps = async (lessonId) => {
 
 export const setQuiz = function* (action) {
     let quizDetails = yield call(retriveQuizDetails, action.payload);
-    console.log(quizDetails, "quiz details");
     quizDetails.success && quizDetails.data && (yield put({ type: SET_QUIZ_DONE, payload: quizDetails.data }));
 };
 

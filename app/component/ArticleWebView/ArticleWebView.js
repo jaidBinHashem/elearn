@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { connect } from "react-redux";
 import { getService } from '../../network'
@@ -47,13 +47,24 @@ class ArticleWebView extends Component {
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 {this.state.content && (
-                    <WebView
-                        originWhitelist={['*']}
-                        scalesPageToFit={this.props.navigation.state.params.lesson ? true : false}
-                        source={{ html: this.props.navigation.state.params.lesson ? this.state.content.content.description : this.state.content.description }}
-                        onLoadStart={() => loaderHandler.showLoader("Loading")}
-                        onLoadEnd={() => loaderHandler.hideLoader()}
-                    />)}
+                    <View style={{ flex: 1 }}>
+                        <View style={{ flex: 9 }}>
+                            <WebView
+                                originWhitelist={['*']}
+                                scalesPageToFit={this.props.navigation.state.params.lesson ? true : false}
+                                source={{ html: this.props.navigation.state.params.lesson ? this.state.content.content.description : this.state.content.description }}
+                                onLoadStart={() => loaderHandler.showLoader("Loading")}
+                                onLoadEnd={() => loaderHandler.hideLoader()}
+                            />
+                        </View>
+                        {this.props.navigation.state.params.deepLinkQuizId && (
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate("QuizDashboard", { showExplanation: false, lessonId: this.props.navigation.state.params.deepLinkQuizId })}
+                                style={{ flex: 1, backgroundColor: Colors.appTheme, justifyContent: 'center', borderRadius: 5 }}>
+                                <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold' }}>Take me to quiz</Text>
+                            </TouchableOpacity>)}
+                    </View>
+                )}
                 <BusyIndicator />
             </View>
         )

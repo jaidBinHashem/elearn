@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Easing, TouchableOpacity } from 'react-native'
+import { Animated, Easing } from 'react-native'
 import { Icon } from 'react-native-elements';
 import { createMaterialTopTabNavigator, TabBarTop, createSwitchNavigator, createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import Loader from '../component/Loader';
