@@ -3,9 +3,11 @@ import { View, Text, TouchableOpacity, Picker, Dimensions } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
 import AutoComplete from 'react-native-autocomplete-input';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
-
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import CounterView from './CounterView';
 import { getService } from '../../network'
+
+const CopilotView = walkthroughable(View);
 const deviceWidth = Dimensions.get("window").width;
 
 import styles from './styles';
@@ -28,6 +30,7 @@ class StudyDetails extends Component {
     }
 
     componentDidMount() {
+        this.props.start();
         this.getStudyLevel();
     }
 
@@ -71,35 +74,40 @@ class StudyDetails extends Component {
                     <CounterView pageNumber={1} />
                 </View>
                 <View style={[styles.formContainer, { bottom: 0 }]}>
-                    <View>
-                        <Text style={styles.formTitle}>STUDY LEVEL</Text>
-                        <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
-                            {this.state.selectedStudyLevel && (<Picker
-                                selectedValue={this.state.selectedStudyLevel.id}
-                                style={{ height: 50 }}
-                                onValueChange={(studyLevel, selectedStudyIndex) => this.selectStudyLevel(studyLevel, selectedStudyIndex)}>
+                    <CopilotStep text="এখানে আপনি যে কোর্সের জন্য  পড়াশোনা করতে চান সেই অনুযায়ী  Study level  সিলেক্ট করুন।" order={1} name="studyLevel">
+                        <CopilotView>
+                            <Text style={styles.formTitle}>STUDY LEVEL</Text>
+                            <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
+                                {this.state.selectedStudyLevel && (<Picker
+                                    selectedValue={this.state.selectedStudyLevel.id}
+                                    style={{ height: 50 }}
+                                    onValueChange={(studyLevel, selectedStudyIndex) => this.selectStudyLevel(studyLevel, selectedStudyIndex)}>
+                                    {
+                                        this.state.selectedStudyLevel && this.state.studyLevels.map((studyLevel) => {
+                                            return (
+                                                <Picker.Item key={studyLevel.id} label={studyLevel.name} value={studyLevel.id} />
+                                            )
+                                        })
+                                    }
+                                </Picker>)}
                                 {
-                                    this.state.selectedStudyLevel && this.state.studyLevels.map((studyLevel) => {
-                                        return (
-                                            <Picker.Item key={studyLevel.id} label={studyLevel.name} value={studyLevel.id} />
-                                        )
-                                    })
+                                    this.state.studyLevels.length === 0 && (
+                                        <Picker
+                                            selectedValue={0}
+                                            style={{ height: 50 }}
+                                        >
+                                            <Picker.Item label="---" value={0} />
+                                        </Picker>
+                                    )
                                 }
-                            </Picker>)}
-                            {
-                                this.state.studyLevels.length === 0 && (
-                                    <Picker
-                                        selectedValue={0}
-                                        style={{ height: 50 }}
-                                    >
-                                        <Picker.Item label="---" value={0} />
-                                    </Picker>
-                                )
-                            }
-                        </View>
-                    </View>
-                    {true && (
-                        <View style={{
+                            </View>
+                        </CopilotView>
+                    </CopilotStep>
+
+                    <CopilotStep text={`১। আপনার বর্তমান অথবা  সর্বশেষ শিক্ষা প্রতিষ্ঠানের নাম লিখে সার্চ দিন। তাহলে একটি লিস্ট পাবেন।
+২। সেই লিস্ট থেকে আপনার শিক্ষা প্রতিষ্ঠানের নাম সিলেক্ট করুন।
+৩। আপনার শিক্ষা প্রতিষ্ঠানের নাম খুজে না পেলে 'Not Found' সার্চ দিয়ে সিলেক্ট করুন।`} order={2} name="institute">
+                        <CopilotView style={{
                             position: 'absolute',
                             top: 100,
                             zIndex: 1,
@@ -129,35 +137,8 @@ class StudyDetails extends Component {
                                     </TouchableOpacity>
                                 )}
                             />
-                        </View>
-                    )}
-                    {/* <View>
-                        <Text style={styles.formTitle}>INSTITUTION NAME</Text>
-                        <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
-                            {this.state.institutions.length > 0 && (<Picker
-                                selectedValue={this.state.selectedInstitution.id}
-                                style={{ height: 50 }}
-                                onValueChange={(institution, selectedInstitutionIndex) => this.selectInstitution(institution, selectedInstitutionIndex)}>
-                                {
-                                    this.state.institutions.length > 0 && this.state.institutions.map((institution) => {
-                                        return (
-                                            <Picker.Item key={institution.id} label={institution.name} value={institution.id} />
-                                        )
-                                    })
-                                }
-                            </Picker>)}
-                            {
-                                this.state.institutions.length === 0 && (
-                                    <Picker
-                                        selectedValue={0}
-                                        style={{ height: 50 }}
-                                    >
-                                        <Picker.Item label="---" value={0} />
-                                    </Picker>
-                                )
-                            }
-                        </View>
-                    </View> */}
+                        </CopilotView>
+                    </CopilotStep>
                 </View>
                 <View style={{ flex: .2, paddingHorizontal: 30 }}>
                     <TouchableOpacity style={styles.submitButtom} onPress={() => this.props.submitStudyDetails(this.state.selectedStudyLevel, this.state.selectedInstitution)}>
@@ -176,4 +157,4 @@ class StudyDetails extends Component {
     }
 }
 
-export default StudyDetails;
+export default copilot()(StudyDetails);

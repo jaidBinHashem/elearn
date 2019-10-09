@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.github.wumke.RNExitApp.RNExitAppPackage;
-// import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.horcrux.svg.SvgPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.airship.customwebview.CustomWebViewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
@@ -42,7 +42,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFirebaseMessagingPackage(),
             new RNFirebaseNotificationsPackage(),
             new RNExitAppPackage(),
-            // new RNDeviceInfo(),
+            new SvgPackage(),
             new ImagePickerPackage(),
             new CustomWebViewPackage(),
             new RNCWebViewPackage(),
