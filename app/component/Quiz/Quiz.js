@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator, Image } from 'react-native'
+import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
@@ -244,7 +244,7 @@ class Quiz extends Component {
                     </View>
                     <View style={styles.question}>
                         <View style={{ marginTop: 10 }}>
-                            {!question.question_image && questionContent.length > 0 && questionContent.map((value, index) => {
+                            {questionContent.length > 0 && questionContent.map((value, index) => {
                                 if (index % 2 === 0) {
                                     if (value.length > 0) {
                                         return (<View key={index} style={{ marginVertical: 15 }}><Text style={{ fontSize: 22 }}>{value}</Text></View>)
@@ -268,12 +268,6 @@ class Quiz extends Component {
                                     )
                                 }
                             })}
-                            {
-                                question.question_image && <Image
-                                    style={{ width: 50, height: 50 }}
-                                    source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }}
-                                />
-                            }
                         </View>
                         <View style={styles.optionsContainer}>
                             {/* <SelectMultipleGroupButton
