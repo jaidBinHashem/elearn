@@ -54,7 +54,7 @@ class Notifications extends Component {
                                     <Text style={{ color: 'black', fontSize: 16, fontWeight: '500' }} numberOfLines={1}>{notification.title}</Text>
                                     <Text style={{ fontSize: 12 }} numberOfLines={1}>{moment(notifications.updated_at).format("Do MMM")}</Text>
                                     <Hyperlink linkDefault={true}>
-                                        <Text style={{ paddingTop: 5, marginVertical: 15 }}>{notification.content}</Text>
+                                        <Text selectable={true} style={{ paddingTop: 5, marginVertical: 15, lineHeight: 18 }}>{notification.content}</Text>
                                     </Hyperlink>
                                 </View>)
                         })

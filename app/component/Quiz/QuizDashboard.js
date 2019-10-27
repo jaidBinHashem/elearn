@@ -35,6 +35,7 @@ class QuizDashboard extends Component {
         let minutes = parseInt(this.props.quiz.time / 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time / 60, 10) : parseInt(this.props.quiz.time / 60, 10);
         let seconds = parseInt(this.props.quiz.time % 60, 10) < 10 ? "0" + parseInt(this.props.quiz.time % 60, 10) : parseInt(this.props.quiz.time % 60, 10);
         let time = String(minutes) + ":" + String(seconds);
+        console.log(this.props.quiz, "quiz");
         return (
             <View style={[styles.container, styles.horizontal]}>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />

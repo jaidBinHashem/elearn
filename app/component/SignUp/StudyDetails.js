@@ -30,7 +30,9 @@ class StudyDetails extends Component {
     }
 
     componentDidMount() {
-        this.props.start();
+        setTimeout(() => {
+            this.props.start();
+        }, 800);
         this.getStudyLevel();
     }
 

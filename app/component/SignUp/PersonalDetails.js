@@ -29,7 +29,9 @@ class PersonalDetails extends Component {
     }
 
     componentDidMount() {
-        this.props.start();
+        setTimeout(() => {
+            this.props.start();
+        }, 800);
     }
 
 

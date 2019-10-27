@@ -153,7 +153,7 @@ class SignUp extends Component {
                                 showsButtons={false}
                                 showsPagination={false}
                                 loop={false}
-                                scrollEnabled={true}
+                                scrollEnabled={false}
                                 loadMinimal={true}
                                 loadMinimalSize={0}
                                 onIndexChanged={(index) => this.setState({ index })}

@@ -33,7 +33,9 @@ class CourseDetails extends Component {
     }
 
     componentDidMount() {
-        this.props.start();
+        setTimeout(() => {
+            this.props.start();
+        }, 800);
     }
 
     componentWillReceiveProps(nextProps) {

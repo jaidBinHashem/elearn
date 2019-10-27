@@ -84,15 +84,15 @@ class Coupon extends Component {
                     {
                         this.props.coupons.map(coupon => {
                             return (
-                                <TouchableOpacity key={coupon.code} style={{ padding: 20, backgroundColor: Colors.appTheme, height: 80, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                                    <View>
-                                        <Text style={{ fontSize: 18, fontWeight: '700' }}>{coupon.code}</Text>
-                                        <Text style={{ fontSize: 18, fontWeight: '300' }}>{coupon.remaining} tk discount remaining</Text>
+                                <View key={coupon.code} style={{ flex: 1, padding: 20, backgroundColor: Colors.appTheme, marginVertical: 15, elevation: 5, borderRadius: 3, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <View style={{ flex: 4, }}>
+                                        <Text style={{ fontSize: 18, fontWeight: '700' }}>{coupon.name}</Text>
+                                        <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '300' }}>{coupon.remaining} tk discount remaining</Text>
                                     </View>
-                                    <View>
-                                        <Icon name='dollar-bill' type='foundation' color='#fff' />
+                                    <View style={{ backgroundColor: '#fff', flex: 2, padding: 5 }}>
+                                        <Text numberOfLines={2} style={{ textAlign: 'center', fontSize: 18, fontWeight: '700' }}>{coupon.code}</Text>
                                     </View>
-                                </TouchableOpacity>
+                                </View>
                             )
                         })
                     }

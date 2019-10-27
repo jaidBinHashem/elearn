@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator } from 'react-native'
+import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator, Image } from 'react-native'
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
@@ -230,7 +230,7 @@ class Quiz extends Component {
     render() {
         let questions = [...this.props.quiz.questions], answers = [...this.props.quiz.answers], selectedAnswersIdArray = [...this.props.quiz.selectedAnswersIdArray], questionViews = [], explanationView = [];
         questions.map((question, index) => {
-            let questionContent = question.question.split(/<latex>(.*?)<latex>/gi);
+            let questionContent = question.question && question.question.split(/<latex>(.*?)<latex>/gi);
             let buttonData = question.answers.map((answer) => {
                 return ({
                     value: answer.id,
@@ -244,7 +244,7 @@ class Quiz extends Component {
                     </View>
                     <View style={styles.question}>
                         <View style={{ marginTop: 10 }}>
-                            {questionContent.map((value, index) => {
+                            {!question.question_image && questionContent.length > 0 && questionContent.map((value, index) => {
                                 if (index % 2 === 0) {
                                     if (value.length > 0) {
                                         return (<View key={index} style={{ marginVertical: 15 }}><Text style={{ fontSize: 22 }}>{value}</Text></View>)
@@ -268,6 +268,12 @@ class Quiz extends Component {
                                     )
                                 }
                             })}
+                            {
+                                question.question_image && <Image
+                                    style={{ width: 50, height: 50 }}
+                                    source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }}
+                                />
+                            }
                         </View>
                         <View style={styles.optionsContainer}>
                             {/* <SelectMultipleGroupButton
@@ -414,7 +420,9 @@ class Quiz extends Component {
                                         })
                                     }
                                     let answerContent = answer.answer.split(/<latex>(.*?)<latex>/gi);
-
+                                    let answerExplanationContent = answer.explanation.split(/<latex>(.*?)<latex>/gi);
+                                    console.log(answer.answer, answerContent, "answer content");
+                                    console.log(answer.explanation, answerExplanationContent, "explnation content");
                                     if (answerContent.length === 1) {
                                         return (
                                             <TouchableOpacity
@@ -422,10 +430,45 @@ class Quiz extends Component {
                                                 style={[styles.option, answer.correct && styles.explanation, wrongStyle]}>
                                                 <Text style={styles.optionText}>{answer.answer}</Text>
                                                 {
-                                                    answer.correct && answer.explanation != null && (<Text style={styles.explanationText}>
-                                                        <Text style={{ color: colors.appTheme }}>
-                                                            Explanation:
-                                                            </Text> {answer.explanation}</Text>)
+                                                    answer.correct && answer.explanation != null && (
+                                                        <View>
+                                                            <Text style={styles.explanationText}>
+                                                                Explanation:
+                                                            </Text>
+                                                            {
+                                                                answerExplanationContent.length === 1 ? <Text>{answer.explanation}</Text> : (
+                                                                    answerExplanationContent.map((value, index) => {
+                                                                        if (index % 2 === 0) {
+                                                                            if (value.length > 0) {
+                                                                                return (
+                                                                                    <View key={index} style={{ marginVertical: 10 }}>
+                                                                                        <Text key={index} style={{ fontSize: 20, textAlign: 'center' }}>{value}</Text>
+                                                                                    </View>
+                                                                                )
+                                                                            }
+                                                                        } else {
+                                                                            return (
+                                                                                <ScrollView key={index}>
+                                                                                    <Katex
+                                                                                        style={{ height: 120 }}
+                                                                                        scalesPageToFit={false}
+                                                                                        expression={value}
+                                                                                        scrollEnabled={false}
+                                                                                        displayMode={false}
+                                                                                        throwOnError={false}
+                                                                                        errorColor="#f00"
+                                                                                        macros={{}}
+                                                                                        colorIsTextColor={false}
+                                                                                        onError={() => console.error('Error')}
+                                                                                    />
+                                                                                </ScrollView>
+                                                                            )
+                                                                        }
+                                                                    })
+                                                                )
+                                                            }
+                                                        </View>
+                                                    )
                                                 }
                                             </TouchableOpacity>
                                         )
@@ -467,10 +510,45 @@ class Quiz extends Component {
                                                     })
                                                 }
                                                 {
-                                                    answer.correct && answer.explanation != null && (<Text style={styles.explanationText}>
-                                                        <Text style={{ color: colors.appTheme }}>
-                                                            Explanation:
-                                                            </Text> {answer.explanation}</Text>)
+                                                    answer.correct && answer.explanation != null && (
+                                                        <View>
+                                                            <Text style={styles.explanationText}>
+                                                                Explanation:
+                                                            </Text>
+                                                            {
+                                                                answerExplanationContent.length === 1 ? <Text>{answer.explanation}</Text> : (
+                                                                    answerExplanationContent.map((value, index) => {
+                                                                        if (index % 2 === 0) {
+                                                                            if (value.length > 0) {
+                                                                                return (
+                                                                                    <View key={index} style={{ marginVertical: 10 }}>
+                                                                                        <Text key={index} style={{ fontSize: 20, textAlign: 'center' }}>{value}</Text>
+                                                                                    </View>
+                                                                                )
+                                                                            }
+                                                                        } else {
+                                                                            return (
+                                                                                <ScrollView key={index}>
+                                                                                    <Katex
+                                                                                        style={{ height: 120 }}
+                                                                                        scalesPageToFit={false}
+                                                                                        expression={value}
+                                                                                        scrollEnabled={false}
+                                                                                        displayMode={false}
+                                                                                        throwOnError={false}
+                                                                                        errorColor="#f00"
+                                                                                        macros={{}}
+                                                                                        colorIsTextColor={false}
+                                                                                        onError={() => console.error('Error')}
+                                                                                    />
+                                                                                </ScrollView>
+                                                                            )
+                                                                        }
+                                                                    })
+                                                                )
+                                                            }
+                                                        </View>
+                                                    )
                                                 }
                                             </TouchableOpacity>
                                         )

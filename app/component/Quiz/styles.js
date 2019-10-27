@@ -119,7 +119,7 @@ export default StyleSheet.create({
   },
   explanationText: {
     marginVertical: 15,
-    color: 'black'
+    color: Colors.appTheme
   },
   questionNavigationContainer: {
     flex: 1,
