@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator, Image } from 'react-native'
+import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator, Image, Modal } from 'react-native'
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
+import ImageViewer from 'react-native-image-zoom-viewer';
 import { NavigationActions } from 'react-navigation';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
@@ -60,7 +61,8 @@ class Quiz extends Component {
             answers: [],
             answerdQuestions: [],
             selectedAnswerIdArray: [],
-
+            modalView: false,
+            selectedImage: [],
             appState: AppState.currentState,
         }
     }
@@ -202,6 +204,15 @@ class Quiz extends Component {
         );
     }
 
+    showModal = (url) => {
+        let selectedImage = [];
+        let image = {
+            'url': url
+        }
+        selectedImage.push(image);
+        this.setState({ selectedImage, modalView: true })
+    }
+
     submitExam = () => {
         let answers = [...this.state.answers];
         let selectedAnswerIdArray = [], rightAnswers = [], wrongAnswers = [];
@@ -244,7 +255,7 @@ class Quiz extends Component {
                     </View>
                     <View style={styles.question}>
                         <View style={{ marginTop: 10 }}>
-                            {!question.question_image && questionContent.length > 0 && questionContent.map((value, index) => {
+                            {questionContent && questionContent.map((value, index) => {
                                 if (index % 2 === 0) {
                                     if (value.length > 0) {
                                         return (<View key={index} style={{ marginVertical: 15 }}><Text style={{ fontSize: 22 }}>{value}</Text></View>)
@@ -269,10 +280,16 @@ class Quiz extends Component {
                                 }
                             })}
                             {
-                                question.question_image && <Image
-                                    style={{ width: 50, height: 50 }}
-                                    source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }}
-                                />
+                                question.question_image &&
+                                <TouchableOpacity
+                                    onPress={() => this.showModal(question.question_image)}
+                                    style={styles.imageContainer}
+                                >
+                                    <Image
+                                        style={{ width: 300, height: 400, alignSelf: 'center' }}
+                                        source={{ uri: question.question_image }}
+                                    />
+                                </TouchableOpacity>
                             }
                         </View>
                         <View style={styles.optionsContainer}>
@@ -384,7 +401,7 @@ class Quiz extends Component {
                     </View>
                     <View style={styles.question}>
                         <View style={{ marginTop: 10 }}>
-                            {questionContent.map((value, index) => {
+                            {questionContent && questionContent.map((value, index) => {
                                 if (index % 2 === 0) {
                                     if (value.length > 0) {
                                         return (<View key={index} ><Text style={{ fontSize: 26 }}>{value}</Text></View>)
@@ -408,6 +425,18 @@ class Quiz extends Component {
                                     )
                                 }
                             })}
+                            {
+                                question.question_image &&
+                                <TouchableOpacity
+                                    onPress={() => this.showModal(question.question_image)}
+                                    style={styles.imageContainer}
+                                >
+                                    <Image
+                                        style={{ width: 300, height: 400, alignSelf: 'center' }}
+                                        source={{ uri: question.question_image }}
+                                    />
+                                </TouchableOpacity>
+                            }
                         </View>
                         <View style={styles.optionsContainer}>
                             {
@@ -421,8 +450,6 @@ class Quiz extends Component {
                                     }
                                     let answerContent = answer.answer.split(/<latex>(.*?)<latex>/gi);
                                     let answerExplanationContent = answer.explanation.split(/<latex>(.*?)<latex>/gi);
-                                    console.log(answer.answer, answerContent, "answer content");
-                                    console.log(answer.explanation, answerExplanationContent, "explnation content");
                                     if (answerContent.length === 1) {
                                         return (
                                             <TouchableOpacity
@@ -436,7 +463,7 @@ class Quiz extends Component {
                                                                 Explanation:
                                                             </Text>
                                                             {
-                                                                answerExplanationContent.length === 1 ? <Text>{answer.explanation}</Text> : (
+                                                                answerExplanationContent[0] != "" && answerExplanationContent.length === 1 ? <Text>{answer.explanation}</Text> : (
                                                                     answerExplanationContent.map((value, index) => {
                                                                         if (index % 2 === 0) {
                                                                             if (value.length > 0) {
@@ -467,6 +494,20 @@ class Quiz extends Component {
                                                                     })
                                                                 )
                                                             }
+
+                                                            {
+                                                                answer.explanation_image &&
+                                                                <TouchableOpacity
+                                                                    onPress={() => this.showModal(answer.explanation_image)}
+                                                                    style={styles.imageContainer}
+                                                                >
+                                                                    <Image
+                                                                        style={{ width: 300, height: 400, alignSelf: 'center' }}
+                                                                        source={{ uri: answer.explanation_image }}
+                                                                    />
+                                                                </TouchableOpacity>
+                                                            }
+
                                                         </View>
                                                     )
                                                 }
@@ -516,7 +557,7 @@ class Quiz extends Component {
                                                                 Explanation:
                                                             </Text>
                                                             {
-                                                                answerExplanationContent.length === 1 ? <Text>{answer.explanation}</Text> : (
+                                                                answerExplanationContent[0] != "" && answerExplanationContent.length === 1 ? <Text>{answer.explanation}</Text> : (
                                                                     answerExplanationContent.map((value, index) => {
                                                                         if (index % 2 === 0) {
                                                                             if (value.length > 0) {
@@ -547,6 +588,18 @@ class Quiz extends Component {
                                                                     })
                                                                 )
                                                             }
+                                                            {
+                                                                answer.explanation_image &&
+                                                                <TouchableOpacity
+                                                                    onPress={() => this.showModal(answer.explanation_image)}
+                                                                    style={styles.imageContainer}
+                                                                >
+                                                                    <Image
+                                                                        style={{ width: 300, height: 400, alignSelf: 'center' }}
+                                                                        source={{ uri: answer.explanation_image }}
+                                                                    />
+                                                                </TouchableOpacity>
+                                                            }
                                                         </View>
                                                     )
                                                 }
@@ -565,6 +618,13 @@ class Quiz extends Component {
         });
         return (
             <View style={[styles.container, styles.horizontal]}>
+                <Modal visible={this.state.modalView} transparent={true} onRequestClose={() => this.setState({ modalView: false })}>
+                    <ImageViewer
+                        imageUrls={this.state.selectedImage}
+                        enableSwipeDown={true}
+                        onCancel={() => this.setState({ modalView: false })}
+                    />
+                </Modal>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
                 <ScrollView>
                     <View style={{ flex: .9 }}>
