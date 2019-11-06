@@ -73,8 +73,10 @@ export default StyleSheet.create({
   },
   submitExam: {
     fontWeight: '500',
-    marginRight: 15,
-    color: Colors.appTheme
+    color: '#fff',
+    textAlign:'center',
+    marginHorizontal:22,
+    marginVertical:7
   },
   questionContainer: {
     // marginVertical: 25,

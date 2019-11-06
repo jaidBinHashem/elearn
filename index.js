@@ -17,5 +17,5 @@ const AppContainer = () => (
   </Provider>
 );
 
-YellowBox.ignoreWarnings(['Require cycle:']);
+YellowBox.ignoreWarnings(['Require cycle:', 'ViewPagerAndroid']);
 AppRegistry.registerComponent(appName, () => AppContainer);

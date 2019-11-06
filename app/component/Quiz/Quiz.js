@@ -64,6 +64,7 @@ class Quiz extends Component {
             modalView: false,
             selectedImage: [],
             appState: AppState.currentState,
+            dotView : true
         }
     }
 
@@ -231,6 +232,11 @@ class Quiz extends Component {
         return text.split(/<latex>(.*?)<latex>/gi);
     }
 
+    handleScroll = ({ nativeEvent }) => {
+        let { y } = nativeEvent.contentOffset;
+        y < 5 ? this.setState({ dotView: true }) : this.setState({ dotView: false })
+    }
+
 
     componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
@@ -249,7 +255,7 @@ class Quiz extends Component {
                 })
             });
             questionViews.push(
-                <ScrollView showsVerticalScrollIndicator={false} key={index} style={styles.questionContainer}>
+                <ScrollView onScroll={this.handleScroll} showsVerticalScrollIndicator={false} key={index} style={styles.questionContainer}>
                     <View style={styles.questionCounter}>
                         <Text>{index + 1}</Text>
                     </View>
@@ -395,7 +401,7 @@ class Quiz extends Component {
             );
 
             explanationView.push(
-                <ScrollView key={index} style={styles.questionContainer}>
+                <ScrollView onScroll={this.handleScroll} key={index} style={styles.questionContainer}>
                     <View style={styles.questionCounter}>
                         <Text>{index + 1}</Text>
                     </View>
@@ -642,18 +648,20 @@ class Quiz extends Component {
                                 </View>
                             </View>
                             <View style={styles.timeContainer}>
-                                <TouchableOpacity onPress={() => this.confirmExamSubmit()}>
+                                <TouchableOpacity style={{ backgroundColor: colors.appTheme, borderRadius: 5, justifyContent: 'center' }} onPress={() => this.confirmExamSubmit()}>
                                     <Text style={styles.submitExam}>Submit</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>)}
-                        <View style={{ height: deviceHeight - 170 }}>
+                        <View style={{ height: deviceHeight - 170, zIndex: 1 }}>
                             <Swiper style={styles.wrapper}
                                 ref={node => (this.scroll = node)}
                                 showsButtons={false}
-                                showsPagination={false}
+                                showsPagination={this.state.dotView}
+                                activeDotColor={colors.appTheme}
+                                paginationStyle={{ top: -350 }}
                                 loop={false}
-                                scrollEnabled={false}
+                                scrollEnabled={true}
                                 index={0}
                                 automaticallyAdjustContentInsets={true}
                                 onIndexChanged={(index) => this.setState({ swiperIndex: index })}
