@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ActivityIndicator, View, StatusBar, Text, } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import VideoView from 'react-native-android-fullscreen-webview-video';
+import VideoView from 'react-native-webview';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 
