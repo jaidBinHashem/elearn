@@ -26,14 +26,6 @@ class Player extends Component {
         }
     }
 
-
-    componentWillReceiveProps(nextProps) {
-
-        // !nextProps.auth.isLoged
-        //     ? this.props.navigation.navigate('Auth')
-        //     : null
-    }
-
     async componentDidMount() {
         let accessToken = await AsyncStorage.getItem("USER_TOKEN");
         this.setState({

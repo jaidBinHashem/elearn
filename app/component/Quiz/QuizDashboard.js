@@ -15,7 +15,7 @@ class QuizDashboard extends Component {
         title: 'Quiz',
     });
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null

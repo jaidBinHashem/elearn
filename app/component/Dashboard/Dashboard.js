@@ -38,7 +38,7 @@ class Dashboard extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.props.selectedCategoryID != null && nextProps.selectedCategoryID != this.props.selectedCategoryID && this._onRefresh();
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')

@@ -23,7 +23,7 @@ class Payment extends Component {
     }
 
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         nextProps.paymentHTML && nextProps.paymentHTML != null && this.setState({ paymentHTML: nextProps.paymentHTML });
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')

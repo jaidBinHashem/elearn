@@ -68,7 +68,7 @@ class Quiz extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null;

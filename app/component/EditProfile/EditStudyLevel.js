@@ -38,7 +38,7 @@ class EditStudyLevel extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.props.user != nextProps.user && (
             Toast.show("Study level updated successfully"),
             this.props.navigation.navigate('Loader')

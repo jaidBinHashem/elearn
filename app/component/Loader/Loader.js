@@ -13,7 +13,7 @@ import colors from '../../global/../global/colors';
 import styles from './styles';
 
 class Loader extends Component {
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : this.switchToApp();

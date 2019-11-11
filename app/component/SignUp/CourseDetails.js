@@ -38,7 +38,7 @@ class CourseDetails extends Component {
         }, 800);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         nextProps.studyLevel && this.getCourse(nextProps.studyLevel);
     }
 

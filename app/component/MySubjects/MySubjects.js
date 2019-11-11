@@ -16,7 +16,7 @@ class MySubjects extends Component {
         // headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => console.log("here")}><Icon name='bell' type='feather' color='#fff' /></TouchableOpacity>,
     });
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null

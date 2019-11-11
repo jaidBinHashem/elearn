@@ -20,7 +20,7 @@ class PreviousAttemps extends Component {
         loaderHandler.showLoader("Loading");
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null;

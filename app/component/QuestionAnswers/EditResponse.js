@@ -58,7 +58,7 @@ class EditResponse extends Component {
         this.setState({ images });
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
             : null

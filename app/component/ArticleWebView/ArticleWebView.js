@@ -21,11 +21,7 @@ class ArticleWebView extends Component {
             content: null
         }
     }
-
-    componentWillReceiveProps(nextProps) {
-
-    }
-
+    
     async componentDidMount() {
         const request = {
             endPoint: this.props.navigation.state.params.category + '/' + this.props.navigation.state.params.slug,

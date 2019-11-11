@@ -45,7 +45,7 @@ class EditProfile extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (this.props.user != nextProps.user) {
             Toast.show("Profile update successfull");
             this.props.navigation.goBack();

@@ -43,7 +43,7 @@ class SignUp extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         nextProps.auth.error && (
             Alert.alert(
                 '',
