@@ -15,7 +15,7 @@ class PreviousAttemps extends Component {
         title: 'Leaderboard',
     });
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.props.getPreviousAttemps(this.props.navigation.state.params.lessonId);
         loaderHandler.showLoader("Loading");
     }

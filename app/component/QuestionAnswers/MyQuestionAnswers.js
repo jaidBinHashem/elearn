@@ -29,7 +29,7 @@ class MyQuestionAnswers extends Component {
             : null
     }
 
-    async componentWillMount() {
+    async UNSAFE_componentWillMount() {
         this.props.navigation.state.params.subject_qna ? this.getQuestions(this.props.navigation.state.params.subject_slug) : this.getQuestions();
     }
 

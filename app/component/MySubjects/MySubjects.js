@@ -22,7 +22,7 @@ class MySubjects extends Component {
             : null
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener("didFocus", () => {
             this.props.getSubjects();

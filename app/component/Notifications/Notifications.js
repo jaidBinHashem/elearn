@@ -27,7 +27,7 @@ class Notifications extends Component {
             : null
     }
 
-    async componentWillMount() {
+    async UNSAFE_componentWillMount() {
         const request = {
             endPoint: 'push-notification-list',
             showLoader: true,

@@ -31,7 +31,7 @@ class Coupon extends Component {
         nextProps.couponAdded != this.props.couponAdded && nextProps.couponAdded && this.setState({ isModalVisible: false });
     }
 
-    async componentWillMount() {
+    async UNSAFE_componentWillMount() {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener("didFocus", () => {
             this.props.getCoupons();

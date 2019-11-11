@@ -26,7 +26,7 @@ class ConfirmBuyPackage extends Component {
         }
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.props.getCoupons();
     }
 

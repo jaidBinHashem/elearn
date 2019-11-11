@@ -34,7 +34,7 @@ class QuestionDetails extends Component {
             : null
     }
 
-    async componentWillMount() {
+    async UNSAFE_componentWillMount() {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener("didFocus", () => {
             this.getResponses();

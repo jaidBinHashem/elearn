@@ -21,7 +21,7 @@ class Offers extends Component {
             : null
     }
 
-    async componentWillMount() {
+    async UNSAFE_componentWillMount() {
         const request = {
             endPoint: 'offer-list',
             showLoader: true,
