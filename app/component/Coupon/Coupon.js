@@ -13,7 +13,7 @@ import styles from './styles';
 class Coupon extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Coupon',
-        headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
+        headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='entypo' color='#fff' /></TouchableOpacity>,
     });
 
     constructor(props) {

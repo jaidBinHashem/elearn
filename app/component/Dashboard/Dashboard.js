@@ -22,10 +22,10 @@ const APP_VERSION = '0.8.0';
 class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Dashboard',
-        headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
+        headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='entypo' color='#fff' /></TouchableOpacity>,
         headerRight: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 60 }} onPress={() => navigation.navigate('Notifications')}>
             <View style={{ flexDirection: 'row', right: 10 }}>
-                <Icon name='bell' type='feather' color='#fff' size={30} containerStyle={{ left: 20 }} />
+                <Icon name='bell' type='simple-line-icon' color='#fff' size={28} containerStyle={{ left: 20 }} />
                 <Badge value={navigation.state.params ? navigation.state.params.notificationCount : 0} status="primary" containerStyle={{ position: 'absolute', right: 4 }} />
             </View>
         </TouchableOpacity>,

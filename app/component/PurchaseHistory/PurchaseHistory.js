@@ -11,7 +11,7 @@ import styles from './styles';
 class PurchaseHistory extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Purchase History',
-        headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='feather' color='#fff' /></TouchableOpacity>,
+        headerLeft: <TouchableOpacity style={{ height: 50, justifyContent: 'center', width: 50 }} onPress={() => navigation.openDrawer()}><Icon name='menu' type='entypo' color='#fff' /></TouchableOpacity>,
     });
 
     constructor(props) {

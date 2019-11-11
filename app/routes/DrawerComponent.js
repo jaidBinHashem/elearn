@@ -3,7 +3,7 @@ import { View, Text, Share, TouchableOpacity } from 'react-native'
 import { Avatar, Icon } from 'react-native-elements';
 import { connect } from "react-redux";
 
-import { DrawerItems } from 'react-navigation';
+import { DrawerItems } from 'react-navigation-drawer';
 
 import colors from '../global/../global/colors'
 // import styles from './styles';

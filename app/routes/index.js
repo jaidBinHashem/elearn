@@ -1,7 +1,10 @@
 import React from 'react';
 import { Animated, Easing } from 'react-native'
 import { Icon } from 'react-native-elements';
-import { createMaterialTopTabNavigator, TabBarTop, createSwitchNavigator, createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
+import { TabBarTop, createSwitchNavigator, createAppContainer } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 import Loader from '../component/Loader';
 import Welcome from '../component/Welcome';
 import SignUp from '../component/SignUp';
