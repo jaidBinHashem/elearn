@@ -33,10 +33,6 @@ class Login extends Component {
         }
     }
 
-    async componentWillMount() {
-
-    }
-
     UNSAFE_componentWillReceiveProps(nextProps) {
         nextProps.auth.loginFailed && (loaderHandler.hideLoader(), Toast.show(nextProps.auth.loginFailedMessage));
         !nextProps.auth.loginFailed && (loaderHandler.hideLoader(), this.props.navigation.navigate('Loader', { 'SuccessLogin': true }))

@@ -8,7 +8,7 @@ import { NavigationActions } from 'react-navigation';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
-import Katex from 'react-native-katex';
+import Katex from './src/';
 
 import { setQuiz, submitQuiz } from '../../redux/actions/QuizActions';
 import { connect } from "react-redux";
@@ -64,7 +64,7 @@ class Quiz extends Component {
             modalView: false,
             selectedImage: [],
             appState: AppState.currentState,
-            dotView : true
+            dotView: true
         }
     }
 
@@ -268,10 +268,9 @@ class Quiz extends Component {
                                     }
                                 } else {
                                     return (
-                                        <ScrollView key={index} style={{ padding: 5 }}>
+                                        <ScrollView showsVerticalScrollIndicator={false} key={index} style={{ padding: 5 }}>
                                             <Katex
                                                 style={{ height: 110 }}
-                                                scalesPageToFit={false}
                                                 expression={value}
                                                 scrollEnabled={false}
                                                 displayMode={false}
@@ -401,7 +400,7 @@ class Quiz extends Component {
             );
 
             explanationView.push(
-                <ScrollView onScroll={this.handleScroll} key={index} style={styles.questionContainer}>
+                <ScrollView showsVerticalScrollIndicator={false} onScroll={this.handleScroll} key={index} style={styles.questionContainer}>
                     <View style={styles.questionCounter}>
                         <Text>{index + 1}</Text>
                     </View>
@@ -414,7 +413,7 @@ class Quiz extends Component {
                                     }
                                 } else {
                                     return (
-                                        <ScrollView key={index} style={{ padding: 5 }}>
+                                        <ScrollView key={index} showsVerticalScrollIndicator={false} style={{ padding: 5 }}>
                                             <Katex
                                                 style={{ height: 110 }}
                                                 scalesPageToFit={false}
@@ -481,7 +480,7 @@ class Quiz extends Component {
                                                                             }
                                                                         } else {
                                                                             return (
-                                                                                <ScrollView key={index}>
+                                                                                <ScrollView showsVerticalScrollIndicator={false} key={index}>
                                                                                     <Katex
                                                                                         style={{ height: 120 }}
                                                                                         scalesPageToFit={false}
@@ -538,7 +537,7 @@ class Quiz extends Component {
                                                             }
                                                         } else {
                                                             return (
-                                                                <ScrollView key={index}>
+                                                                <ScrollView showsVerticalScrollIndicator={false} key={index}>
                                                                     <Katex
                                                                         style={{ height: 120 }}
                                                                         scalesPageToFit={false}
@@ -575,7 +574,7 @@ class Quiz extends Component {
                                                                             }
                                                                         } else {
                                                                             return (
-                                                                                <ScrollView key={index}>
+                                                                                <ScrollView showsVerticalScrollIndicator={false} key={index}>
                                                                                     <Katex
                                                                                         style={{ height: 120 }}
                                                                                         scalesPageToFit={false}
@@ -619,8 +618,6 @@ class Quiz extends Component {
                     </View>
                 </ScrollView>
             )
-
-
         });
         return (
             <View style={[styles.container, styles.horizontal]}>
@@ -632,7 +629,7 @@ class Quiz extends Component {
                     />
                 </Modal>
                 <StatusBar barStyle="light-content" backgroundColor="#e0d1ff" />
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{ flex: .9 }}>
                         {!this.props.navigation.state.params.showExplanation && (<View style={styles.quesationNumberAndTimeContainer}>
                             <View style={styles.quationNumberContainer}>
@@ -654,12 +651,24 @@ class Quiz extends Component {
                             </View>
                         </View>)}
                         <View style={{ height: deviceHeight - 170, zIndex: 1 }}>
+                            <View style={{ paddingVertical: 20, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    {
+                                        questions.map((q, index) => (
+                                            <TouchableOpacity key={index} onPress={() => this.scroll.scrollTo(index)}>
+                                                <Text style={[{ marginHorizontal: 10, fontSize: 20, textAlign: 'center' }, this.state.swiperIndex === index && ({ color: colors.appTheme, fontWeight:'bold' })]}>{index + 1}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                        )
+                                    }
+                                </ScrollView>
+                            </View>
                             <Swiper style={styles.wrapper}
                                 ref={node => (this.scroll = node)}
                                 showsButtons={false}
-                                showsPagination={this.state.dotView}
-                                activeDotColor={colors.appTheme}
-                                paginationStyle={{ top: -350 }}
+                                showsPagination={false}
+                                // activeDotColor={colors.appTheme}
+                                // paginationStyle={{ top: -350 }}
                                 loop={false}
                                 scrollEnabled={true}
                                 index={0}

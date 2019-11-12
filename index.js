@@ -3,6 +3,7 @@
  */
 import React from "react";
 import { AppRegistry, YellowBox } from 'react-native';
+import 'react-native-gesture-handler';
 import App from './app/routes';
 import { name as appName } from './app.json';
 

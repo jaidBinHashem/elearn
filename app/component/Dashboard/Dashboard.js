@@ -453,10 +453,10 @@ class Dashboard extends Component {
                             </View>
                             <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
                                 <TouchableOpacity onPress={() => this.allSubjectScroll.scrollBy(-1)}>
-                                    <Icon name='chevron-left' type='feather' color='gray' size={30} />
+                                    <Icon name='left' type='antdesign' color='gray' size={30} />
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.allSubjectScroll.scrollBy(1)}>
-                                    <Icon name='chevron-right' type='feather' color='gray' size={30} />
+                                    <Icon name='right' type='antdesign' color='gray' size={30} />
                                 </TouchableOpacity>
                             </View>
                         </View>

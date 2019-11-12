@@ -89,7 +89,7 @@ class MyProfile extends Component {
                     <View style={{ marginVertical: 20, justifyContent: 'space-between', flexDirection: 'row' }}>
                         <Text style={{ fontWeight: '600', color: 'black', fontSize: 16 }}>Study Levels</Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('EditStudyLevel')}>
-                            <Icon name='edit' type='feather' color={Colors.appTheme} />
+                            <Icon name='edit' type='antdesign' color={Colors.appTheme} />
                         </TouchableOpacity>
                     </View>
 
@@ -115,7 +115,7 @@ class MyProfile extends Component {
                     <View style={{ marginVertical: 20, justifyContent: 'space-between', flexDirection: 'row' }}>
                         <Text style={{ fontWeight: '600', color: 'black', fontSize: 16 }}>Profile Details</Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('EditProfile')}>
-                            <Icon name='edit' type='feather' color={Colors.appTheme} />
+                            <Icon name='edit' type='antdesign' color={Colors.appTheme} />
                         </TouchableOpacity>
                     </View>
 
@@ -125,15 +125,15 @@ class MyProfile extends Component {
                             <Text style={[styles.profileDetails, { marginLeft: 56 }]}>{this.props.user.name}</Text>
                         </View>
                         <View style={styles.profileDetailsContainer}>
-                            <Icon name='phone-call' type='feather' color={Colors.appTheme} />
+                            <Icon name='phone' type='antdesign' color={Colors.appTheme} />
                             <Text style={styles.profileDetails}>0{this.props.user.phone}</Text>
                         </View>
                         <View style={styles.profileDetailsContainer}>
-                            <Icon name='mail' type='feather' color={Colors.appTheme} />
+                            <Icon name='mail' type='antdesign' color={Colors.appTheme} />
                             <Text style={styles.profileDetails}>{this.props.user.email}</Text>
                         </View>
                         <View style={styles.profileDetailsContainer}>
-                            <Icon name='users' type='feather' color={Colors.appTheme} />
+                            <Icon name='user' type='antdesign' color={Colors.appTheme} />
                             <Text style={styles.profileDetails}>{this.props.user.gender ? this.props.user.gender : 'Add your gender'}</Text>
                         </View>
                         <View style={styles.profileDetailsContainer}>
