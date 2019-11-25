@@ -18,7 +18,7 @@ import { getService, postService } from '../../network';
 
 import styles from './styles';
 
-const APP_VERSION = '0.8.0';
+const APP_VERSION = '1.0.0';
 class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Dashboard',

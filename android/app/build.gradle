@@ -103,6 +103,22 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    bundle {
+    density {
+        // Different APKs are generated for devices with different screen densities; true by default.
+        enableSplit true
+    }
+    abi {
+        // Different APKs are generated for devices with different CPU architectures; true by default.
+        enableSplit true
+    }
+    language {
+        // This is disabled so that the App Bundle does NOT split the APK for each language.
+        // We're gonna use the same APK for all languages.
+        enableSplit false
+    }
+    }
+
     dexOptions {
        javaMaxHeapSize "3g"
     }
@@ -116,8 +132,8 @@ android {
         applicationId "com.eshosikhi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 14
-        versionName "0.8.0"
+        versionCode 4194322
+        versionName "1.0.1"
     }
     signingConfigs {
         debug {
@@ -163,7 +179,7 @@ android {
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
-                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+                        defaultConfig.versionCode
             }
         }
     }

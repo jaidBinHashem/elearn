@@ -28,11 +28,11 @@ class PersonalDetails extends Component {
         }
     }
 
-    componentDidMount() {
-        setTimeout(() => {
-            this.props.start();
-        }, 800);
-    }
+    // componentDidMount() {
+    //     setTimeout(() => {
+    //         this.props.start();
+    //     }, 800);
+    // }
 
 
     render() {
