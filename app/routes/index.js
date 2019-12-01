@@ -7,7 +7,7 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import Loader from '../component/Loader';
 import Welcome from '../component/Welcome';
-import OTP from '../component/Welcome/Otp';
+import OTP from '../component/SignUp/Otp';
 import SignUp from '../component/SignUp';
 import Login from '../component/Login';
 import Dashboard from '../component/Dashboard';

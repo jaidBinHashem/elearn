@@ -23,13 +23,13 @@ class Otp extends Component {
     UNSAFE_componentWillReceiveProps(nextProps) {
         !nextProps.auth.isLoged
             ? this.props.navigation.navigate('Auth')
-            : this.switchToApp();
+            : this.props.navigation.navigate('Loder');
     }
 
     submitOtp = async () => {
         // api/validate-otp
         console.log(this.props.navigation)
-        let { phone } = this.props.navigation.state.params;
+        let { phone, user } = this.props.navigation.state.params;
         let request = {
             endPoint: 'validate-otp',
             showLoader: true,
@@ -40,8 +40,13 @@ class Otp extends Component {
             }
         }
         let response = await postService(request);
-        console.log(response, "here is response");
-        response.success && this.props.makeLoginRequest(response.data.code, phone[0] == 0 ? phone.substring(1) : phone)
+        if(response.success) {
+            if(user){
+                this.props.makeLoginRequest(response.data.data.code, phone[0] == 0 ? phone.substring(1) : phone)
+            } else {
+                this.props.navigation.navigate('SignUp')
+            }
+        } 
     }
 
     render() {

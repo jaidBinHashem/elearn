@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, Dimensions, Keyboard, Alert, Picker, TouchableOpacity } from 'react-native'
+import { View, StatusBar, Text, Dimensions, Keyboard, Alert, Picker, TouchableOpacity, ScrollView } from 'react-native'
 import { Input, Icon } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux";
@@ -7,6 +7,7 @@ import { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, r
 import RNAccountKit from 'react-native-facebook-account-kit'
 import AutoComplete from 'react-native-autocomplete-input';
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
 import Toast from 'react-native-simple-toast';
 
 import BusyIndicator from 'react-native-busy-indicator';
@@ -15,7 +16,7 @@ import { getService } from '../../network'
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 import globalStyles from '../../global/styles';
-
+import colors from '../../global/colors';
 import styles from './styles';
 
 const CopilotView = walkthroughable(View);
@@ -33,6 +34,7 @@ class SignUp extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            name: "",
             nameError: "",
             emailError: "",
             numberError: "",
@@ -51,26 +53,17 @@ class SignUp extends Component {
             selectedStudyLevel: null,
             selectedInstitution: null,
             query: '',
-            hideList: true
+            hideList: true,
+
+            studyLevelError: false,
+            courseError: false
         }
     }
-
-
-
-
-
 
 
     componentDidMount() {
         this.getStudyLevel();
     }
-
-
-
-
-
-
-
 
 
     UNSAFE_componentWillReceiveProps(nextProps) {
@@ -118,48 +111,27 @@ class SignUp extends Component {
     }
 
 
-    submitAccount = (name, email, number) => {
+    submitAccount = (name) => {
         Keyboard.dismiss();
-        let nameError = "", emailError = "", numberError = "", err = false;
-        (name.length < 1 || name.length > 191) && (nameError = "Please insert name", err = true);
-        !EMAIL.test(String(email).toLowerCase()) && (emailError = "Please insert a valid Email", err = true);
-        !NUMBER.test(String(number)) && (numberError = "Please intert a valid phone number", err = true);
-
-        err && this.setState({
+        let nameError = "", studyLevelError = false, err = false;
+        (name.length < 1 || name.length > 191) ? (nameError = "Please insert name", err = true) : (nameError = "");
+        (!this.state.selectedInstitution || !this.state.selectedStudyLevel) ? (err = true, studyLevelError = true) : (err = false, studyLevelError = false);
+        (this.state.buttonData.length > 0 && this.state.selectedValues.length < 1) ? (err = true, courseError = true) : (err = false, courseError = false);
+        this.setState({
             nameError,
-            emailError,
-            numberError
+            studyLevelError,
+            courseError
         });
-        !err && (this.createSignUpRequest(name, email, number), this.setState({ nameError, emailError, numberError }));
-    }
 
-    createSignUpRequest = (name, email, number) => {
-        RNAccountKit.configure({
-            responseType: 'code', // 'token' by default,
-            titleType: 'login',
-            initialPhoneCountryPrefix: '+880', // autodetected if none is provided
-            initialPhoneNumber: number[0] == 0 ? number.substring(1) : number,
-            // initialPhoneNumber: '1316100093',
-            readPhoneStateEnabled: true, // true by default,
-            receiveSMS: true, // true by default,
-            defaultCountry: 'BD',
-            getACallEnabled: true
-        })
-        RNAccountKit.loginWithPhone()
-            .then((response) => {
-                response.code && this.props.signUp(response.code, email, name)
-            })
-            .catch(err => console.log(err));
-    }
+        !err && this.registerUser(
+            name,
+            referralCode,
+            this.state.selectStudyLevel.id,
+            this.state.selectedInstitution,
+            this.state.selectedValues
 
-    submitStudyDetails = (studyLevel, institution) => {
-        Keyboard.dismiss();
-        this.props.submitStudyDetails(studyLevel, institution);
+        );
     }
-
-    scrollToNext = i => {
-        this.scroll.scrollBy(1);
-    };
 
     registerUser = (courses, referralCode) => {
         Keyboard.dismiss();
@@ -170,9 +142,9 @@ class SignUp extends Component {
 
 
 
-
-
-
+    _groupButtonOnSelectedValuesChange = (selectedValues) => {
+        this.setState({ selectedValues })
+    }
 
 
 
@@ -188,6 +160,7 @@ class SignUp extends Component {
         this.setState({ query: '', selectedInstitution: null })
         let selectedStudyLevel = [...this.state.studyLevels];
         selectedStudyLevel = selectedStudyLevel[selectedStudyIndex];
+        this.getCourse(selectedStudyLevel);
         this.setState({ selectedStudyLevel });
         this.getInstitutions('A', this.state.studyLevels[selectedStudyIndex].slug);
         loaderHandler.hideLoader();
@@ -208,6 +181,21 @@ class SignUp extends Component {
         this.setState({ selectedInstitution });
     }
 
+    getCourse = async (studyLevel) => {
+        const request = {
+            endPoint: 'study-levels/' + studyLevel.slug + '/categories',
+            showLoader: true
+        }
+        let courses = await getService(request);
+        let buttonData = courses.data.data.map((course) => {
+            return ({
+                value: course.id,
+                displayValue: course.name
+            })
+        })
+        this.setState({ courses: courses.data.data, buttonData });
+    }
+
 
 
 
@@ -217,16 +205,17 @@ class SignUp extends Component {
 
 
     render() {
+        console.log(this.state, this.props.navigation.state)
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />
-                <View style={{ flex: .8 }}>
+                <View style={{ flex: 1 }}>
                     <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='never'>
-                        <View style={[globalStyles.flexOne]}>
+                        <ScrollView style={[globalStyles.flexOne]}>
                             <View style={[styles.registerTextContainer]}>
                                 <Text style={[styles.registerText]}>Register</Text>
                             </View>
-                            <View style={{ height: deviceHeight - 130 }}>
+                            <View style={{ height: deviceHeight - 230, flex: 1 }}>
                                 <CopilotStep text="এখানে আপনার পূর্ণ নাম লিখুন।" order={1} name="name">
                                     <CopilotView style={{ marginBottom: 20 }}>
                                         <Input
@@ -235,7 +224,7 @@ class SignUp extends Component {
                                             inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
                                             placeholder='Your Full Name'
                                             errorStyle={{ color: 'red' }}
-                                            errorMessage={this.props.nameError}
+                                            errorMessage={this.state.nameError}
                                             onChangeText={(name) => this.setState({ name })}
                                             value={this.state.name}
                                             leftIcon={
@@ -248,6 +237,21 @@ class SignUp extends Component {
                                                     containerStyle={styles.inputIconContainer}
                                                 />
                                             }
+                                        />
+                                    </CopilotView>
+                                </CopilotStep>
+
+                                <CopilotStep text="খালি রাখুন।" order={2} name="referralCode">
+                                    <CopilotView style={{}}>
+                                        <Input
+                                            label="Referral Code (Optional)"
+                                            labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
+                                            inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                                            placeholder='না থাকলে ঘরটি খালি রাখুন'
+                                            errorStyle={{ color: 'red' }}
+                                            errorMessage={this.props.emailError}
+                                            onChangeText={(referralCode) => this.setState({ referralCode })}
+                                            value={this.state.referralCode}
                                         />
                                     </CopilotView>
                                 </CopilotStep>
@@ -283,12 +287,13 @@ class SignUp extends Component {
                                     </CopilotView>
                                 </CopilotStep>
 
+
                                 <CopilotStep text={`১। আপনার বর্তমান অথবা  সর্বশেষ শিক্ষা প্রতিষ্ঠানের নাম লিখে সার্চ দিন। তাহলে একটি লিস্ট পাবেন।
 ২। সেই লিস্ট থেকে আপনার শিক্ষা প্রতিষ্ঠানের নাম সিলেক্ট করুন।
 ৩। আপনার শিক্ষা প্রতিষ্ঠানের নাম খুজে না পেলে 'Not Found' সার্চ দিয়ে সিলেক্ট করুন।`} order={2} name="institute">
                                     <CopilotView style={{
                                         position: 'absolute',
-                                        top: 215,
+                                        top: 300,
                                         zIndex: 1,
                                         marginLeft: 10
                                     }}>
@@ -319,8 +324,14 @@ class SignUp extends Component {
                                     </CopilotView>
                                 </CopilotStep>
 
+                                <View style={{ marginTop: 100 }}>
+                                    {this.state.studyLevelError && (
+                                        <Text style={{ marginLeft: 10, color: 'red' }}>*Please select proper study levels</Text>
+                                    )}
+                                </View>
+
                                 {this.state.buttonData.length > 0 && (<View>
-                                    <Text style={styles.formTitle}>COURSE SELECTION</Text>
+                                    <Text style={[styles.formTitle, { textAlign: 'center', marginTop: 10 }]}>COURSE SELECTION</Text>
                                 </View>)}
                                 {this.state.buttonData.length > 0 && (
                                     <CopilotStep text="আপনার প্রয়োজনীয় কোর্সটিতে ক্লিক করে সিলেক্ট করুন।" order={1} name="course">
@@ -328,11 +339,11 @@ class SignUp extends Component {
                                             <SelectMultipleGroupButton
                                                 containerViewStyle={{
                                                     justifyContent: 'center',
-                                                    marginTop: 20
+                                                    marginTop: 10
                                                 }}
                                                 buttonViewStyle={{ height: 50 }}
                                                 highLightStyle={{
-                                                    height: 50,
+                                                    height: 20,
                                                     borderColor: colors.appTheme,
                                                     backgroundColor: "transparent",
                                                     textColor: colors.appTheme,
@@ -347,36 +358,12 @@ class SignUp extends Component {
                                         </CopilotView>
                                     </CopilotStep>
                                 )}
-                                <CopilotStep text="খালি রাখুন।" order={2} name="referralCode">
-                                    <CopilotView style={{ top: 110 }}>
-                                        <Input
-                                            label="Referral Code (Optional)"
-                                            labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
-                                            inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
-                                            placeholder='না থাকলে ঘরটি খালি রাখুন'
-                                            errorStyle={{ color: 'red' }}
-                                            errorMessage={this.props.emailError}
-                                            onChangeText={(referralCode) => this.setState({ referralCode })}
-                                            value={this.state.referralCode}
-                                        />
-                                    </CopilotView>
-                                </CopilotStep>
-                                {/* </Swiper> */}
                             </View>
-                        </View>
+                            <TouchableOpacity onPress={() => this.submitAccount(this.state.name)} style={styles.submitButtom}>
+                                <Text>Submit</Text>
+                            </TouchableOpacity>
+                        </ScrollView>
                     </KeyboardAwareScrollView>
-                </View>
-                <View style={{ flex: .2, paddingHorizontal: 20 }}>
-                    <TouchableOpacity style={styles.submitButtom} onPress={() => this.sendCourse()}>
-                        <Text style={styles.submitText}>Next Step</Text>
-                        <Icon
-                            name='arrowright'
-                            size={22}
-                            type='antdesign'
-                            color='black'
-                            containerStyle={styles.submitButtomIconContainer}
-                        />
-                    </TouchableOpacity>
                 </View>
                 <BusyIndicator />
             </View>
