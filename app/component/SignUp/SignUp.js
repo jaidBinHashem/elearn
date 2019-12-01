@@ -1,23 +1,24 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, Dimensions, Keyboard, Alert } from 'react-native'
+import { View, StatusBar, Text, Dimensions, Keyboard, Alert, Picker, TouchableOpacity } from 'react-native'
+import { Input, Icon } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux";
 import { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer } from '../../redux/actions/AuthActions';
 import RNAccountKit from 'react-native-facebook-account-kit'
-import Swiper from 'react-native-swiper';
+import AutoComplete from 'react-native-autocomplete-input';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import Toast from 'react-native-simple-toast';
 
 import BusyIndicator from 'react-native-busy-indicator';
 
-import PersonalDetails from './PersonalDetails';
-import StudyDetails from './StudyDetails';
-import CourseDetails from './CourseDetails';
-import Success from './Success';
+import { getService } from '../../network'
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
 import globalStyles from '../../global/styles';
 
 import styles from './styles';
 
+const CopilotView = walkthroughable(View);
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -39,9 +40,38 @@ class SignUp extends Component {
             institutions: [],
             selectedStudyLevel: null,
             regSuccess: false,
-            index: 0
+            courses: [],
+            buttonData: [],
+            selectedValues: [],
+            referralCode: null,
+            index: 0,
+
+            studyLevels: [],
+            institutions: [],
+            selectedStudyLevel: null,
+            selectedInstitution: null,
+            query: '',
+            hideList: true
         }
     }
+
+
+
+
+
+
+
+    componentDidMount() {
+        this.getStudyLevel();
+    }
+
+
+
+
+
+
+
+
 
     UNSAFE_componentWillReceiveProps(nextProps) {
         nextProps.auth.error && (
@@ -138,45 +168,216 @@ class SignUp extends Component {
     }
 
 
+
+
+
+
+
+
+
+
+    getStudyLevel = async () => {
+        const request = { endPoint: 'study-levels' }
+        let studyLevels = await getService(request);
+        studyLevels.success && this.setState({ studyLevels: studyLevels.data.data });
+        this.selectStudyLevel(studyLevels[0], 0);
+    }
+
+    selectStudyLevel = async (selectedStudyLevelId, selectedStudyIndex) => {
+        loaderHandler.showLoader("Loading");
+        this.setState({ query: '', selectedInstitution: null })
+        let selectedStudyLevel = [...this.state.studyLevels];
+        selectedStudyLevel = selectedStudyLevel[selectedStudyIndex];
+        this.setState({ selectedStudyLevel });
+        this.getInstitutions('A', this.state.studyLevels[selectedStudyIndex].slug);
+        loaderHandler.hideLoader();
+    }
+
+    getInstitutions = async (query, slug = null) => {
+        let studySlug = slug === null ? this.state.selectedStudyLevel.slug : slug;
+        const request = {
+            endPoint: 'study-levels/' + studySlug + '/institutions?q=' + query
+        }
+        let institutions = await getService(request);
+        this.setState({ institutions: institutions.data.data });
+    }
+
+    selectInstitution = async (selectedInstitutionId, selectedInstitutionIndex) => {
+        let selectedInstitution = [...this.state.institutions];
+        selectedInstitution = selectedInstitution[selectedInstitutionIndex]
+        this.setState({ selectedInstitution });
+    }
+
+
+
+
+
+
+
+
+
     render() {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />
-                <KeyboardAwareScrollView keyboardShouldPersistTaps='always'>
-                    <View style={[globalStyles.flexOne]}>
-                        <View style={[styles.registerTextContainer]}>
-                            <Text style={[styles.registerText]}>Register</Text>
+                <View style={{ flex: .8 }}>
+                    <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='never'>
+                        <View style={[globalStyles.flexOne]}>
+                            <View style={[styles.registerTextContainer]}>
+                                <Text style={[styles.registerText]}>Register</Text>
+                            </View>
+                            <View style={{ height: deviceHeight - 130 }}>
+                                <CopilotStep text="এখানে আপনার পূর্ণ নাম লিখুন।" order={1} name="name">
+                                    <CopilotView style={{ marginBottom: 20 }}>
+                                        <Input
+                                            label="FULL NAME"
+                                            labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
+                                            inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                                            placeholder='Your Full Name'
+                                            errorStyle={{ color: 'red' }}
+                                            errorMessage={this.props.nameError}
+                                            onChangeText={(name) => this.setState({ name })}
+                                            value={this.state.name}
+                                            leftIcon={
+                                                <Icon
+                                                    name='user'
+                                                    size={24}
+                                                    type='font-awesome'
+                                                    name='user'
+                                                    color='lightgray'
+                                                    containerStyle={styles.inputIconContainer}
+                                                />
+                                            }
+                                        />
+                                    </CopilotView>
+                                </CopilotStep>
+
+
+                                <CopilotStep text="এখানে আপনি যে কোর্সের জন্য  পড়াশোনা করতে চান সেই অনুযায়ী  Study level  সিলেক্ট করুন।" order={1} name="studyLevel">
+                                    <CopilotView style={{ marginHorizontal: 10 }}>
+                                        <Text style={styles.formTitle}>STUDY LEVEL</Text>
+                                        <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
+                                            {this.state.selectedStudyLevel && (<Picker
+                                                selectedValue={this.state.selectedStudyLevel.id}
+                                                style={{ height: 50 }}
+                                                onValueChange={(studyLevel, selectedStudyIndex) => this.selectStudyLevel(studyLevel, selectedStudyIndex)}>
+                                                {
+                                                    this.state.selectedStudyLevel && this.state.studyLevels.map((studyLevel) => {
+                                                        return (
+                                                            <Picker.Item key={studyLevel.id} label={studyLevel.name} value={studyLevel.id} />
+                                                        )
+                                                    })
+                                                }
+                                            </Picker>)}
+                                            {
+                                                this.state.studyLevels.length === 0 && (
+                                                    <Picker
+                                                        selectedValue={0}
+                                                        style={{ height: 50 }}
+                                                    >
+                                                        <Picker.Item label="---" value={0} />
+                                                    </Picker>
+                                                )
+                                            }
+                                        </View>
+                                    </CopilotView>
+                                </CopilotStep>
+
+                                <CopilotStep text={`১। আপনার বর্তমান অথবা  সর্বশেষ শিক্ষা প্রতিষ্ঠানের নাম লিখে সার্চ দিন। তাহলে একটি লিস্ট পাবেন।
+২। সেই লিস্ট থেকে আপনার শিক্ষা প্রতিষ্ঠানের নাম সিলেক্ট করুন।
+৩। আপনার শিক্ষা প্রতিষ্ঠানের নাম খুজে না পেলে 'Not Found' সার্চ দিয়ে সিলেক্ট করুন।`} order={2} name="institute">
+                                    <CopilotView style={{
+                                        position: 'absolute',
+                                        top: 215,
+                                        zIndex: 1,
+                                        marginLeft: 10
+                                    }}>
+                                        <Text style={styles.formTitle}>School / College / University</Text>
+                                        <AutoComplete
+                                            data={this.state.institutions}
+                                            defaultValue={this.state.query}
+                                            placeholder="সার্চ দিয়ে সিলেক্ট করুন"
+                                            keyExtractor={(item, index) => 'key' + index}
+                                            onChangeText={query => {
+                                                query.length > 2 && this.getInstitutions(query);
+                                                this.setState({
+                                                    query,
+                                                    hideList: query.length > 2 ? false : true
+                                                })
+                                            }
+                                            }
+                                            hideResults={this.state.hideList}
+                                            inputContainerStyle={{ width: deviceWidth - 40, height: 50, borderRadius: 5 }}
+                                            listStyle={{ marginTop: 2, maxHeight: 200, width: deviceWidth - 40, right: 10 }}
+                                            renderItem={({ item, i }) => (
+                                                <TouchableOpacity style={{ height: 45, padding: 10 }}
+                                                    onPress={() => this.setState({ query: item.name, selectedInstitution: item, hideList: true })}>
+                                                    <Text>{item.name}</Text>
+                                                </TouchableOpacity>
+                                            )}
+                                        />
+                                    </CopilotView>
+                                </CopilotStep>
+
+                                {this.state.buttonData.length > 0 && (<View>
+                                    <Text style={styles.formTitle}>COURSE SELECTION</Text>
+                                </View>)}
+                                {this.state.buttonData.length > 0 && (
+                                    <CopilotStep text="আপনার প্রয়োজনীয় কোর্সটিতে ক্লিক করে সিলেক্ট করুন।" order={1} name="course">
+                                        <CopilotView>
+                                            <SelectMultipleGroupButton
+                                                containerViewStyle={{
+                                                    justifyContent: 'center',
+                                                    marginTop: 20
+                                                }}
+                                                buttonViewStyle={{ height: 50 }}
+                                                highLightStyle={{
+                                                    height: 50,
+                                                    borderColor: colors.appTheme,
+                                                    backgroundColor: "transparent",
+                                                    textColor: colors.appTheme,
+                                                    borderTintColor: colors.appTheme,
+                                                    backgroundTintColor: colors.appTheme,
+                                                    textTintColor: '#fff'
+                                                }}
+                                                multiple={false}
+                                                onSelectedValuesChange={selectedValues => this._groupButtonOnSelectedValuesChange(selectedValues)}
+                                                group={this.state.buttonData}
+                                            />
+                                        </CopilotView>
+                                    </CopilotStep>
+                                )}
+                                <CopilotStep text="খালি রাখুন।" order={2} name="referralCode">
+                                    <CopilotView style={{ top: 110 }}>
+                                        <Input
+                                            label="Referral Code (Optional)"
+                                            labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
+                                            inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                                            placeholder='না থাকলে ঘরটি খালি রাখুন'
+                                            errorStyle={{ color: 'red' }}
+                                            errorMessage={this.props.emailError}
+                                            onChangeText={(referralCode) => this.setState({ referralCode })}
+                                            value={this.state.referralCode}
+                                        />
+                                    </CopilotView>
+                                </CopilotStep>
+                                {/* </Swiper> */}
+                            </View>
                         </View>
-                        <View style={{ height: deviceHeight - 130 }}>
-                            <Swiper style={styles.wrapper}
-                                ref={node => (this.scroll = node)}
-                                showsButtons={false}
-                                showsPagination={false}
-                                loop={false}
-                                scrollEnabled={false}
-                                loadMinimal={true}
-                                loadMinimalSize={0}
-                                onIndexChanged={(index) => this.setState({ index })}
-                            >
-                                <PersonalDetails
-                                    nameError={this.state.nameError}
-                                    emailError={this.state.emailError}
-                                    numberError={this.state.numberError}
-                                    submitAccount={this.submitAccount.bind(this)}
-                                    phone={this.props.navigation.state.params && this.props.navigation.state.params.phone ? this.props.navigation.state.params.phone : null}
-                                />
-                                <StudyDetails
-                                    submitStudyDetails={this.submitStudyDetails.bind(this)} />
-                                <CourseDetails
-                                    registerUser={this.registerUser.bind(this)}
-                                    studyLevel={this.props.auth.studyLevel} />
-                                <Success
-                                    navigation={this.props.navigation}
-                                />
-                            </Swiper>
-                        </View>
-                    </View>
-                </KeyboardAwareScrollView>
+                    </KeyboardAwareScrollView>
+                </View>
+                <View style={{ flex: .2, paddingHorizontal: 20 }}>
+                    <TouchableOpacity style={styles.submitButtom} onPress={() => this.sendCourse()}>
+                        <Text style={styles.submitText}>Next Step</Text>
+                        <Icon
+                            name='arrowright'
+                            size={22}
+                            type='antdesign'
+                            color='black'
+                            containerStyle={styles.submitButtomIconContainer}
+                        />
+                    </TouchableOpacity>
+                </View>
                 <BusyIndicator />
             </View>
         )
@@ -190,7 +391,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
+export default copilot()(connect(
     mapStateToProps,
     { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer }
-)(SignUp);
+)(SignUp));

@@ -21,15 +21,15 @@ class Loader extends Component {
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <Image
                             resizeMode='cover'
-                            source={{ uri: 'https://i.imgur.com/jOUp65k.png' }}
+                            source={require('./logo.png')}
                             style={{ height: 200, width: 200, marginBottom: 120 }}
                         />
                     </View>
                     <View style={[globalStyles.flexOne]}>
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('SignUp')}
+                            onPress={() => this.props.navigation.navigate('Login')}
                             style={styles.signUpContainer}>
-                            <Text style={styles.signUp}>Register</Text>
+                            <Text style={styles.signUp}>Let's Start</Text>
                         </TouchableOpacity>
                     </View>
                     <Text style={{}}>If you are already an user please{<Text onPress={() => this.props.navigation.navigate('Login')} style={{ fontWeight: 'bold', color: '#BC9CFF' }}> Sign in</Text>}</Text>

@@ -51,8 +51,7 @@ class Player extends Component {
                         onLoadStart={() => loaderHandler.showLoader("Loading")}
                         onLoadEnd={() => loaderHandler.hideLoader()}
                         originWhitelist={['*']}
-
-
+                        allowsFullscreenVideo={true}
                         javaScriptEnabled={true}
                         domStorageEnabled={true}
                         injectedJavaScript={yourAlert}

@@ -7,6 +7,7 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import Loader from '../component/Loader';
 import Welcome from '../component/Welcome';
+import OTP from '../component/Welcome/Otp';
 import SignUp from '../component/SignUp';
 import Login from '../component/Login';
 import Dashboard from '../component/Dashboard';
@@ -99,6 +100,7 @@ const transitionConfig = () => {
 const AuthStack = createStackNavigator(
     {
         Welcome: Welcome,
+        OTP : OTP,
         Login: Login,
         SignUp: SignUp,
         ContactUs: Upcoming

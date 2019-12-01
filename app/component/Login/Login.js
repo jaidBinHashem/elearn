@@ -11,7 +11,7 @@ import md5 from 'js-md5';
 import { connect } from "react-redux";
 import { makeLoginRequest } from '../../redux/actions/AuthActions';
 
-import { postService } from '../../network';
+import { postService, getService } from '../../network';
 
 import globalStyles from '../../global/styles';
 import styles from './styles';
@@ -28,7 +28,7 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            number: "",
+            number: "01621370573",
             numberError: "",
         }
     }
@@ -59,39 +59,24 @@ class Login extends Component {
             }
         }
         let response = await postService(request);
-
+        let otpRequest = {
+            endPoint: 'get-otp',
+            showLoader: true,
+            params: {
+                phone: number[0] == 0 ? number.substring(1) : number,
+                token: md5(btoa(number[0] == 0 ? number.substring(1) : number))
+            }
+        }
+        let otpResponse = await postService(otpRequest);
+        console.log(response, otpResponse);
         if (response.success) {
-            RNAccountKit.configure({
-                responseType: 'code',
-                titleType: 'login',
-                initialPhoneCountryPrefix: '+880',
-                initialPhoneNumber: number[0] == 0 ? number.substring(1) : number,
-                readPhoneStateEnabled: true,
-                receiveSMS: true,
-                defaultCountry: 'BD',
-                getACallEnabled: true
-            });
-            RNAccountKit.loginWithPhone()
-                .then((response) => {
-                    response.code && this.props.makeLoginRequest(response.code, number[0] == 0 ? number.substring(1) : number)
-                })
-                .catch(err => {
-                    loaderHandler.hideLoader();
-                    console.log(err);
-                });
+            if (otpResponse.success) {
+                this.props.navigation.navigate('OTP', { 'user': true, 'phone': this.state.number });
+            } else {
+                Toast.show('OTP sent error, please try again later !');
+            }
         } else {
-            Alert.alert(
-                '',
-                'You are not registered !',
-                [
-                    {
-                        text: 'Cancel',
-                        style: 'cancel',
-                    },
-                    { text: 'Sign Up Now', onPress: () => this.props.navigation.replace('SignUp', { 'phone': number }) },
-                ],
-                { cancelable: true },
-            );
+            this.props.navigation.navigate('OTP', { 'user': false, 'phone': this.state.number });
         }
     }
 

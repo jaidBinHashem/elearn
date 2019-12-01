@@ -6,6 +6,7 @@ const deviceWidth = Dimensions.get("window").width;
 export default StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal:10
   },
   mainView: {
     flex: 1,

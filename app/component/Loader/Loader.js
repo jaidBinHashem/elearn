@@ -30,7 +30,7 @@ class Loader extends Component {
         }
         setTimeout(() => {
             this.props.checkAuth();
-        }, 4000)
+        }, 500)
     }
 
     switchToApp = async () => {
