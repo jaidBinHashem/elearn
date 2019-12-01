@@ -6,9 +6,8 @@ import { checkAuth } from '../../redux/actions/AuthActions';
 import BusyIndicator from 'react-native-busy-indicator'
 
 import { makeLoginRequest } from '../../redux/actions/AuthActions';
-import colors from '../../global/../global/colors';
 import styles from './styles';
-import { postService, getService } from '../../network';
+import { postService } from '../../network';
 
 import { encode as btoa } from 'base-64';
 import md5 from 'js-md5';
