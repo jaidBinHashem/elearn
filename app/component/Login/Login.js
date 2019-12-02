@@ -34,8 +34,8 @@ class Login extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        nextProps.auth.loginFailed && (loaderHandler.hideLoader(), Toast.show(nextProps.auth.loginFailedMessage));
-        !nextProps.auth.loginFailed && (loaderHandler.hideLoader(), this.props.navigation.navigate('Loader', { 'SuccessLogin': true }))
+        // nextProps.auth.loginFailed && (loaderHandler.hideLoader(), Toast.show(nextProps.auth.loginFailedMessage));
+        // !nextProps.auth.loginFailed && (loaderHandler.hideLoader(), this.props.navigation.navigate('Loader', { 'SuccessLogin': true }))
     }
 
     logIn = (number) => {
@@ -84,10 +84,10 @@ class Login extends Component {
 
     render() {
         return (
-            <View style={[styles.container]}>
+            <View style={[styles.container, {backgroundColor: '#f6f3fc'}]}>
                 <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />
                 <View style={[styles.registerTextContainer]}>
-                    <Text style={[styles.registerText]}>LOG IN</Text>
+                    <Text style={[styles.registerText]}>ESHO SHIKHI</Text>
                 </View>
                 <View style={styles.formContainer}>
                     <View style={{ marginBottom: 50 }}>

@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, Dimensions, Keyboard, Alert, Picker, TouchableOpacity, ScrollView } from 'react-native'
+import { View, StatusBar, Text, Dimensions, Keyboard, Picker, TouchableOpacity, ScrollView } from 'react-native'
 import { Input, Icon } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux";
 import { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer } from '../../redux/actions/AuthActions';
-import RNAccountKit from 'react-native-facebook-account-kit'
 import AutoComplete from 'react-native-autocomplete-input';
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
@@ -65,55 +64,20 @@ class SignUp extends Component {
         this.getStudyLevel();
     }
 
-
     UNSAFE_componentWillReceiveProps(nextProps) {
-        nextProps.auth.error && (
-            Alert.alert(
-                '',
-                nextProps.auth.errorMessage,
-                [
-                    {},
-                    {
-                        text: 'Okay',
-                        // onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
-                    },
-                    {},
-                ],
-                { cancelable: false },
-            )
-        );
-        nextProps.auth.registrationFailed && nextProps.auth.registrationFailedMessage && (
-            // Toast.show(nextProps.auth.errorMessage)
-            Alert.alert(
-                '',
-                nextProps.auth.registrationFailedMessage,
-                [
-                    {},
-                    {
-                        text: 'Okay',
-                        // onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
-                    },
-                    {},
-                ],
-                { cancelable: false },
-            )
-        );
-        this.state.index === 0 && this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
-        this.state.index === 1 && nextProps.auth.studyLevel && nextProps.auth.institution && (this.scrollToNext(2));
-        nextProps.auth.studyLevel === null || nextProps.auth.institution === null && Toast.show("Please select your study details");
-        this.state.index === 2 && nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage), this.setState({ regSuccess: true }));
+        nextProps.auth.registrationSuccess && this.props.navigation.navigate('Success');
+        nextProps.auth.registrationFailed && nextProps.auth.registrationFailedMessage && (Toast.show(nextProps.auth.registrationFailedMessage));
     }
 
+
     componentWillUnmount() {
-        !this.state.regSuccess && this.props.resetAuthReducer();
+        // !this.state.regSuccess && this.props.resetAuthReducer();
     }
 
 
     submitAccount = (name) => {
         Keyboard.dismiss();
-        let nameError = "", studyLevelError = false, err = false;
+        let nameError = "", studyLevelError = false, courseError = false, err = false;
         (name.length < 1 || name.length > 191) ? (nameError = "Please insert name", err = true) : (nameError = "");
         (!this.state.selectedInstitution || !this.state.selectedStudyLevel) ? (err = true, studyLevelError = true) : (err = false, studyLevelError = false);
         (this.state.buttonData.length > 0 && this.state.selectedValues.length < 1) ? (err = true, courseError = true) : (err = false, courseError = false);
@@ -124,19 +88,21 @@ class SignUp extends Component {
         });
 
         !err && this.registerUser(
+            this.props.navigation.state.params.phone,
+            this.props.navigation.state.params.code,
             name,
-            referralCode,
-            this.state.selectStudyLevel.id,
-            this.state.selectedInstitution,
+            this.state.referralCode,
+            this.state.selectedStudyLevel.id,
+            this.state.selectedInstitution.id,
             this.state.selectedValues
 
         );
     }
 
-    registerUser = (courses, referralCode) => {
+    registerUser = (...args) => {
         Keyboard.dismiss();
-        this.props.registerUser(this.props.auth, courses, referralCode);
-        this.props.submitCourses(courses);
+        this.props.registerUser(args);
+        this.props.submitCourses(args[6]);
     }
 
 
@@ -205,7 +171,6 @@ class SignUp extends Component {
 
 
     render() {
-        console.log(this.state, this.props.navigation.state)
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />

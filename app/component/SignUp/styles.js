@@ -7,9 +7,11 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 10,
+  },
+  optContainer : {
     justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: 20,
+    alignItems: 'center',
+    marginHorizontal: 20,
   },
   mainView: {
     flex: 1,
@@ -41,7 +43,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     marginTop: 30
   },
   submitButtomIconContainer: {
@@ -49,10 +51,10 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
   },
   submitText: {
-    flex: 4,
-    textAlign: 'center',
-    marginLeft: 10,
-    fontSize: 18,
+    // flex: 4,
+    // textAlign: 'center',
+    // marginLeft: 10,
+    // fontSize: 18,
     color: 'black'
   },
   formContainer: {
@@ -125,7 +127,6 @@ export default StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     textDecorationLine: 'underline',
-    marginTop: 30
   },
   submitContainer: {
     flex: 1,

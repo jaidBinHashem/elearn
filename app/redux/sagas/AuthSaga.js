@@ -40,19 +40,20 @@ const signUpUser = async (payload) => {
 }
 
 const registerUserDetails = async (payload) => {
-    console.log(payload, "here is the payload");
     try {
         let request = {
             endPoint: 'register',
             showLoader: true,
             params: {
-                name: payload.authData.name,
-                phone: payload.authData.number,
-                study_level_id: payload.authData.studyLevel.id,
-                institution_id: payload.authData.institution.id,
-                code: payload.authData.code,
-                categories: payload.courses,
-                referral_code: payload.referralCode
+                name: payload.args[2],
+                phone: payload.args[0],
+                email: 'eshoshikhiapp@gmail.com',
+                study_level_id: payload.args[4],
+                institution_id: payload.args[5],
+                code: payload.args[1],
+                categories: payload.args[6],
+                referral_code: payload.args[3],
+                otp_type : 1
             }
         }
         return (await postService(request));
@@ -153,8 +154,8 @@ export const saveCourses = function* (action) {
 };
 
 export const registerUser = function* (action) {
-    console.log(action, "here is the action");
     let response = yield call(registerUserDetails, action.payload);
+    console.log(response, "here is the response");
     !response.success && (yield put({ type: REGISTRATION_FAILED, payload: response.data.referral_code ? 'Referral code isn\'t valid, you can register without applying referral code.' : REGISTRATION_FAILED_MESSAGE }));
     !response.success && (yield put({ type: RESET_AUTH_ERROR }));
     response.success && (yield put({ type: REGISTRATION_SUCCESS, payload: response.data.message }));
