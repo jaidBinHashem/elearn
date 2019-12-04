@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, StatusBar, Text, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
-import RNAccountKit from 'react-native-facebook-account-kit';
 import Toast from 'react-native-simple-toast';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';

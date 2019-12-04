@@ -29,7 +29,7 @@ class Otp extends Component {
             this.setState({
                 resendOTP: true
             });
-        }, 5000);
+        }, 300000);
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
@@ -49,7 +49,6 @@ class Otp extends Component {
             }
         }
         let otpResponse = await postService(otpRequest);
-        console.log(otpResponse, "otp response")
         otpResponse.success && (Toast.show("OTP Sent"), this.setState({ resendOTP: false }));
     }
 
@@ -66,7 +65,6 @@ class Otp extends Component {
             }
         }
         let response = await postService(request);
-        console.log(response, "here is okay")
         if (response.success) {
             if (user) {
                 this.props.makeLoginRequest(response.data.data.code, phone[0] == 0 ? phone.substring(1) : phone)
@@ -92,7 +90,6 @@ class Otp extends Component {
                             <OTPInputView
                                 style={{ width: '80%', height: 150 }}
                                 pinCount={4}
-                                autoFocusOnLoad={false}
                                 // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
                                 onCodeChanged={code => this.setState({ code })}
                                 codeInputFieldStyle={styles.underlineStyleBase}

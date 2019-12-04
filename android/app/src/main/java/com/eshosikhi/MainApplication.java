@@ -12,7 +12,6 @@ import com.imagepicker.ImagePickerPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import io.underscope.react.fbak.RNAccountKitPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactNativeHost;
