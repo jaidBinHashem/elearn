@@ -72,7 +72,7 @@ class Otp extends Component {
                 this.props.navigation.replace('SignUp', { phone: phone[0] == 0 ? phone.substring(1) : phone, code: response.data.data.code })
             }
         } else {
-            Toast.show("Incalid OTP, Please try again !")
+            Toast.show("Invalid OTP, Please try again !")
         }
     }
 
@@ -102,7 +102,7 @@ class Otp extends Component {
                             </View>
                             <TouchableOpacity style={styles.submitContainer}
                                 onPress={() => this.submitOtp()}>
-                                <Text style={styles.submitText}>সাবমিট করুন</Text>
+                                <Text style={styles.submitText}>Submit</Text>
                             </TouchableOpacity>
                         </KeyboardAvoidingView>
                     </ScrollView>

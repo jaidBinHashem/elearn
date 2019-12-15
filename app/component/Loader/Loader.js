@@ -28,13 +28,17 @@ class Loader extends Component {
             this.props.getScholarships();
             this.props.getBlogs();
         }
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
             this.props.checkAuth();
         }, 500);
     }
 
     switchToApp = async () => {
         this.props.navigation.navigate('App');
+    }
+
+    componentWillMount() {
+        clearTimeout(this.timer);
     }
 
     render() {

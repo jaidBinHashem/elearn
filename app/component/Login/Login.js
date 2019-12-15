@@ -27,7 +27,7 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            number: "01621370573",
+            number: "",
             numberError: "",
         }
     }

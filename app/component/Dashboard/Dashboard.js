@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import { Icon, Badge } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
+import LinearGradient from 'react-native-linear-gradient';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { setCategories } from '../../redux/actions/CategoryActions';
@@ -228,53 +229,57 @@ class Dashboard extends Component {
         let subj = [...this.props.subjectsTitleArr];
         let allSubjects = [...this.props.allSubjects];
         let allSubjectsTitleArr = [...this.props.allSubjectsTitleArr];
-        let colors = ['#BC9CFF', '#F6D365', '#F093FB', '#0BA360', '#74DBC9', '#677DCB', '#F6D365', '#F07B52'];
+        let colors = ['#56CCF2', '#2F80ED',
+            '#D66D75', '#E29587',
+            '#4568DC', '#B06AB3',
+            '#f4c4f3', '#fc67fa',
+            '#808080', '#3fada8'];
         let colorsArr = [...colors];
         let allSubjectColorsArr = [...colors];
         let views = [], length = Math.ceil(subj.length / 4);
         let allSubjectViews = [], allSubjectLength = Math.ceil(allSubjects.length / 4);
-        for (let i = 0; i < length; i++) {
-            let subjectArr = [];
-            if (subjects.length > 4) {
-                for (let i = 0; i < 4; i++) {
-                    subjectArr.push(subjects.shift());
-                }
-            } else {
-                for (let i = 0; i <= subj.length; i++) {
-                    subjectArr.push(subjects.shift());
-                }
-            }
-            view = (
-                <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
-                    <View style={{ flex: 2, flexDirection: 'row' }}>
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                    <View style={{ flex: 2, flexDirection: 'row' }}>
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                </View>
-            )
-            colorsArr = colorsArr.concat(colors);
-            views.push(view);
-        }
+        // for (let i = 0; i < length; i++) {
+        //     let subjectArr = [];
+        //     if (subjects.length > 4) {
+        //         for (let i = 0; i < 4; i++) {
+        //             subjectArr.push(subjects.shift());
+        //         }
+        //     } else {
+        //         for (let i = 0; i <= subj.length; i++) {
+        //             subjectArr.push(subjects.shift());
+        //         }
+        //     }
+        //     view = (
+        //         <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
+        //             <View style={{ flex: 2, flexDirection: 'row' }}>
+        //                 {subj.length > 0 && (
+        //                     <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
+        //                         <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
+        //                     </TouchableOpacity>
+        //                 )}
+        //                 {subj.length > 0 && (
+        //                     <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+        //                         <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
+        //                     </TouchableOpacity>
+        //                 )}
+        //             </View>
+        //             <View style={{ flex: 2, flexDirection: 'row' }}>
+        //                 {subj.length > 0 && (
+        //                     <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
+        //                         <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
+        //                     </TouchableOpacity>
+        //                 )}
+        //                 {subj.length > 0 && (
+        //                     <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
+        //                         <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
+        //                     </TouchableOpacity>
+        //                 )}
+        //             </View>
+        //         </View>
+        //     )
+        //     colorsArr = colorsArr.concat(colors);
+        //     views.push(view);
+        // }
 
         for (let i = 0; i < allSubjectLength; i++) {
             let allSubjectArr = [];
@@ -292,29 +297,37 @@ class Dashboard extends Component {
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
-                            </TouchableOpacity>
+                            <LinearGradient colors={[colorsArr.shift(), colorsArr.shift()]} style={[styles.subject, styles.subjectMarginRight]}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[0] })} style={[styles.subject, styles.subjectMarginRight]} >
+                                    <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
                         )}
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
-                            </TouchableOpacity>
+                            <LinearGradient colors={[colorsArr.shift(), colorsArr.shift()]} style={[styles.subject, styles.subjectMarginRight]}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft]}>
+                                    <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
                         )}
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
-                            </TouchableOpacity>
+                            <LinearGradient colors={[colorsArr.shift(), colorsArr.shift()]} style={[styles.subject, styles.subjectMarginRight]}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[2] })} style={[styles.subject, styles.subjectMarginRight]}>
+                                    <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
                         )}
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
-                            </TouchableOpacity>
+                            <LinearGradient colors={[colorsArr.shift(), colorsArr.shift()]} style={[styles.subject, styles.subjectMarginRight]}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft]}>
+                                    <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
                         )}
                     </View>
-                </View>
+                </View >
             )
             allSubjectColorsArr = allSubjectColorsArr.concat(colors);
             allSubjectViews.push(view);

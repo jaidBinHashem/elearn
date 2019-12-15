@@ -6,7 +6,6 @@ const deviceWidth = Dimensions.get("window").width;
 export default StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 10,
   },
   optContainer : {
     justifyContent: 'center',
@@ -43,8 +42,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    // marginHorizontal: 10,
-    marginTop: 30
+    marginHorizontal: 10,
+    marginVertical: 30
   },
   submitButtomIconContainer: {
     marginRight: 20,
