@@ -76,7 +76,6 @@ class Quiz extends Component {
     }
 
     componentDidMount() {
-        console.log(AppState.currentState, "here did state")
         AppState.addEventListener('change', this._handleAppStateChange);
         BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
         !this.props.navigation.state.params.showExplanation && this.startTimer((this.props.quiz.time - 1));
@@ -96,15 +95,13 @@ class Quiz extends Component {
     }
 
     _handleAppStateChange = (nextAppState) => {
-        console.log(nextAppState, "here is app state");
-        if (!(this.state.appState.match(/inactive|background/) && nextAppState === 'active')) {
+        if (nextAppState.match(/inactive|background/)) {
             this.submitExam();
         }
         this.setState({ appState: nextAppState });
     };
 
     startTimer = async (duration) => {
-        console.log(duration, "here is duration");
         let timer = duration, minutes, seconds;
         this.myTimer = setInterval(() => {
             minutes = parseInt(timer / 60, 10)
