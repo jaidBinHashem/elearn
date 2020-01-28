@@ -27,7 +27,7 @@ export default StyleSheet.create({
   },
   swiperContainer: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 20
   },
   subject: {
     flex: 1,

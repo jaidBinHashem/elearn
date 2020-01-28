@@ -252,18 +252,6 @@ const PurchaseHistoryStack = createStackNavigator(
 );
 
 
-const UpcomingStack = createStackNavigator(
-    {
-        Upcoming: Upcoming,
-    },
-    {
-        initialRouteName: 'Upcoming',
-        headerMode: 'none',
-        transitionConfig
-    }
-);
-
-
 const OffersStack = createStackNavigator(
     {
         Offers: Offers,

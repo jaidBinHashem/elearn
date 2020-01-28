@@ -132,8 +132,8 @@ android {
         applicationId "com.eshosikhi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4194322
-        versionName "1.0.1"
+        versionCode 4194325
+        versionName "1.2.0"
     }
     signingConfigs {
         debug {
