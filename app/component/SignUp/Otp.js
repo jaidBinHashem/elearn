@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react'
-import { View, StatusBar, ScrollView, KeyboardAvoidingView, Image, Text, TouchableOpacity } from 'react-native'
+import { View, StatusBar, ScrollView, KeyboardAvoidingView, Image, Text, TouchableOpacity, Linking } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
@@ -38,7 +38,7 @@ class Otp extends Component {
             : this.props.navigation.navigate('Loader');
     }
 
-    resendOtp = async() => {
+    resendOtp = async () => {
         let { phone } = this.props.navigation.state.params;
         let otpRequest = {
             endPoint: 'get-otp',
@@ -65,6 +65,7 @@ class Otp extends Component {
             }
         }
         let response = await postService(request);
+        console.log(response, "here is response");
         if (response.success) {
             if (user) {
                 this.props.makeLoginRequest(response.data.data.code, phone[0] == 0 ? phone.substring(1) : phone)
@@ -100,6 +101,7 @@ class Otp extends Component {
                                     this.state.resendOTP && <Text onPress={() => this.resendOtp()} style={styles.resendSmsText}>Didn't receive the OTP, please send again.</Text>
                                 }
                             </View>
+                            <Text style={[{ textAlign: 'center', fontSize: 15, lineHeight: 23, color: "#9e9e9e", }]}>Didn't Get OTP? <Text onPress={() => Linking.openURL("http://m.me/eshosikhi.bd")} style={{ fontWeight: '500', color: '#BC9CFF' }}>Contact Us</Text></Text>
                             <TouchableOpacity style={styles.submitContainer}
                                 onPress={() => this.submitOtp()}>
                                 <Text style={styles.submitText}>Submit</Text>

@@ -37,7 +37,7 @@ class Loader extends Component {
         this.props.navigation.navigate('App');
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         clearTimeout(this.timer);
     }
 
