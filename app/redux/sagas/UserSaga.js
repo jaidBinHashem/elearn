@@ -1,5 +1,5 @@
 import { put, call } from "redux-saga/effects";
-import {GET_CATEGORIES, GET_SCHOLARSHIPS, GET_USER, SET_USER_MYPROFILE, GET_ALL_SUBJECTS } from '../actions/types';
+import { GET_CATEGORIES, GET_SCHOLARSHIPS, GET_USER, SET_USER_MYPROFILE, GET_ALL_SUBJECTS } from '../actions/types';
 
 import { getService, postService } from '../../network'
 

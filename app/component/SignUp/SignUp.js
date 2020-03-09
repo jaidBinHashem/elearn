@@ -83,7 +83,6 @@ class SignUp extends Component {
         Keyboard.dismiss();
         let nameError = "", studyLevelError = false, courseError = false, err = false;
         (name.length < 1 || name.length > 191) ? (nameError = "Please insert name", err = true) : (nameError = "");
-        (this.state.selectedInstitution === null || !this.state.selectedStudyLevel) ? (err = true, studyLevelError = true) : !err && (err = false, studyLevelError = false);
         (this.state.buttonData.length > 0 && this.state.selectedValues.length < 1) ? (err = true, courseError = true) : !err && (err = false, courseError = false);
         this.setState({
             nameError,
@@ -97,7 +96,6 @@ class SignUp extends Component {
             name,
             this.state.referralCode,
             this.state.selectedStudyLevel.id,
-            this.state.selectedInstitution.id,
             this.state.selectedValues
 
         );
@@ -106,7 +104,7 @@ class SignUp extends Component {
     registerUser = (...args) => {
         Keyboard.dismiss();
         this.props.registerUser(args);
-        this.props.submitCourses(args[6]);
+        this.props.submitCourses(args[5]);
     }
 
 
@@ -209,44 +207,10 @@ class SignUp extends Component {
                             </CopilotStep>
 
 
-                            <CopilotStep text={`১। আপনার বর্তমান অথবা  সর্বশেষ শিক্ষা প্রতিষ্ঠানের নাম লিখে সার্চ দিন। তাহলে একটি লিস্ট পাবেন।
-২। সেই লিস্ট থেকে আপনার শিক্ষা প্রতিষ্ঠানের নাম সিলেক্ট করুন।
-৩। আপনার শিক্ষা প্রতিষ্ঠানের নাম খুজে না পেলে 'Not Found' সার্চ দিয়ে সিলেক্ট করুন।`} order={2} name="institute">
-                                <CopilotView style={{
-                                    position: 'absolute',
-                                    top: 100,
-                                    zIndex: 1,
-                                    marginLeft: 10
-                                }}>
-                                    <Text style={styles.formTitle}>School / College / University<Text style={{ color: 'red', fontSize: 16 }}>*</Text></Text>
-                                    <AutoComplete
-                                        data={this.state.institutions}
-                                        defaultValue={this.state.query}
-                                        placeholder="সার্চ দিয়ে সিলেক্ট করুন"
-                                        keyExtractor={(item, index) => 'key' + index}
-                                        onChangeText={query => {
-                                            query.length > 2 && this.getInstitutions(query);
-                                            this.setState({
-                                                query,
-                                                hideList: query.length > 2 ? false : true
-                                            })
-                                        }
-                                        }
-                                        hideResults={this.state.hideList}
-                                        inputContainerStyle={{ width: deviceWidth - 40, height: 50, borderRadius: 5 }}
-                                        listStyle={{ marginTop: 2, maxHeight: 200, width: deviceWidth - 40, right: 10 }}
-                                        renderItem={({ item, i }) => (
-                                            <TouchableOpacity style={{ height: 45, padding: 10 }}
-                                                onPress={() => this.setState({ query: item.name, selectedInstitution: item, hideList: true })}>
-                                                <Text>{item.name}</Text>
-                                            </TouchableOpacity>
-                                        )}
-                                    />
-                                </CopilotView>
-                            </CopilotStep>
+
 
                             {this.state.buttonData.length > 0 && (<View>
-                                <Text style={[styles.formTitle, { textAlign: 'center', top: 80 }]}>COURSE SELECTION<Text style={{ color: 'red', fontSize: 16 }}>*</Text></Text>
+                                <Text style={[styles.formTitle, { textAlign: 'center', }]}>COURSE SELECTION<Text style={{ color: 'red', fontSize: 16 }}>*</Text></Text>
                             </View>)}
                             {this.state.buttonData.length > 0 && (
                                 <CopilotStep text="আপনার প্রয়োজনীয় কোর্সটিতে ক্লিক করে সিলেক্ট করুন।" order={1} name="course">
@@ -254,7 +218,6 @@ class SignUp extends Component {
                                         <SelectMultipleGroupButton
                                             containerViewStyle={{
                                                 justifyContent: 'center',
-                                                marginTop: 80
                                             }}
                                             buttonViewStyle={{ height: 50 }}
                                             highLightStyle={{
@@ -284,7 +247,7 @@ class SignUp extends Component {
                             <CopilotStep text="এখানে আপনার পূর্ণ নাম লিখুন।" order={1} name="name">
                                 <CopilotView style={{ marginBottom: 20, top: 10 }}>
                                     <Input
-                                        label={() => <Text style={{ color: 'black', fontWeight: '500', marginBottom: 10 }}>FULL NAME<Text style={{ color: 'red', fontSize: 16 }}>*</Text></Text>}
+                                        label={<Text style={{ color: 'black', fontWeight: '500', marginBottom: 10 }}>FULL NAME<Text style={{ color: 'red', fontSize: 16 }}>*</Text></Text>}
                                         inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
                                         placeholder='Your Full Name'
                                         errorStyle={{ color: 'red' }}

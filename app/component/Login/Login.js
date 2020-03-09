@@ -83,7 +83,7 @@ class Login extends Component {
 
     render() {
         return (
-            <View style={[styles.container, {backgroundColor: '#f6f3fc'}]}>
+            <View style={[styles.container, { backgroundColor: '#f6f3fc' }]}>
                 <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />
                 <View style={[styles.registerTextContainer]}>
                     <Text style={[styles.registerText]}>ESHO SHIKHI</Text>

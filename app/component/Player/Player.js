@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, View, StatusBar, Text, } from 'react-native';
+import { ActivityIndicator, View, StatusBar, Text, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import VideoView from 'react-native-webview';
 import { connect } from "react-redux";
@@ -46,7 +46,7 @@ class Player extends Component {
 
         return (
             <View style={[styles.container, styles.horizontal]}>
-                <View style={{ flex: .4 }} >
+                <View style={{ height: 220, backgroundColor: 'black' }} >
                     {this.state.accessToken && (<VideoView
                         onLoadStart={() => loaderHandler.showLoader("Loading")}
                         onLoadEnd={() => loaderHandler.hideLoader()}
@@ -66,9 +66,9 @@ class Player extends Component {
                         }}
                     />)}
                 </View>
-                <View>
+                <ScrollView>
                     <Text style={{ margin: 20 }}>{this.props.navigation.state.params.description && this.props.navigation.state.params.description}</Text>
-                </View>
+                </ScrollView>
                 <BusyIndicator />
             </View>
         )

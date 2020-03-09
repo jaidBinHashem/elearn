@@ -69,7 +69,7 @@ class EditStudyLevel extends Component {
         let slugObj = studyLevel || this.state.studyLevels[selectedStudyIndex];
         this.getInstitutions('A', slugObj.slug);
         this.state.selectedStudyLevel !== slugObj && (this.getCourse(slugObj), this.setState({ selectedStudyLevel: slugObj }));
-        loaderHandler.hideLoader();
+        // loaderHandler.hideLoader();
     }
 
     getInstitutions = async (query, slug = null) => {
@@ -82,6 +82,7 @@ class EditStudyLevel extends Component {
     }
 
     getCourse = async (studyLevel) => {
+        loaderHandler.showLoader("Loading");
         const request = {
             endPoint: 'study-levels/' + studyLevel.slug + '/categories'
         }
@@ -92,11 +93,25 @@ class EditStudyLevel extends Component {
         this.setState({ courses: courses.data.data });
         courses.data.data.length === 0 && this.setState({ selectedCourse: null });
         this.state.selectedCourse === null && this.state.courses.length > 0 && this.setState({ selectedCourse: this.state.courses[0] });
+        loaderHandler.hideLoader();
     }
 
 
     componentWillUnmount() {
         loaderHandler.hideLoader();
+    }
+
+    getSlectedCategory = () => {
+        let { selectedCourse, courses } = this.state;
+        if (selectedCourse) {
+            let courseFound = courses.filter(course => course.id === selectedCourse.id);
+            return courseFound.length > 0
+                ? [courseFound[0].id]
+                : [courses[0].id];
+
+        } else {
+            return null;
+        }
     }
 
 
@@ -223,12 +238,11 @@ class EditStudyLevel extends Component {
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        console.log(this.props.user.institutionSlug, this.props.user.studySlug,this.props, "okay");
                         unsubscribeFromTopic([this.props.user.institutionSlug, this.props.user.studySlug]);
                         this.props.updateStudyLevel({
                             "study_level_id": this.state.selectedStudyLevel.id,
                             "institution_id": this.state.selectedInstitution ? this.state.selectedInstitution.id : null,
-                            "categories": this.state.selectedCourse ? [this.state.selectedCourse.id] : null
+                            "categories": this.getSlectedCategory()
                         }
                         )
                     }}

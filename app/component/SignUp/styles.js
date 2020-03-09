@@ -7,10 +7,10 @@ export default StyleSheet.create({
   container: {
     flex: 1,
   },
-  optContainer : {
-    justifyContent: 'center',
+  optContainer: {
     alignItems: 'center',
     marginHorizontal: 20,
+    marginVertical: 10
   },
   mainView: {
     flex: 1,
@@ -66,7 +66,7 @@ export default StyleSheet.create({
     fontFamily: 'sans-serif',
     fontWeight: '500',
     marginBottom: 10,
-    marginTop: 20
+    marginTop: 10
     // marginLeft:10
   },
 
@@ -84,27 +84,25 @@ export default StyleSheet.create({
     height: 90,
     resizeMode: 'contain',
     alignSelf: 'center',
-    marginBottom: 30,
-    marginTop: 90
+    // marginBottom: 30,
+    // marginTop: 90
   },
   smsText: {
     color: Colors.appTheme,
     fontSize: 20,
     textAlign: 'center',
-    height: 28,
+    // height: 28,
   },
   smsDescription: {
     textAlign: 'center',
     fontSize: 15,
     lineHeight: 23,
     color: "#9e9e9e",
-    paddingVertical: 10,
-    marginBottom: 50,
   },
   mobileNumberTitle: {
     color: '#000000',
     fontSize: 16,
-    paddingBottom: 8,
+    textAlign: 'center'
   },
   mobileNumberTextInputContainer: {
     borderColor: 'lightgray',
@@ -128,10 +126,8 @@ export default StyleSheet.create({
     textDecorationLine: 'underline',
   },
   submitContainer: {
-    flex: 1,
-    height: 70,
-    marginBottom: 16,
-    marginTop: 30,
+    flex: .8,
+    height: 50,
     borderRadius: 2,
     backgroundColor: Colors.appTheme,
     justifyContent: 'center',

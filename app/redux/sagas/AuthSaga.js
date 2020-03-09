@@ -49,11 +49,10 @@ const registerUserDetails = async (payload) => {
                 phone: payload.args[0],
                 email: 'eshoshikhiapp@gmail.com',
                 study_level_id: payload.args[4],
-                institution_id: payload.args[5],
                 code: payload.args[1],
-                categories: payload.args[6],
+                categories: payload.args[5],
                 referral_code: payload.args[3],
-                otp_type : 1
+                otp_type: 1
             }
         }
         return (await postService(request));
@@ -64,7 +63,6 @@ const registerUserDetails = async (payload) => {
 }
 
 const getToken = async (payload) => {
-    console.log(payload, "payload")
     try {
         let request = {
             endPoint: 'login',
@@ -101,7 +99,6 @@ export const isAuthenticated = function* (action) {
 export const makeLoginRequest = function* (action) {
     let response = yield call(getToken, action.payload);
     if (response) {
-        console.log(response, "here is login res");
         !response.success && (yield put({ type: MAKE_LOGIN_REQUEST_FAILED, payload: LOGIN_FAILED }));
         response.success && (yield call(setToken, response), yield put({ type: GET_USER }));
         response.success && (yield put({ type: MAKE_LOGIN_REQUEST_SUCCESS, payload: response }));

@@ -33,7 +33,7 @@ class Loader extends Component {
                         </TouchableOpacity>
                     </View>
                     {/* <Text style={{}}>If you are already an user please{<Text onPress={() => this.props.navigation.navigate('Login')} style={{ fontWeight: 'bold', color: '#BC9CFF' }}> Sign in</Text>}</Text> */}
-                    <Text onPress={() => this.props.navigation.navigate('ContactUs')} style={{ textAlign: 'center', marginBottom: 50,marginTop:10, fontWeight: 'bold', color: '#BC9CFF' }}>Contact Us</Text>
+                    <Text onPress={() => this.props.navigation.navigate('ContactUs')} style={{ textAlign: 'center', marginBottom: 50, marginTop: 10, fontWeight: 'bold', color: '#BC9CFF' }}>Contact Us</Text>
                 </View>
             </View>
         )
