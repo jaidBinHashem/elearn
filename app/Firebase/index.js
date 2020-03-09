@@ -19,9 +19,9 @@ export const setToken = async () => {
 
 
 export const subscribeToToic = async ([...topics]) => {
-    topics.map((topic) => firebase.messaging().subscribeToTopic(topic));
+    topics.map((topic) => topic.length > 0 && firebase.messaging().subscribeToTopic(topic));
 }
 
 export const unsubscribeFromTopic = async ([...topics]) => {
-    topics.map((topic) => firebase.messaging().unsubscribeFromTopic(topic));
+    topics.map((topic) => topic.length > 0 && firebase.messaging().unsubscribeFromTopic(topic));
 }
