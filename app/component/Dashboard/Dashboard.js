@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import { Icon, Badge } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
+import LinearGradient from 'react-native-linear-gradient';
 import { connect } from "react-redux";
 import { checkAuth } from '../../redux/actions/AuthActions';
 import { setCategories } from '../../redux/actions/CategoryActions';
@@ -18,7 +19,7 @@ import { getService, postService } from '../../network';
 
 import styles from './styles';
 
-const APP_VERSION = '1.0.2';
+const APP_VERSION = '1.4.0';
 class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Dashboard',
@@ -224,57 +225,17 @@ class Dashboard extends Component {
     }
 
     render() {
-        let subjects = [...this.props.subjects];
-        let subj = [...this.props.subjectsTitleArr];
         let allSubjects = [...this.props.allSubjects];
         let allSubjectsTitleArr = [...this.props.allSubjectsTitleArr];
-        let colors = ['#BC9CFF', '#F6D365', '#F093FB', '#0BA360', '#74DBC9', '#677DCB', '#F6D365', '#F07B52'];
-        let colorsArr = [...colors];
+        let colors = [
+            '#56CCF2', '#2F80ED',
+            '#D66D75', '#E29587',
+            '#4568DC', '#B06AB3',
+            '#f4c4f3', '#fc67fa',
+            '#808080', '#3fada8'
+        ];
         let allSubjectColorsArr = [...colors];
-        let views = [], length = Math.ceil(subj.length / 4);
         let allSubjectViews = [], allSubjectLength = Math.ceil(allSubjects.length / 4);
-        for (let i = 0; i < length; i++) {
-            let subjectArr = [];
-            if (subjects.length > 4) {
-                for (let i = 0; i < 4; i++) {
-                    subjectArr.push(subjects.shift());
-                }
-            } else {
-                for (let i = 0; i <= subj.length; i++) {
-                    subjectArr.push(subjects.shift());
-                }
-            }
-            view = (
-                <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
-                    <View style={{ flex: 2, flexDirection: 'row' }}>
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                    <View style={{ flex: 2, flexDirection: 'row' }}>
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                        {subj.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { showExplanation: false, subjectDetails: subjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{subj.shift()}</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                </View>
-            )
-            colorsArr = colorsArr.concat(colors);
-            views.push(view);
-        }
 
         for (let i = 0; i < allSubjectLength; i++) {
             let allSubjectArr = [];
@@ -292,29 +253,37 @@ class Dashboard extends Component {
                 <View key={i} style={{ flex: 4, marginHorizontal: 10 }}>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[0] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]} >
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
-                            </TouchableOpacity>
+                            <LinearGradient colors={[allSubjectColorsArr.shift(), allSubjectColorsArr.shift()]} style={[styles.subject, styles.subjectMarginRight]}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[0] })} style={[styles.subject, styles.subjectMarginRight]} >
+                                    <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
                         )}
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
-                            </TouchableOpacity>
+                            <LinearGradient colors={[allSubjectColorsArr.shift(), allSubjectColorsArr.shift()]} style={[styles.subject, styles.subjectMarginRight]}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[1] })} style={[styles.subject, styles.subjectMarginLeft]}>
+                                    <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
                         )}
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[2] })} style={[styles.subject, styles.subjectMarginRight, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
-                            </TouchableOpacity>
+                            <LinearGradient colors={[allSubjectColorsArr.shift(), allSubjectColorsArr.shift()]} style={[styles.subject, styles.subjectMarginRight]}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[2] })} style={[styles.subject, styles.subjectMarginRight]}>
+                                    <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
                         )}
                         {allSubjectsTitleArr.length > 0 && (
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft, { backgroundColor: colorsArr.shift() }]}>
-                                <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
-                            </TouchableOpacity>
+                            <LinearGradient colors={[allSubjectColorsArr.shift(), allSubjectColorsArr.shift()]} style={[styles.subject, styles.subjectMarginRight]}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SubjectDashboard', { subjectDetails: allSubjectArr[3] })} style={[styles.subject, styles.subjectMarginLeft]}>
+                                    <Text numberOfLines={1} style={styles.subjectTitle}>{allSubjectsTitleArr.shift()}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
                         )}
                     </View>
-                </View>
+                </View >
             )
             allSubjectColorsArr = allSubjectColorsArr.concat(colors);
             allSubjectViews.push(view);
@@ -340,28 +309,6 @@ class Dashboard extends Component {
                 </TouchableOpacity>
             )
         });
-
-
-        // let tipsAndTricks = [...this.props.tipsAndTricks], tipsAndTricksView = [];
-        // tipsAndTricks.length > 0 && tipsAndTricks.map((tipsAndTrick) => {
-        //     tipsAndTricksView.push(
-        //         <TouchableOpacity
-        //             onPress={() => this.props.navigation.navigate('ArticleWebView', { tipsAndTrick: true, title: tipsAndTrick.title, slug: tipsAndTrick.slug, category: 'articles' })} T
-        //             key={tipsAndTrick.id} style={styles.cards}>
-        //             <ImageBackground
-        //                 style={{ width: '100%', height: '100%', borderRadius: 20 }}
-        //                 imageStyle={{ borderRadius: 5 }}
-        //                 source={{ uri: tipsAndTrick.image }}
-        //             >
-        //                 <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 5, justifyContent: 'flex-end' }}>
-        //                     <View style={{}}>
-        //                         <Text numberOfLines={2} style={{ color: 'white', margin: 10, fontWeight: '600' }}>{tipsAndTrick.title}</Text>
-        //                     </View>
-        //                 </View>
-        //             </ImageBackground>
-        //         </TouchableOpacity>
-        //     )
-        // });
 
 
         let newsAndUpdates = [...this.props.newsAndUpdates], newsAndUpdatesView = [];
@@ -418,66 +365,41 @@ class Dashboard extends Component {
                                 }
                             </Picker>}
                         </View>
-                        {/* {views.length > 0 && <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
-                            <TouchableOpacity onPress={() => this.scroll.scrollBy(-1)}>
-                                <Icon name='chevron-left' type='feather' color='gray' size={30} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.scroll.scrollBy(1)}>
-                                <Icon name='chevron-right' type='feather' color='gray' size={30} />
-                            </TouchableOpacity>
-                        </View>} */}
                     </View>
 
-                    {/* {views.length > 0 && <View style={styles.swiperContainer}>
-                        {
-                            views.length === length && (
-                                <Swiper
-                                    height={250}
-                                    index={0}
-                                    ref={node => (this.scroll = node)}
-                                    showsButtons={false}
-                                    showsPagination={false}
-                                    loop={false}
-                                    scrollEnabled={true}
-                                >
-                                    {views}
-                                </Swiper>
-                            )
-                        }
-                    </View>} */}
 
-                    {allSubjectViews.length > 0 && <View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 1, left: 2 }}>
-                                {/* <Text style={styles.newsAndUpdatesTitle}>All Subjects</Text> */}
+                    {allSubjectViews.length > 0 &&
+                        <View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flex: 1, left: 2 }}>
+                                </View>
+                                <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
+                                    <TouchableOpacity onPress={() => this.allSubjectScroll.scrollBy(-1)}>
+                                        <Icon name='left' type='antdesign' color='gray' size={30} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.allSubjectScroll.scrollBy(1)}>
+                                        <Icon name='right' type='antdesign' color='gray' size={30} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                            <View style={{ flexDirection: 'row', flex: .2, alignItems: 'center' }}>
-                                <TouchableOpacity onPress={() => this.allSubjectScroll.scrollBy(-1)}>
-                                    <Icon name='left' type='antdesign' color='gray' size={30} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.allSubjectScroll.scrollBy(1)}>
-                                    <Icon name='right' type='antdesign' color='gray' size={30} />
-                                </TouchableOpacity>
+                            <View style={[styles.swiperContainer]}>
+                                {
+                                    allSubjectViews.length === allSubjectLength && (
+                                        <Swiper
+                                            height={250}
+                                            index={0}
+                                            ref={node => (this.allSubjectScroll = node)}
+                                            showsButtons={false}
+                                            showsPagination={false}
+                                            loop={false}
+                                            scrollEnabled={true}
+                                        >
+                                            {allSubjectViews}
+                                        </Swiper>
+                                    )
+                                }
                             </View>
-                        </View>
-                        <View style={[styles.swiperContainer]}>
-                            {
-                                views.length === length && (
-                                    <Swiper
-                                        height={250}
-                                        index={0}
-                                        ref={node => (this.allSubjectScroll = node)}
-                                        showsButtons={false}
-                                        showsPagination={false}
-                                        loop={false}
-                                        scrollEnabled={true}
-                                    >
-                                        {allSubjectViews}
-                                    </Swiper>
-                                )
-                            }
-                        </View>
-                    </View>}
+                        </View>}
                     {newsAndUpdatesView.length > 0 && (<View>
                         <View>
                             <Text style={styles.newsAndUpdatesTitle}>News & Info</Text>
@@ -494,14 +416,6 @@ class Dashboard extends Component {
                             {scholarshipsView}
                         </ScrollView>
                     </View>)}
-                    {/* {tipsAndTricksView.length > 0 && (<View>
-                        <View>
-                            <Text style={styles.newsAndUpdatesTitle}>Tips & Tricks</Text>
-                        </View>
-                        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-                            {tipsAndTricksView}
-                        </ScrollView>
-                    </View>)} */}
                 </ScrollView>
                 <ActionButton
                     buttonColor='#1E88E5'
@@ -509,10 +423,7 @@ class Dashboard extends Component {
                     fixNativeFeedbackRadius={true}
                     useNativeFeedback={true}
                     renderIcon={() => <Image style={{ width: 40, height: 44, resizeMode: "contain" }} source={{ uri: 'https://i.imgur.com/eZvXxPG.png' }} />}
-                    onPress={() => {
-                        this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': false });
-                        // Linking.openURL("http://m.me/eshosikhi.bd")
-                    }}
+                    onPress={() => this.props.navigation.navigate('QuestionAnswers', { 'subject_qna': false })}
                 />
                 <BusyIndicator />
             </View>
@@ -527,9 +438,6 @@ function mapStateToProps(state) {
         user: state.UserReducer,
         scholarships: state.ScholarshipsReducer,
         newsAndUpdates: state.BlogReducer.newsAndUpdates,
-        // tipsAndTricks: state.BlogReducer.tipsAndTricks,
-        subjects: state.SubjectsReducer.subjects,
-        subjectsTitleArr: state.SubjectsReducer.subjectsTitleArr,
         allSubjects: state.SubjectsReducer.allSubjects,
         allSubjectsTitleArr: state.SubjectsReducer.allSubjectsTitleArr,
         categories: state.CategoryReducer.categories,

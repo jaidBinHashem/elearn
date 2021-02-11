@@ -79,30 +79,32 @@ class QuizHighlights extends Component {
                     </View>
                 </View>
                 <View style={{ flex: .4, paddingHorizontal: 30 }}>
-                    <TouchableOpacity style={[styles.submitButtom, { marginBottom: 30 }]}
-                        onPress={() => this.props.navigation.navigate('QuizSolutions', { showExplanation: true })}
-                    >
-                        <Text style={styles.submitText}>VIEW SOLUTIONS</Text>
-                        <Icon
-                            name='arrowright'
-                            size={22}
-                            type='antdesign'
-                            color='black'
-                            containerStyle={styles.submitButtomIconContainer}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.submitButtom}
-                        onPress={() => this.props.navigation.navigate('PreviousAttemps', { lessonId: this.props.navigation.state.params.lessonId })}
-                    >
-                        <Text style={styles.submitText}>LEADERBOARD</Text>
-                        <Icon
-                            name='arrowright'
-                            size={22}
-                            type='antdesign'
-                            color='black'
-                            containerStyle={styles.submitButtomIconContainer}
-                        />
-                    </TouchableOpacity>
+                    {
+                        this.props.quiz.solution !== 0 && (<TouchableOpacity style={[styles.submitButtom, { marginBottom: 30 }]}
+                            onPress={() => this.props.navigation.navigate('QuizSolutions', { showExplanation: true })}
+                        >
+                            <Text style={styles.submitText}>VIEW SOLUTIONS</Text>
+                            <Icon
+                                name='arrowright'
+                                size={22}
+                                type='antdesign'
+                                color='black'
+                                containerStyle={styles.submitButtomIconContainer}
+                            />
+                        </TouchableOpacity>)}
+                    {
+                        this.props.quiz.leaderBoard !== 0 && (<TouchableOpacity style={styles.submitButtom}
+                            onPress={() => this.props.navigation.navigate('PreviousAttemps', { lessonId: this.props.navigation.state.params.lessonId })}
+                        >
+                            <Text style={styles.submitText}>LEADERBOARD</Text>
+                            <Icon
+                                name='arrowright'
+                                size={22}
+                                type='antdesign'
+                                color='black'
+                                containerStyle={styles.submitButtomIconContainer}
+                            />
+                        </TouchableOpacity>)}
                 </View>
             </View>
         )

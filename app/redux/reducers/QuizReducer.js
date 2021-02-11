@@ -8,7 +8,9 @@ const initialState = {
   wrongAnswers: [],
   completedQuiz: false,
   previousAttemps: [],
-  userRanking :  null
+  userRanking: null,
+  leaderBoard: false,
+  solution: false
 };
 
 export default function (state = initialState, action) {
@@ -20,7 +22,9 @@ export default function (state = initialState, action) {
         time: action.payload.time,
         totalMark: action.payload.total_mark,
         negativeMark: action.payload.negetive_mark,
-        rightMark: action.payload.total_mark / action.payload.data.length
+        rightMark: action.payload.total_mark / action.payload.data.length,
+        leaderBoard: action.payload.leaderboard_visibility,
+        solution: action.payload.view_solutions_visibility
       }
     case SUBMIT_QUIZ_RETURN:
       return {

@@ -1,23 +1,22 @@
 import React, { Component } from 'react'
-import { View, StatusBar, Text, Dimensions, Keyboard, Alert } from 'react-native'
+import { View, StatusBar, Text, Dimensions, Keyboard, Picker, TouchableOpacity } from 'react-native'
+import { Input, Icon } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux";
 import { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer } from '../../redux/actions/AuthActions';
-import RNAccountKit from 'react-native-facebook-account-kit'
-import Swiper from 'react-native-swiper';
+import AutoComplete from 'react-native-autocomplete-input';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
 import Toast from 'react-native-simple-toast';
 
 import BusyIndicator from 'react-native-busy-indicator';
 
-import PersonalDetails from './PersonalDetails';
-import StudyDetails from './StudyDetails';
-import CourseDetails from './CourseDetails';
-import Success from './Success';
-
-import globalStyles from '../../global/styles';
-
+import { getService } from '../../network'
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+import colors from '../../global/colors';
 import styles from './styles';
 
+const CopilotView = walkthroughable(View);
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -32,6 +31,7 @@ class SignUp extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            name: "",
             nameError: "",
             emailError: "",
             numberError: "",
@@ -39,102 +39,129 @@ class SignUp extends Component {
             institutions: [],
             selectedStudyLevel: null,
             regSuccess: false,
-            index: 0
+            courses: [],
+            buttonData: [],
+            selectedValues: [],
+            referralCode: null,
+            index: 0,
+
+            studyLevels: [],
+            institutions: [],
+            selectedStudyLevel: null,
+            selectedInstitution: null,
+            query: '',
+            hideList: true,
+
+            studyLevelError: false,
+            courseError: false
         }
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        nextProps.auth.error && (
-            Alert.alert(
-                '',
-                nextProps.auth.errorMessage,
-                [
-                    {},
-                    {
-                        text: 'Okay',
-                        // onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
-                    },
-                    {},
-                ],
-                { cancelable: false },
-            )
-        );
-        nextProps.auth.registrationFailed && nextProps.auth.registrationFailedMessage && (
-            // Toast.show(nextProps.auth.errorMessage)
-            Alert.alert(
-                '',
-                nextProps.auth.registrationFailedMessage,
-                [
-                    {},
-                    {
-                        text: 'Okay',
-                        // onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
-                    },
-                    {},
-                ],
-                { cancelable: false },
-            )
-        );
-        this.state.index === 0 && this.props.auth.numberVerified != nextProps.auth.numberVerified && nextProps.auth.numberVerified && this.scrollToNext(1);
-        this.state.index === 1 && nextProps.auth.studyLevel && nextProps.auth.institution && (this.scrollToNext(2));
-        nextProps.auth.studyLevel === null || nextProps.auth.institution === null && Toast.show("Please select your study details");
-        this.state.index === 2 && nextProps.auth.registrationSuccess && nextProps.auth.registrationSuccessMessage && (this.scrollToNext(3), Toast.show(nextProps.auth.registrationSuccessMessage), this.setState({ regSuccess: true }));
+    componentDidMount() {
+        this.getStudyLevel();
     }
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        nextProps.auth.registrationSuccess && this.loginUser();
+        nextProps.auth.registrationFailed && nextProps.auth.registrationFailedMessage && (loaderHandler.hideLoader(), Toast.show(nextProps.auth.registrationFailedMessage));
+    }
+
+    loginUser = () => {
+        this.timer = setTimeout(() => {
+            loaderHandler.hideLoader();
+            this.props.navigation.navigate('Loader')
+        }, 5000);
+    }
+
 
     componentWillUnmount() {
-        !this.state.regSuccess && this.props.resetAuthReducer();
+        clearTimeout(this.timer);
     }
 
 
-    submitAccount = (name, email, number) => {
+    submitAccount = (name) => {
         Keyboard.dismiss();
-        let nameError = "", emailError = "", numberError = "", err = false;
-        (name.length < 1 || name.length > 191) && (nameError = "Please insert name", err = true);
-        !EMAIL.test(String(email).toLowerCase()) && (emailError = "Please insert a valid Email", err = true);
-        !NUMBER.test(String(number)) && (numberError = "Please intert a valid phone number", err = true);
-
-        err && this.setState({
+        let nameError = "", studyLevelError = false, courseError = false, err = false;
+        (name.length < 1 || name.length > 191) ? (nameError = "Please insert name", err = true) : (nameError = "");
+        (this.state.buttonData.length > 0 && this.state.selectedValues.length < 1) ? (err = true, courseError = true) : !err && (err = false, courseError = false);
+        this.setState({
             nameError,
-            emailError,
-            numberError
+            studyLevelError,
+            courseError
         });
-        !err && (this.createSignUpRequest(name, email, number), this.setState({ nameError, emailError, numberError }));
+
+        !err && this.registerUser(
+            this.props.navigation.state.params.phone,
+            this.props.navigation.state.params.code,
+            name,
+            this.state.referralCode,
+            this.state.selectedStudyLevel.id,
+            this.state.selectedValues
+
+        );
     }
 
-    createSignUpRequest = (name, email, number) => {
-        RNAccountKit.configure({
-            responseType: 'code', // 'token' by default,
-            titleType: 'login',
-            initialPhoneCountryPrefix: '+880', // autodetected if none is provided
-            initialPhoneNumber: number[0] == 0 ? number.substring(1) : number,
-            // initialPhoneNumber: '1316100093',
-            readPhoneStateEnabled: true, // true by default,
-            receiveSMS: true, // true by default,
-            defaultCountry: 'BD',
-            getACallEnabled: true
-        })
-        RNAccountKit.loginWithPhone()
-            .then((response) => {
-                response.code && this.props.signUp(response.code, email, name)
+    registerUser = (...args) => {
+        Keyboard.dismiss();
+        this.props.registerUser(args);
+        this.props.submitCourses(args[5]);
+    }
+
+
+
+
+    _groupButtonOnSelectedValuesChange = (selectedValues) => {
+        this.setState({ selectedValues })
+    }
+
+
+
+    getStudyLevel = async () => {
+        const request = { endPoint: 'study-levels' }
+        let studyLevels = await getService(request);
+        studyLevels.success && this.setState({ studyLevels: studyLevels.data.data });
+        this.selectStudyLevel(studyLevels[0], 0);
+    }
+
+    selectStudyLevel = async (selectedStudyLevelId, selectedStudyIndex) => {
+        loaderHandler.showLoader("Loading");
+        this.setState({ query: '', selectedInstitution: null })
+        let selectedStudyLevel = [...this.state.studyLevels];
+        selectedStudyLevel = selectedStudyLevel[selectedStudyIndex];
+        this.getCourse(selectedStudyLevel);
+        this.setState({ selectedStudyLevel });
+        this.getInstitutions('A', this.state.studyLevels[selectedStudyIndex].slug);
+        loaderHandler.hideLoader();
+    }
+
+    getInstitutions = async (query, slug = null) => {
+        let studySlug = slug === null ? this.state.selectedStudyLevel.slug : slug;
+        const request = {
+            endPoint: 'study-levels/' + studySlug + '/institutions?q=' + query
+        }
+        let institutions = await getService(request);
+        this.setState({ institutions: institutions.data.data });
+    }
+
+    selectInstitution = async (selectedInstitutionId, selectedInstitutionIndex) => {
+        let selectedInstitution = [...this.state.institutions];
+        selectedInstitution = selectedInstitution[selectedInstitutionIndex]
+        this.setState({ selectedInstitution });
+    }
+
+    getCourse = async (studyLevel) => {
+        const request = {
+            endPoint: 'study-levels/' + studyLevel.slug + '/categories',
+            showLoader: true
+        }
+        let courses = await getService(request);
+        let buttonData = courses.data.data.map((course) => {
+            return ({
+                value: course.id,
+                displayValue: course.name
             })
-            .catch(err => console.log(err));
-    }
-
-    submitStudyDetails = (studyLevel, institution) => {
-        Keyboard.dismiss();
-        this.props.submitStudyDetails(studyLevel, institution);
-    }
-
-    scrollToNext = i => {
-        this.scroll.scrollBy(1);
-    };
-
-    registerUser = (courses, referralCode) => {
-        Keyboard.dismiss();
-        this.props.registerUser(this.props.auth, courses, referralCode);
-        this.props.submitCourses(courses);
+        })
+        this.setState({ courses: courses.data.data, buttonData });
     }
 
 
@@ -142,41 +169,126 @@ class SignUp extends Component {
         return (
             <View style={[styles.container]}>
                 <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />
-                <KeyboardAwareScrollView keyboardShouldPersistTaps='always'>
-                    <View style={[globalStyles.flexOne]}>
+                <View style={{ flex: 1, marginHorizontal: 10 }}>
+                    {/* <ScrollView > */}
+                    <KeyboardAwareScrollView keyboardShouldPersistTaps='never'>
                         <View style={[styles.registerTextContainer]}>
                             <Text style={[styles.registerText]}>Register</Text>
                         </View>
-                        <View style={{ height: deviceHeight - 130 }}>
-                            <Swiper style={styles.wrapper}
-                                ref={node => (this.scroll = node)}
-                                showsButtons={false}
-                                showsPagination={false}
-                                loop={false}
-                                scrollEnabled={false}
-                                loadMinimal={true}
-                                loadMinimalSize={0}
-                                onIndexChanged={(index) => this.setState({ index })}
-                            >
-                                <PersonalDetails
-                                    nameError={this.state.nameError}
-                                    emailError={this.state.emailError}
-                                    numberError={this.state.numberError}
-                                    submitAccount={this.submitAccount.bind(this)}
-                                    phone={this.props.navigation.state.params && this.props.navigation.state.params.phone ? this.props.navigation.state.params.phone : null}
-                                />
-                                <StudyDetails
-                                    submitStudyDetails={this.submitStudyDetails.bind(this)} />
-                                <CourseDetails
-                                    registerUser={this.registerUser.bind(this)}
-                                    studyLevel={this.props.auth.studyLevel} />
-                                <Success
-                                    navigation={this.props.navigation}
-                                />
-                            </Swiper>
+                        <View style={{ flex: 1 }}>
+                            <CopilotStep text="এখানে আপনি যে কোর্সের জন্য  পড়াশোনা করতে চান সেই অনুযায়ী  Study level  সিলেক্ট করুন।" order={1} name="studyLevel">
+                                <CopilotView style={{ marginHorizontal: 10 }}>
+                                    <Text style={styles.formTitle}>STUDY LEVEL<Text style={{ color: 'red', fontSize: 16 }}>*</Text></Text>
+                                    <View style={{ marginBottom: 20, borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}>
+                                        {this.state.selectedStudyLevel && (<Picker
+                                            selectedValue={this.state.selectedStudyLevel.id}
+                                            style={{ height: 50 }}
+                                            onValueChange={(studyLevel, selectedStudyIndex) => this.selectStudyLevel(studyLevel, selectedStudyIndex)}>
+                                            {
+                                                this.state.selectedStudyLevel && this.state.studyLevels.map((studyLevel) => {
+                                                    return (
+                                                        <Picker.Item key={studyLevel.id} label={studyLevel.name} value={studyLevel.id} />
+                                                    )
+                                                })
+                                            }
+                                        </Picker>)}
+                                        {
+                                            this.state.studyLevels.length === 0 && (
+                                                <Picker
+                                                    selectedValue={0}
+                                                    style={{ height: 50 }}
+                                                >
+                                                    <Picker.Item label="---" value={0} />
+                                                </Picker>
+                                            )
+                                        }
+                                    </View>
+                                </CopilotView>
+                            </CopilotStep>
+
+
+
+
+                            {this.state.buttonData.length > 0 && (<View>
+                                <Text style={[styles.formTitle, { textAlign: 'center', }]}>COURSE SELECTION<Text style={{ color: 'red', fontSize: 16 }}>*</Text></Text>
+                            </View>)}
+                            {this.state.buttonData.length > 0 && (
+                                <CopilotStep text="আপনার প্রয়োজনীয় কোর্সটিতে ক্লিক করে সিলেক্ট করুন।" order={1} name="course">
+                                    <CopilotView>
+                                        <SelectMultipleGroupButton
+                                            containerViewStyle={{
+                                                justifyContent: 'center',
+                                            }}
+                                            buttonViewStyle={{ height: 50 }}
+                                            highLightStyle={{
+                                                height: 20,
+                                                borderColor: colors.appTheme,
+                                                backgroundColor: "transparent",
+                                                textColor: colors.appTheme,
+                                                borderTintColor: colors.appTheme,
+                                                backgroundTintColor: colors.appTheme,
+                                                textTintColor: '#fff'
+                                            }}
+                                            multiple={false}
+                                            onSelectedValuesChange={selectedValues => this._groupButtonOnSelectedValuesChange(selectedValues)}
+                                            group={this.state.buttonData}
+                                        />
+                                    </CopilotView>
+                                </CopilotStep>
+                            )}
+
+
+                            <View style={{ marginTop: this.state.buttonData.length > 0 ? 10 : 80 }}>
+                                {this.state.studyLevelError && (
+                                    <Text style={{ marginLeft: 10, color: 'red' }}>*Please select proper study levels</Text>
+                                )}
+                            </View>
+
+                            <CopilotStep text="এখানে আপনার পূর্ণ নাম লিখুন।" order={1} name="name">
+                                <CopilotView style={{ marginBottom: 20, top: 10 }}>
+                                    <Input
+                                        label={<Text style={{ color: 'black', fontWeight: '500', marginBottom: 10 }}>FULL NAME<Text style={{ color: 'red', fontSize: 16 }}>*</Text></Text>}
+                                        inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                                        placeholder='Your Full Name'
+                                        errorStyle={{ color: 'red' }}
+                                        errorMessage={this.state.nameError}
+                                        onChangeText={(name) => this.setState({ name })}
+                                        value={this.state.name}
+                                        leftIcon={
+                                            <Icon
+                                                name='user'
+                                                size={24}
+                                                type='font-awesome'
+                                                name='user'
+                                                color='lightgray'
+                                                containerStyle={styles.inputIconContainer}
+                                            />
+                                        }
+                                    />
+                                </CopilotView>
+                            </CopilotStep>
+
+                            <CopilotStep text="খালি রাখুন।" order={2} name="referralCode">
+                                <CopilotView style={{}}>
+                                    <Input
+                                        label="Referral Code (Optional)"
+                                        labelStyle={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
+                                        inputContainerStyle={{ borderColor: 'lightgray', borderWidth: 2, borderRadius: 5 }}
+                                        placeholder='না থাকলে ঘরটি খালি রাখুন'
+                                        errorStyle={{ color: 'red' }}
+                                        errorMessage={this.props.emailError}
+                                        onChangeText={(referralCode) => this.setState({ referralCode })}
+                                        value={this.state.referralCode}
+                                    />
+                                </CopilotView>
+                            </CopilotStep>
                         </View>
-                    </View>
-                </KeyboardAwareScrollView>
+                        <TouchableOpacity onPress={() => this.submitAccount(this.state.name)} style={styles.submitButtom}>
+                            <Text>Submit</Text>
+                        </TouchableOpacity>
+                    </KeyboardAwareScrollView>
+                    {/* </ScrollView> */}
+                </View>
                 <BusyIndicator />
             </View>
         )
@@ -190,7 +302,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
+export default copilot()(connect(
     mapStateToProps,
     { signUp, submitStudyDetails, submitCourses, registerUser, resetErrors, resetAuthReducer }
-)(SignUp);
+)(SignUp));

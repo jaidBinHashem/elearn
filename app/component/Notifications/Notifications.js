@@ -52,7 +52,7 @@ class Notifications extends Component {
                             return (
                                 <View key={notification.id} style={{ flex: 1, elevation: 5, backgroundColor: 'white', padding: 10, margin: 10 }}>
                                     <Text style={{ color: 'black', fontSize: 16, fontWeight: '500' }} numberOfLines={1}>{notification.title}</Text>
-                                    <Text style={{ fontSize: 12 }} numberOfLines={1}>{moment(notifications.updated_at).format("Do MMM")}</Text>
+                                    <Text style={{ fontSize: 12 }} numberOfLines={1}>{moment(notification.updated_at, 'YYYY-MM-DD').format("Do MMM, YYYY")}</Text>
                                     <Hyperlink linkDefault={true}>
                                         <Text selectable={true} style={{ paddingTop: 5, marginVertical: 15, lineHeight: 18 }}>{notification.content}</Text>
                                     </Hyperlink>

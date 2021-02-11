@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, StatusBar, Text, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
-import RNAccountKit from 'react-native-facebook-account-kit';
 import Toast from 'react-native-simple-toast';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
@@ -11,7 +10,7 @@ import md5 from 'js-md5';
 import { connect } from "react-redux";
 import { makeLoginRequest } from '../../redux/actions/AuthActions';
 
-import { postService } from '../../network';
+import { postService, getService } from '../../network';
 
 import globalStyles from '../../global/styles';
 import styles from './styles';
@@ -34,8 +33,8 @@ class Login extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        nextProps.auth.loginFailed && (loaderHandler.hideLoader(), Toast.show(nextProps.auth.loginFailedMessage));
-        !nextProps.auth.loginFailed && (loaderHandler.hideLoader(), this.props.navigation.navigate('Loader', { 'SuccessLogin': true }))
+        // nextProps.auth.loginFailed && (loaderHandler.hideLoader(), Toast.show(nextProps.auth.loginFailedMessage));
+        // !nextProps.auth.loginFailed && (loaderHandler.hideLoader(), this.props.navigation.navigate('Loader', { 'SuccessLogin': true }))
     }
 
     logIn = (number) => {
@@ -59,39 +58,24 @@ class Login extends Component {
             }
         }
         let response = await postService(request);
-
+        let otpRequest = {
+            endPoint: 'get-otp',
+            showLoader: true,
+            params: {
+                phone: number[0] == 0 ? number.substring(1) : number,
+                token: md5(btoa(number[0] == 0 ? number.substring(1) : number))
+            }
+        }
+        let otpResponse = await postService(otpRequest);
+        console.log(response, otpResponse);
         if (response.success) {
-            RNAccountKit.configure({
-                responseType: 'code',
-                titleType: 'login',
-                initialPhoneCountryPrefix: '+880',
-                initialPhoneNumber: number[0] == 0 ? number.substring(1) : number,
-                readPhoneStateEnabled: true,
-                receiveSMS: true,
-                defaultCountry: 'BD',
-                getACallEnabled: true
-            });
-            RNAccountKit.loginWithPhone()
-                .then((response) => {
-                    response.code && this.props.makeLoginRequest(response.code, number[0] == 0 ? number.substring(1) : number)
-                })
-                .catch(err => {
-                    loaderHandler.hideLoader();
-                    console.log(err);
-                });
+            if (otpResponse.success) {
+                this.props.navigation.navigate('OTP', { 'user': true, 'phone': this.state.number });
+            } else {
+                Toast.show('OTP sent error, please try again later !');
+            }
         } else {
-            Alert.alert(
-                '',
-                'You are not registered !',
-                [
-                    {
-                        text: 'Cancel',
-                        style: 'cancel',
-                    },
-                    { text: 'Sign Up Now', onPress: () => this.props.navigation.replace('SignUp', { 'phone': number }) },
-                ],
-                { cancelable: true },
-            );
+            this.props.navigation.navigate('OTP', { 'user': false, 'phone': this.state.number });
         }
     }
 
@@ -99,10 +83,10 @@ class Login extends Component {
 
     render() {
         return (
-            <View style={[styles.container]}>
+            <View style={[styles.container, { backgroundColor: '#f6f3fc' }]}>
                 <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,.1)" />
                 <View style={[styles.registerTextContainer]}>
-                    <Text style={[styles.registerText]}>LOG IN</Text>
+                    <Text style={[styles.registerText]}>ESHO SHIKHI</Text>
                 </View>
                 <View style={styles.formContainer}>
                     <View style={{ marginBottom: 50 }}>

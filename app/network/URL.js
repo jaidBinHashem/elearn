@@ -1,4 +1,20 @@
-// export const BASE_URL = 'https://esuat.xyz/api/';
-export const BASE_URL = 'https://v2.eshosikhi.com/api/';
-// export const BASE_URL = 'http://172.16.228.145:8080/api/';
-// export const BASE_URL = 'https://7861e2f4.ngrok.io/api/';
+/**
+ * Created by BS-175 on 19-Jul-17.
+ */
+const app = {}
+
+app.uat = {
+    //UAT
+    // BASE_URL: 'https://dev.eshosikhi.com/api/'
+    // BASE_URL: 'https://8fefcdc2.ngrok.io/api/'
+    BASE_URL: 'https://v2.eshosikhi.com/api/'
+};
+
+app.live = {
+    //Live
+    BASE_URL: 'https://v2.eshosikhi.com/api/'
+    // BASE_URL: 'https://11768a06.ngrok.io/api/'
+    // BASE_URL: 'https://dev.eshosikhi.com/api/'
+};
+
+module.exports = __DEV__ ? app.uat : app.live;

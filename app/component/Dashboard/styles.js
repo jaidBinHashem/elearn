@@ -27,14 +27,14 @@ export default StyleSheet.create({
   },
   swiperContainer: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 20
   },
   subject: {
     flex: 1,
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 8,
+    // elevation: 8,
     borderRadius: 5,
   },
   subjectMarginRight: {
@@ -63,7 +63,8 @@ export default StyleSheet.create({
   subjectTitle: {
     textAlign: 'center',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '300',
+    color: 'black',
     marginHorizontal: 10
   }
 });

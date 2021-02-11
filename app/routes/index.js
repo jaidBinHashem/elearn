@@ -1,14 +1,17 @@
 import React from 'react';
 import { Animated, Easing } from 'react-native'
 import { Icon } from 'react-native-elements';
-import { TabBarTop, createSwitchNavigator, createAppContainer } from 'react-navigation';
+import { TabBarTop, createAppContainer } from 'react-navigation';
+import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import Loader from '../component/Loader';
 import Welcome from '../component/Welcome';
+import OTP from '../component/SignUp/Otp';
 import SignUp from '../component/SignUp';
 import Login from '../component/Login';
+import Success from '../component/SignUp/Success';
 import Dashboard from '../component/Dashboard';
 import ArticleWebView from '../component/ArticleWebView'
 import MyProfile from '../component/MyProfile';
@@ -99,9 +102,11 @@ const transitionConfig = () => {
 const AuthStack = createStackNavigator(
     {
         Welcome: Welcome,
+        OTP : OTP,
         Login: Login,
         SignUp: SignUp,
-        ContactUs: Upcoming
+        ContactUs: Upcoming,
+        Success : Success
     },
     {
         initialRouteName: 'Welcome',
@@ -242,18 +247,6 @@ const PurchaseHistoryStack = createStackNavigator(
                 // fontWeight: 'bold',
             },
         },
-        transitionConfig
-    }
-);
-
-
-const UpcomingStack = createStackNavigator(
-    {
-        Upcoming: Upcoming,
-    },
-    {
-        initialRouteName: 'Upcoming',
-        headerMode: 'none',
         transitionConfig
     }
 );
@@ -415,7 +408,7 @@ const AppDrawer = createDrawerNavigator(
     }
 );
 
-const App = createAppContainer(createSwitchNavigator(
+const App = createAppContainer(createAnimatedSwitchNavigator(
     {
         Loader: Loader,
         Auth: AuthStack,

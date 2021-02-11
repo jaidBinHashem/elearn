@@ -78,7 +78,7 @@ export const postService = async (request) => {
         });
         response = await checkStatus(response).json();
         // console.log(response, "post success response");
-        request.showLoader && loaderHandler.hideLoader();
+        request.showLoader && request.endPoint !== "register" && loaderHandler.hideLoader();
         return { success: true, data: response };
     }
     catch (err) {

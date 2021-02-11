@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, AppState, ActivityIndicator, Image, Modal } from 'react-native'
+import { Text, View, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert, BackHandler, ActivityIndicator, Image, Modal } from 'react-native'
 import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { SelectMultipleGroupButton } from "react-native-selectmultiple-button";
@@ -63,7 +63,6 @@ class Quiz extends Component {
             selectedAnswerIdArray: [],
             modalView: false,
             selectedImage: [],
-            appState: AppState.currentState,
             dotView: true
         }
     }
@@ -76,7 +75,6 @@ class Quiz extends Component {
     }
 
     componentDidMount() {
-        AppState.addEventListener('change', this._handleAppStateChange);
         BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
         !this.props.navigation.state.params.showExplanation && this.startTimer((this.props.quiz.time - 1));
     }
@@ -93,13 +91,6 @@ class Quiz extends Component {
             this.props.navigation.dispatch(NavigationActions.back());
         }
     }
-
-    _handleAppStateChange = (nextAppState) => {
-        if (!(this.state.appState.match(/inactive|background/) && nextAppState === 'active')) {
-            this.submitExam();
-        }
-        this.setState({ appState: nextAppState });
-    };
 
     startTimer = async (duration) => {
         let timer = duration, minutes, seconds;
@@ -239,7 +230,6 @@ class Quiz extends Component {
 
 
     componentWillUnmount() {
-        AppState.removeEventListener('change', this._handleAppStateChange);
         BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
         clearInterval(this.myTimer);
     }
@@ -291,7 +281,8 @@ class Quiz extends Component {
                                     style={styles.imageContainer}
                                 >
                                     <Image
-                                        style={{ width: 300, height: 400, alignSelf: 'center' }}
+                                        style={{ width: 300, height: 300, alignSelf: 'center' }}
+                                        resizeMode="contain"
                                         source={{ uri: question.question_image }}
                                     />
                                 </TouchableOpacity>
@@ -656,7 +647,7 @@ class Quiz extends Component {
                                     {
                                         questions.map((q, index) => (
                                             <TouchableOpacity key={index} onPress={() => this.scroll.scrollTo(index)}>
-                                                <Text style={[{ marginHorizontal: 10, fontSize: 20, textAlign: 'center' }, this.state.swiperIndex === index && ({ color: colors.appTheme, fontWeight:'bold' })]}>{index + 1}</Text>
+                                                <Text style={[{ marginHorizontal: 10, fontSize: 20, textAlign: 'center' }, this.state.swiperIndex === index && ({ color: colors.appTheme, fontWeight: 'bold' })]}>{index + 1}</Text>
                                             </TouchableOpacity>
                                         )
                                         )
